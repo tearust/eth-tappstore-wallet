@@ -3,7 +3,7 @@
   
 
   <div style="text-align:left;">
-    <div v-if="layer1_account && $root.is_sudo(layer1_account.address) && user && user.isLogin">
+    <!-- <div v-if="layer1_account && $root.is_sudo(layer1_account.address) && user && user.isLogin">
     <h2>ADMIN</h2>
     <el-button type="danger" @click="query_balance_action('5Hq3maxnpUx566bEDcLARMVAnGEqtoV7ytzXbtqieen7dXhs')">DAO-RESERVE Balance</el-button>
     <el-button type="danger" @click="query_special_balance_action(null, '5HrN7fHLXWcFiXPwwtq2EkSGns9eMt5P7SpeTPewumZy6ftb')">CONSUME-ACCT Balance</el-button>
@@ -11,7 +11,14 @@
     <br/><br/>
     <el-button type="danger" @click="query_special_balance_action()">Speical Balance</el-button>
     <el-divider />
-    </div>
+    </div> -->
+
+    <h2>ETH</h2>
+    <el-button type="primary" @click="connectToWallet()">Connect Metamask wallet</el-button>
+    <el-button type="danger" @click="getChain()">Query connect chain</el-button>
+    <br/><br/>
+    <el-button type="primary" @click="maintainerContract()">Maintainer contract</el-button>
+    <el-divider />
 
     <h2>USER</h2>
     <el-button type="danger" @click="query_asset_action()">Query Asset</el-button>
@@ -91,7 +98,7 @@ import PubSub from 'pubsub-js';
 import request from '../request';
 
 import layer2 from '../layer2';
-
+import eth from '../eth';
 
 export default {
 
@@ -111,6 +118,9 @@ export default {
       },
 
       latest_hash: null,
+
+
+      layer1: null,
     };
   },
 
@@ -128,6 +138,8 @@ export default {
 
     this.wf = new SettingAccount();
     await this.wf.init();
+
+    this.layer1 = await eth.get();
 
     this.$root.loading(false);
     
@@ -334,7 +346,7 @@ export default {
         day: 4,
       });
 
-    }
+    },
 
     
     // async query_hash_result(){
@@ -349,7 +361,28 @@ export default {
     //   }
     // },
 
-    
+    // -------------- eth ------------------
+    async connectToWallet(){
+      try{
+        await this.layer1.requestWalletAddressList();
+        const b = await this.layer1.getBalance();
+        console.log(11, b);
+        alert('Balance is '+b+' ether');
+      }catch(e){
+        this.$root.showError(e);
+      }
+      
+    },
+    async getChain(){
+      const {id, name} = await this.layer1.getChain();
+
+      alert('id: '+id+' | name: '+name);
+    },
+
+    async maintainerContract(){
+      const rs = await this.layer1.test();
+      console.log(11, rs);
+    }
     
   }
 

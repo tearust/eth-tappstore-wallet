@@ -82,6 +82,8 @@ import utils from '../tea/utils';
 
 import layer2 from '../layer2';
 import helper from '../views/helper';
+
+import eth from '../eth';
 export default {
   data() {
     return {
@@ -210,37 +212,40 @@ export default {
       channel: 'NA',
     });
 
+    // const layer1 = await eth.get();
+    await eth.get();
 
-    await (new Base()).init()
+
+    // await (new Base()).init()
     let time = 500;
 
     const loop = async (cb)=>{
 
-      try{
-        const wf = new Base();
-        const connected = wf.layer1.isConnected();
-        if(connected !== this.connected){
-          this.connected = connected;
+      // try{
+      //   const wf = new Base();
+      //   const connected = wf.layer1.isConnected();
+      //   if(connected !== this.connected){
+      //     this.connected = connected;
 
-          if(this.connected === 2){
-            this.wf = wf;
-            this.initAllPluginAccount(wf);
-            cb();
-          }
+      //     if(this.connected === 2){
+      //       this.wf = wf;
+      //       this.initAllPluginAccount(wf);
+      //       cb();
+      //     }
           
-        }
+      //   }
         
-        if(this.connected > 0){
-          time = 2000;
-        }
+      //   if(this.connected > 0){
+      //     time = 2000;
+      //   }
 
-      }catch(e){
-        this.connected = 0;
-      }
+      // }catch(e){
+      //   this.connected = 0;
+      // }
      
-      _.delay(()=>{
-        loop(cb);
-      }, time);
+      // _.delay(()=>{
+      //   loop(cb);
+      // }, time);
     };
 
     loop(async ()=>{

@@ -110,10 +110,15 @@ class Instance {
     return true;
   }
 
+  async getMaintainerAddressList(){
+    return await this.maintainer_contract.listValidators();
+  }
+
   async test(){
-    console.log(this.maintainer_contract)
-    const rs = await this.maintainer_contract.validators_(1);
-    return rs.toString();
+    // console.log(this.maintainer_contract)
+    const list = await this.maintainer_contract.listValidators();
+    console.log(1, list);
+    return list;
   }
 }
 

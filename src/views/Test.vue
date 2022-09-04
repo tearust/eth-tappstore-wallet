@@ -16,9 +16,10 @@
     <h2>ETH</h2>
     <el-button type="primary" @click="connectToWallet()">Connect Metamask wallet</el-button>
     <el-button type="danger" @click="getChain()">Query connect chain</el-button>
+    <el-button type="danger" @click="queryMaintainerAddressList()">Maintainer list</el-button>
     <br/><br/>
     <el-button type="primary" @click="topup()">Topup</el-button>
-    <el-button type="primary" @click="maintainerContract()">Maintainer contract</el-button>
+    
     <el-divider />
 
     <h2>USER</h2>
@@ -380,11 +381,14 @@ export default {
       alert('id: '+id+' | name: '+name);
     },
 
-    async maintainerContract(){
-      const rs = await this.layer1.test();
+    async queryMaintainerAddressList(){
+
+      const rs = await this.layer1.getMaintainerAddressList();
       console.log(11, rs);
+      this.$root.alert_success(rs.join('<br/>'));
     },
     async topup(){
+      this.$root.loading(true);
       try{
         const rs = await this.layer1.topup();
         this.$root.alert_success();
@@ -392,6 +396,7 @@ export default {
         console.log('error', e);
         this.$root.showError(e.code);
       }
+      this.$root.loading(false);
       
     }
     

@@ -2,15 +2,10 @@ import { ethers, BigNumber } from "ethers";
 import utils from '../tea/utils';
 import { ChainMap, ContractMap } from "./consts";
 import {_} from 'tearust_utils';
+import help from './help';
 
 const U = ethers.utils;
 
-const help = {
-  toBN(n){
-    let bn = BigNumber.from(n);
-    return bn; 
-  }
-};
 
 class Instance {
   constructor(){
@@ -34,6 +29,8 @@ class Instance {
       this.provider.getSigner(),
     );
 
+    this.signer = this.provider.getSigner();
+
   }
   async init(){
     
@@ -45,15 +42,13 @@ class Instance {
     return list;
   }
   async getBalance(){
-    const signer = this.provider.getSigner();
-    const n = await signer.getBalance();
+    const n = await this.signer.getBalance();
     const balance = U.formatUnits(n, 'ether');
     return balance;
   }
 
   async getChain(){
-    const signer = this.provider.getSigner();
-    const cid = await signer.getChainId();
+    const cid = await this.signer.getChainId();
     const cname = _.get(ChainMap, cid, 'UnknownChainId');
     return {
       id: cid,
@@ -65,9 +60,10 @@ class Instance {
 
     const erc20Token = this.tea_contract;
     const lock = this.lock_contract;
-    const signer = this.provider.getSigner();
+    const signer = this.signer;
+
     const current_address = await signer.getAddress();
-    await erc20Token.approve(lock.address, help.toBN('100000000000000000000'));
+    await erc20Token.approve(lock.address, help.unit(100));
        
     // lock
     const types = {
@@ -87,7 +83,7 @@ class Instance {
       verifyingContract: erc20Token.address,
     };
     const deadline = parseInt(new Date().getTime() / 1000) + 10000;
-    const amount = help.toBN('2000000000000000000');
+    const amount = help.unit(10);
     const value = {
       owner: current_address,
       spender: lock.address,
@@ -109,8 +105,9 @@ class Instance {
       s,
       false
     );
-console.log(22, res);
+    console.log('result:', res);
     
+    return true;
   }
 
   async test(){
@@ -122,10 +119,12 @@ console.log(22, res);
 
 let instance = null;
 export default {
+  help,
   async get(){
     if(instance) return instance;
     instance = new Instance();
     await instance.init();
     return instance;
-  }
+  },
+  
 };

@@ -387,7 +387,7 @@ export default {
     async topup(){
       try{
         const rs = await this.layer1.topup();
-        console.log(11, rs);
+        this.$root.alert_success();
       }catch(e){
         console.log('error', e);
         this.$root.showError(e.code);

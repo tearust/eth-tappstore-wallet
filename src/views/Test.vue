@@ -17,6 +17,7 @@
     <el-button type="primary" @click="connectToWallet()">Connect Metamask wallet</el-button>
     <el-button type="danger" @click="getChain()">Query connect chain</el-button>
     <br/><br/>
+    <el-button type="primary" @click="topup()">Topup</el-button>
     <el-button type="primary" @click="maintainerContract()">Maintainer contract</el-button>
     <el-divider />
 
@@ -24,7 +25,7 @@
     <el-button type="danger" @click="query_asset_action()">Query Asset</el-button>
     <el-button type="danger" @click="query_balance_action()">Query Balance</el-button>
 
-    <el-button type="primary" @click="topup_action()">Topup 10</el-button>
+    <!-- <el-button type="primary" @click="topup_action()">Topup 10</el-button> -->
     <el-button type="primary" @click="withdraw_action()">Withdraw 10</el-button>
     <br/><br/>
     <el-button type="danger" @click="query_consume_account_action()">Query consume account</el-button>
@@ -382,6 +383,16 @@ export default {
     async maintainerContract(){
       const rs = await this.layer1.test();
       console.log(11, rs);
+    },
+    async topup(){
+      try{
+        const rs = await this.layer1.topup();
+        console.log(11, rs);
+      }catch(e){
+        console.log('error', e);
+        this.$root.showError(e.code);
+      }
+      
     }
     
   }

@@ -467,7 +467,7 @@ const F = {
   },
 
   getEpochEndBlock(){
-    return _.toNumber(F.get_env('end_block')||'999999');
+    return _.toNumber(F.get_env('end_block')||'20000000');
   },
 
 

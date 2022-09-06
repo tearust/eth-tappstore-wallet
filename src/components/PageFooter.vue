@@ -12,12 +12,14 @@
       </el-col>
 
       <div style="position:absolute;right:0;bottom:0;">
-        <div class="tlg" v-if="end_block && chain.current_block_hash" :inner-html.prop="epochInfo()">
-          
-        </div>
+        <div class="tlg" v-if="end_block && chain.current_block" :inner-html.prop="epochInfo()"></div>
+        <b class="lg">
+          <span>Chain name :</span> 
+          <b>{{chain_name}}</b>
+        </b>
         <b class="lg">
           <span>Block Height :</span> 
-          <b>{{chain.current_block_hash ? chain.current_block : ''}}</b>
+          <b>{{chain.current_block ? chain.current_block : ''}}</b>
         </b>
         <b class="lg">
           <span>Epoch version :</span> 
@@ -45,6 +47,7 @@ import {mapGetters, mapState} from 'vuex';
 import Base from '../workflow/Base';
 import _ from 'lodash';
 import utils from '../tea/utils';
+import eth from '../eth';
 export default {
   computed: {
     // ...mapGetters(['layer1_account']),
@@ -57,13 +60,19 @@ export default {
       epoch_version: null,
       version: null,
       end_block: null,
+
+      chain_name: '',
     };
   },
-  mounted(){
+  async mounted(){
     this.epoch_version = utils.get_env('epoch_version');
     this.version = utils.get_env('version');
 
     this.end_block = utils.getEpochEndBlock();
+
+    this.layer1 = await eth.get();
+    const chain = await this.layer1.getChain();
+    this.chain_name = chain.name;
   },
   methods: {
     epochInfo(){
@@ -104,7 +113,7 @@ export default {
 
   .tlg{
     position: absolute;
-    top: -70px;
+    top: -50px;
     right: 0;
     width: 500px;
     text-align: right;

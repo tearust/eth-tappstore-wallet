@@ -1,14 +1,11 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
 import _ from 'lodash';
-
 import Base from '../workflow/Base';
-
 import modal from './modal';
-import clog from './clog';
 import utils from '../tea/utils';
-import request from '../request';
 import layer2 from '../layer2';
+import eth from '../eth';
 
 Vue.use(Vuex);
 
@@ -52,19 +49,8 @@ const initState = () => {
       debt: null,
     },
 
-
-    auction: {
-      last_auction_id: 0,
-
-      auction_list: [],
-
-      my_auction_list: [],
-      my_bid_list: [],
-    },
-
     chain: {
       current_block: null,
-      current_block_hash: null,
     },
 
     user: null,
@@ -82,7 +68,6 @@ const initState = () => {
 const store = new Vuex.Store({
   modules: {
     modal: modal,
-    clog: clog,
   },
 
   state: initState(),

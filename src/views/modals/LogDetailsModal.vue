@@ -104,7 +104,7 @@ import utils from '../../tea/utils';
 export default {
   data(){
     return {
-
+      details: null,
     };
   },
   computed: {
@@ -112,9 +112,7 @@ export default {
       visible: state => store.state.modal.log_details.visible,
       param: state => store.state.modal.log_details.param,
     }),
-    ...mapState('clog', {
-      details: state => store.state.clog.details,
-    }),
+    
   },
 
   methods: {
@@ -125,7 +123,7 @@ export default {
         value: this.param.value,
       };
       this.$root.loading(true);
-      await this.$store.dispatch('clog/fetch_details_log', opts);
+     
       this.$root.loading(false);
     }
   }

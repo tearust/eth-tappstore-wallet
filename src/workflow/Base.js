@@ -77,26 +77,25 @@ export default class {
     if (utils.get_env('env') !== 'prod') {
       window.api = api;
     }
-    api.rpc.chain.subscribeNewHeads(async (header) => {
-      // console.log(`chain is at #${header.number} has hash ${header.hash}`);
+
+    utils.register('layer1_block', (key, {block})=>{
       store.commit('set_chain', {
-        current_block: header.number,
-        current_block_hash: header.hash,
-        metadata: this.getLayer1Instance().getMetadata(),
+        current_block: block,
       });
-      
-      if(utils.getEpochEndBlock() - header.number.toJSON() < 1){
+
+      if(utils.getEpochEndBlock() - block < 1){
         utils.mem.set('epoch_closed', true);
 
-        if(store.state.user && store.state.user.isLogin && store.state.user.address !== utils.consts.SUDO_ACCOUNT){
-          _.delay(async ()=>{
-            await layer2.user.logout();
-          }, 5000);
-        }
+        // if(store.state.user && store.state.user.isLogin && store.state.user.address !== utils.consts.SUDO_ACCOUNT){
+        //   _.delay(async ()=>{
+        //     await layer2.user.logout();
+        //   }, 5000);
+        // }
         
       }
-
     });
+
+
 
     const chainInfo = await api.registry.getChainProperties();
     store.commit('set_chain', chainInfo.toHuman());

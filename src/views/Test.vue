@@ -17,9 +17,10 @@
     <el-button type="primary" @click="connectToWallet()">Connect Metamask wallet</el-button>
     <el-button type="danger" @click="getChain()">Query connect chain</el-button>
     <el-button type="danger" @click="queryMaintainerAddressList()">Maintainer list</el-button>
+    <el-button type="danger" @click="queryCurrentBlock()">Query current block</el-button>
     <br/><br/>
     <el-button type="primary" @click="topup()">Topup</el-button>
-    
+    <el-button type="primary" @click="signMessage()">Sign "tearust"</el-button>
     <el-divider />
 
     <h2>USER</h2>
@@ -382,7 +383,6 @@ export default {
     },
 
     async queryMaintainerAddressList(){
-
       const rs = await this.layer1.getMaintainerAddressList();
       console.log(11, rs);
       this.$root.alert_success(rs.join('<br/>'));
@@ -390,7 +390,7 @@ export default {
     async topup(){
       this.$root.loading(true);
       try{
-        const rs = await this.layer1.topup();
+        const rs = await this.layer1.topup(10);
         this.$root.alert_success();
       }catch(e){
         console.log('error', e);
@@ -398,6 +398,20 @@ export default {
       }
       this.$root.loading(false);
       
+    },
+    async signMessage(){
+      this.$root.loading(true);
+      try{
+        const rs = await this.layer1.signMessage('tearust');
+        this.$root.alert_success(rs);
+      }catch(e){
+        this.$root.showError(e);
+      }
+      this.$root.loading(false);
+    },
+    async queryCurrentBlock(){
+      const rs = await this.layer1.queryCurrentBlock();
+      console.log(11, rs);
     }
     
   }

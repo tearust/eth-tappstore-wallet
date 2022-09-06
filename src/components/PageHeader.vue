@@ -8,7 +8,6 @@
       fit="fit">
     </el-image>
     
-    <!-- <b class="lg">{{chain.current_block_hash ? chain.current_block : ''}}</b> -->
   </a>
   
 

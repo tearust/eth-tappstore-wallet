@@ -114,9 +114,6 @@ export default {
     async openHandler(){
       this.wf = new Base();
       await this.wf.init();
-      const layer1_instance = this.wf.getLayer1Instance();
-      let api = layer1_instance.getApi();
-
 
       this.loading = false;
     }

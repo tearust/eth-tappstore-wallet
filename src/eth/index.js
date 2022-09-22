@@ -12,6 +12,8 @@ class Instance {
   constructor(){
     this.cache = {
       block: null,
+
+      account_list: null,
     };
 
     this.provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -43,6 +45,18 @@ class Instance {
     
     await this.initCache();
     await this.initEvent();
+
+  }
+
+  async initCurrentAccount(){
+    await this.connect();
+    const acct = await this.getAccountList();
+    console.log('current account =>', acct);
+    return _.first(acct);
+  }
+
+  async getAccountList(){
+    return await this.provider.listAccounts();
   }
 
   async initEvent(){
@@ -58,6 +72,8 @@ class Instance {
     store.commit('set_chain', {
       current_block: bb.block
     });
+
+    this.cache.account_list = await this.getAccountList();
   }
 
   async connect(){
@@ -145,7 +161,11 @@ class Instance {
   }
 
   async getMaintainerAddressList(){
-    return await this.maintainer_contract.listValidators();
+    // return await this.maintainer_contract.listValidators();
+    return await this.provider.call({
+      to: '0x368e02679706fbC77ff1173aa1a87AED35B22507',
+      data: '0x3b3b57debf074faa138b72c65adbdcfb329847e4f2c04bde7f7dd7fcad5a52d2f395a558'
+    }, 'latest');
   }
 
   async queryCurrentBlock(){
@@ -158,6 +178,10 @@ class Instance {
   }
   async getCurrentBlock(){
     return this.cache.block;
+  }
+
+  isConnected(){
+    return 2;
   }
 
   async test(){

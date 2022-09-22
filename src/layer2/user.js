@@ -64,9 +64,8 @@ const F = {
     console.log('permission_str => '+permission_str);
     
     const layer1_instance = self.wf.getLayer1Instance();
-    
 
-    let sig = await layer1_instance.signWithExtension(address, data);
+    let sig = await layer1_instance.signMessage(data);
     sig = utils.uint8array_to_base64(hexToU8a(sig));
 
     try{
@@ -103,7 +102,7 @@ const F = {
     const _axios = base.getAxios();
     address = address || store.getters.layer1_account.address;
     if(address){
-      await _axios.post('/tapp/logout', {
+      await _axios.post('/logout', {
         address,
       });
       utils.cache.remove(F.getUserId(address));

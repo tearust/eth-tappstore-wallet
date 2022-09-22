@@ -13,18 +13,21 @@
 
 
   <div style="margin-left: 20px;" class="el-menu-item">
-    <el-dropdown trigger="click" @command="handleCommand">
-      <el-button size="small" type="primary" round style="font-size: 17px; position:relative;top:-2px;" @click="clickSelectAccount()">
-        {{layer1_account.name || 'Select account'}}
-        <!-- <i class="el-icon-arrow-down el-icon--right"></i> -->
-      </el-button>
-      <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item v-for="(item, i) of all_account" :key="i" :command="item">
-          <span v-if="layer1_account && layer1_account.address!==item.address">{{item.ori_name}}</span>
-        </el-dropdown-item>
-        
-      </el-dropdown-menu>
-    </el-dropdown>
+    <el-tooltip v-if="layer1_account.address" effect="light" :content="layer1_account.address">
+    <div style="
+      display: inline-block;
+      font-size: 14px;
+      color: #fff;
+      background: #35a696;
+      padding: 0 8px;
+      height: 32px;
+      line-height: 32px;
+      border-radius: 4px;
+      width: 120px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      position: relative;
+    ">{{layer1_account.address}}</div></el-tooltip>
 
     <el-button style="margin-left: 10px; font-size: 17px;" @click="loginOrLogout()" type="text">{{user ? 'Logout' : 'Login'}}</el-button>
   </div>
@@ -161,23 +164,6 @@ export default {
       this.all_account = tmp;
     },
 
-    async handleCommand(item){
-
-      this.$store.commit('set_account', item);
-      this.$root.goPath('/account_profile');
-      location.reload(true);
-
-    },
-    async clickSelectAccount(){
-      if(this.no_plugin_account){
-        const html = `
-          <p style="font-size: 15px;">Please add an account or <a target="_blank" href="https://teaproject.org/#/doc_list/%2FFAQ%2Fhow_to_install_polkadot_extension.md ">install polkadot browser extension</a></p>
-        `;
-        this.$alert(html, {
-          dangerouslyUseHTMLString: true,
-        });
-      }
-    },
 
     async loginOrLogout(){
       if(!this.user){
@@ -202,7 +188,6 @@ export default {
   },
   async mounted(){
     layer2.base.set_global_log(this);
-
     const id = layer2.base.getTappId();
   
 
@@ -211,40 +196,41 @@ export default {
       channel: 'NA',
     });
 
-    // const layer1 = await eth.get();
-    await eth.get();
-
-
-    // await (new Base()).init()
     let time = 500;
 
     const loop = async (cb)=>{
-
-      // try{
-      //   const wf = new Base();
-      //   const connected = wf.layer1.isConnected();
-      //   if(connected !== this.connected){
-      //     this.connected = connected;
-
-      //     if(this.connected === 2){
-      //       this.wf = wf;
-      //       this.initAllPluginAccount(wf);
-      //       cb();
-      //     }
-          
-      //   }
+      try{
+        const wf = new Base();
+        await wf.init();
         
-      //   if(this.connected > 0){
-      //     time = 2000;
-      //   }
+        const connected = wf.layer1.isConnected();
+        if(connected !== this.connected){
+          this.connected = connected;
 
-      // }catch(e){
-      //   this.connected = 0;
-      // }
+          if(this.connected === 2){
+            this.wf = wf;
+            
+            const address = await this.wf.layer1.initCurrentAccount();
+            this.$store.commit('set_account', {
+              address
+            });
+
+            cb();
+          }
+          
+        }
+        
+        if(this.connected > 0){
+          time = 2000;
+        }
+
+      }catch(e){
+        this.connected = 0;
+      }
      
-      // _.delay(()=>{
-      //   loop(cb);
-      // }, time);
+      _.delay(()=>{
+        loop(cb);
+      }, time);
     };
 
     loop(async ()=>{
@@ -253,7 +239,7 @@ export default {
 
       await this.$store.dispatch('init_user');
 
-      helper.checkForLayer1UserChanged(this);
+      // helper.checkForLayer1UserChanged(this);
 
       const tapp = {};
       this.$store.commit('set_bbs', {

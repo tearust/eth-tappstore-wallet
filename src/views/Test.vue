@@ -139,8 +139,8 @@ export default {
   async mounted(){
     this.$root.loading(true);
 
-    this.wf = new SettingAccount();
-    await this.wf.init();
+    // this.wf = new SettingAccount();
+    // await this.wf.init();
 
     this.layer1 = await eth.get();
 
@@ -341,6 +341,7 @@ export default {
     async query_seat_list(){
       const list = await layer2.seat.querySeatList(this, {});
       console.log(1, list);
+      
     },
 
     async query_op_logs(){

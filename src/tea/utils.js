@@ -352,12 +352,6 @@ const F = {
   },
 
 
-  async waitLayer1Ready(layer1) {
-    while (layer1.connected !== 2) {
-      await F.sleep(500);
-    }
-  },
-
   async getPriceTable() {
     const key = 'staking_price_table';
     const rs = mem.get(key);

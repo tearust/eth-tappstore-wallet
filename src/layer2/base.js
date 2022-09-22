@@ -12,7 +12,7 @@ const meta = {
   server_url: utils.get_env('LAYER2_URL'),
   server_actor: utils.get_env('LAYER2_ACTOR') || 'MAUJS3ZTZQ2GEVDPAV4P5HBVTHGBLEDSQGPDRAMDRUIYQ3CN6TBERYF7',  // default is tappstore_in_B actor
 };
-console.log("layer2 meta", meta);
+// console.log("layer2 meta", meta);
 
 const _axios = axios.create({
   baseURL: meta.server_url,
@@ -26,12 +26,16 @@ _axios.interceptors.request.use((config)=>{
 
 // set request response
 _axios.interceptors.response.use((res)=>{
+  console.log(222, res);
   if(res.data){
+    if(res.data.error){
+      return Promise.reject(res.data.error);
+    }
     if(res.data.data){
       return Promise.resolve(res.data.data);
     }
     else{
-      return Promise.resolve(null);
+      return Promise.resolve(res.data);
     }
   }
 }, (error)=>{

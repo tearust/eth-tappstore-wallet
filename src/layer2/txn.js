@@ -17,7 +17,7 @@ const F = {
     try{
       base.log("Send txn request...");
       console.log("Send txn request...");
-      const step1_rs = await _axios.post('/tapp/'+method, {
+      const step1_rs = await _axios.post('/'+method, {
         ...param,
         uuid: txn_uuid,
       });
@@ -38,11 +38,10 @@ const F = {
     const step_2_loop = async ()=>{
       try{
         console.log('query result for '+txn_uuid+'...');
-        step_2_rs = await _axios.post('/tapp/query_result', {
+        step_2_rs = await _axios.post('/query_result', {
           uuid: txn_uuid,
         });
 
-        step_2_rs = utils.parseJSON(step_2_rs);
       }catch(e){
         console.log("step2 error: ", e);
         // rs = e.message;
@@ -80,7 +79,7 @@ const F = {
       try{
         base.log("Send query txn hash request...");
         console.log('Send query txn hash request...');
-        step_3_rs = await _axios.post('/tapp/queryHashResult', {
+        step_3_rs = await _axios.post('/queryHashResult', {
           hash: step_3_hash,
           ts: step_3_ts.toString(),
           uuid: hash_uuid,
@@ -91,11 +90,10 @@ const F = {
         await utils.sleep(5000);
 
         console.log('query hash result for '+hash_uuid+'...');
-        step_4_rs = await _axios.post('/tapp/query_result', {
+        step_4_rs = await _axios.post('/query_result', {
           uuid: hash_uuid,
         });
 
-        step_4_rs = utils.parseJSON(step_4_rs);
         if(!step_4_rs.status) throw step_4_rs.error;
       }catch(e){
         console.log("step4 error: ", e);
@@ -144,11 +142,10 @@ const F = {
       }
       try{
         console.log('continue query for '+step_5_uuid+'...');
-        step_5_rs = await _axios.post('/tapp/query_result', {
+        step_5_rs = await _axios.post('/query_result', {
           uuid: step_5_uuid,
         });
 
-        step_5_rs = utils.parseJSON(step_5_rs);
       }catch(e){
         console.log("step5 error: ", e);
         step_5_n ++;
@@ -177,7 +174,7 @@ const F = {
     const _axios = base.getAxios();
 
     try{
-      const step1_rs = await _axios.post('/tapp/'+method, {
+      const step1_rs = await _axios.post('/'+method, {
         ...param,
         uuid: _uuid,
       });
@@ -197,16 +194,15 @@ const F = {
     let rs = null;
     let n = 0;
     const loop2 = async ()=>{
-      if(n>15){
-        return;
+      if(n>5){
+        throw "timeout, please retry.";
       }
       try{
-        rs = await _axios.post('/tapp/query_result', {
+        rs = await _axios.post('/query_result', {
           uuid: _uuid,
         });
   
       }catch(e){
-  
         // rs = e.message;
         rs = null;
         await utils.sleep(5000);

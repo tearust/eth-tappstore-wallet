@@ -1,5 +1,5 @@
-import Layer1 from '../tea/layer1';
 import layer2 from '../layer2';
+import eth from '../eth';
 import utils from '../tea/utils';
 import Log from '../shared/utility/Log';
 import http from '../tea/http';
@@ -11,7 +11,6 @@ import { hexToString, numberToHex } from 'tearust_layer1';
 
 import '../tea/moment-precise-range';
 
-window._layer1 = require('tearust_layer1');
 
 let _layer1 = null;
 let _init = false;
@@ -20,7 +19,6 @@ export default class {
     this.layer1 = _layer1;
     this._log = Log.create(this.defineLog());
 
-    this.gluon = null;
   }
 
   defineLog() {
@@ -29,7 +27,7 @@ export default class {
 
   async init() {
     const init_loop = (resolve) => {
-      if (!this.layer1 || this.layer1.connected !== 2) {
+      if (!this.layer1) {
         _.delay(() => {
           init_loop(resolve);
         }, 300);
@@ -63,49 +61,20 @@ export default class {
 
   async initLayer1() {
     if (!_layer1) {
-      _layer1 = new Layer1();
+      _layer1 = await eth.get();
 
-      await _layer1.init();
-      await utils.waitLayer1Ready(_layer1);
       this.layer1 = _layer1;
-      await this.initEvent();
     }
   }
 
   async initEvent() {
-    const api = this.getLayer1Instance().getApi();
-    if (utils.get_env('env') !== 'prod') {
-      window.api = api;
-    }
+    
 
-    utils.register('layer1_block', (key, {block})=>{
-      store.commit('set_chain', {
-        current_block: block,
-      });
-
-      if(utils.getEpochEndBlock() - block < 1){
-        utils.mem.set('epoch_closed', true);
-
-        // if(store.state.user && store.state.user.isLogin && store.state.user.address !== utils.consts.SUDO_ACCOUNT){
-        //   _.delay(async ()=>{
-        //     await layer2.user.logout();
-        //   }, 5000);
-        // }
-        
-      }
-    });
-
-
-
-    const chainInfo = await api.registry.getChainProperties();
-    store.commit('set_chain', chainInfo.toHuman());
-
-    // console.log(1, api.errors)
   }
 
   getLayer1Instance() {
     if (this.layer1) {
-      return this.layer1.getLayer1Instance();
+      return this.layer1;
     }
 
     return null;

@@ -130,7 +130,6 @@ export default {
     async refresh(){
       this.$root.loading(true);
       const layer1_instance = this.wf.getLayer1Instance();
-      const api = layer1_instance.getApi();
       
 
       const cml_data = await layer2.miner.queryCmlDetails(this, {

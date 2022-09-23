@@ -26,8 +26,12 @@ export default class {
   }
 
   async init() {
+    if(_init){
+      return true;
+    }
+
     const init_loop = (resolve) => {
-      if (!this.layer1) {
+      if (!_init) {
         _.delay(() => {
           init_loop(resolve);
         }, 300);
@@ -40,8 +44,8 @@ export default class {
 
     return new Promise(async (resolve) => {
       if (!_init) {
-        _init = true;
         await this.initLayer1();
+        _init = true;
       }
       init_loop(resolve);
     });
@@ -80,13 +84,9 @@ export default class {
     return null;
   }
 
-  async getCurrentBlock(api) {
-    if (!api) {
-      const layer1_instance = this.getLayer1Instance();
-      api = layer1_instance.getApi();
-    }
-    const block = await api.rpc.chain.getBlock();
-    return block.toJSON().block.header.number;
+  async getCurrentBlock() {
+    const rs = this.layer1.queryCurrentBlock()
+    return rs.block;
   }
 
   showQrCodeModal(opts) {
@@ -150,7 +150,6 @@ export default class {
     ]);
 
     const layer1_instance = this.getLayer1Instance();
-    const api = layer1_instance.getApi();
 
     let total = 0;
     const debt_map = {};
@@ -182,31 +181,16 @@ export default class {
   }
 
   async getAllBalance(address) {
-    const layer1_instance = this.getLayer1Instance();
-    const api = layer1_instance.getApi();
-    let tmp = await api.query.system.account(address);
-    // console.log('balance =>', tmp.toJSON().data);
-    tmp = tmp.data;
-
-
-    const free = parseInt(tmp.free, 10) / layer1_instance.asUnit();
-    const lock = parseInt(tmp.reserved, 10) / layer1_instance.asUnit();
-
-    
-
-    let usd = await api.query.genesisExchange.usdStore(address);
-    usd = usd.toJSON();
-    usd = utils.layer1.balanceToAmount(usd);
-    // let usd = 0;
-
-    let usd_debt = 0;
-    
+    const eth = await this.layer1.getEthBalance();
+    const tea = await this.layer1.getTeaBalance();
+    const coffee = await this.layer1.getCoffeeBalance();
     return {
-      free: Math.floor(free * 10000) / 10000,
-      lock: Math.floor(lock * 10000) / 10000,
+      eth: Math.floor(eth * 10000) / 10000,
+      free: Math.floor(tea * 10000) / 10000,
+      lock: 0,
       reward: 0,
-      usd,
-      usd_debt,
+      usd: coffee,
+      usd_debt: 0,
     };
   }
 
@@ -260,41 +244,34 @@ export default class {
       return false;
     }
 
-    const layer1_instance = this.getLayer1Instance();
 
-    const api = layer1_instance.getApi();
     const balance = await this.getAllBalance(layer1_account.address);
-
-    const coupons = await this.getCoupons(layer1_account.address);
-
-    const pawn_cml_list = await this.getAllPawnByAddress(layer1_account.address);
 
     // reset all state
     store.commit('reset_state');
 
-    // let my_auction = await api.query.auction.userAuctionStore(layer1_account.address);
-    // my_auction = my_auction.toHuman();
-    const cml_list = await this.getCmlListByUser(layer1_account.address);
-    const cml_data = await this.getCmlByList(cml_list);
+    // const cml_list = await this.getCmlListByUser(layer1_account.address);
+    // const cml_data = await this.getCmlByList(cml_list);
 
     this._log.i("refresh current layer1_account");
     store.commit('set_account', {
+      eth: balance.eth,
       balance: balance.free,
       lock_balance: balance.lock,
       address: layer1_account.address,
-      ori_name: layer1_account.name,
-      cml: cml_data,
+      ori_name: layer1_account.name||'_',
+      cml: [],
       reward: balance.reward,
       
       usd: balance.usd,
       usd_debt: balance.usd_debt,
 
-      coupons,
-      pawn_cml_list,
+      coupons: [],
+      pawn_cml_list: [],
     });
 
     
-    store.commit('set_miner_mode', cml_data.length>0);
+    store.commit('set_miner_mode', false);
     await store.dispatch('init_user');
   }
 
@@ -308,31 +285,12 @@ export default class {
   }
 
   async getCmlByList(cml_list, flag=false) {
-    const layer1_instance = this.getLayer1Instance();
-    const api = layer1_instance.getApi();
-
-    const current_block = await this.getCurrentBlock(api);
-
-    const list = await Promise.all(_.map(cml_list, async (cml_id) => {
-      let cml = await api.query.cml.cmlStore(cml_id);
-      cml = cml.toJSON();
-
-      
-      let remaining = cml.intrinsic.lifespan;
-
-      if (remaining < 0) remaining = 0;
-      cml.liferemaining = remaining;
-      cml.life_day = this.blockToDay(remaining);
-
-      // cml.performance = cml.intrinsic.performance;
-      
-      cml = this.to_default_cml(cml);
+    // todo
+    return _.map(cml_list, (id)=>{
       return {
-        ...cml.intrinsic,
-        ...cml,
-      };
-    }));
-    return list;
+        id,
+      }
+    });
 
   }
 

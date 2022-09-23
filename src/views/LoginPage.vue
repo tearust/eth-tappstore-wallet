@@ -30,6 +30,7 @@ export default {
   async mounted(){
     this.wf = new SettingAccount();
     await this.wf.init();
+    
   },
   methods: {
     async loginHander(){

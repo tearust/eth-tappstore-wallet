@@ -187,11 +187,11 @@ export default {
 
     this.$root.loading(true);
 
-    const layer1_instance = this.wf.getLayer1Instance();
-    const api = layer1_instance.getApi();
+    // const layer1_instance = this.wf.getLayer1Instance();
+    // const api = layer1_instance.getApi();
 
-    let cml = await api.query.cml.cmlStore(this.form.cml_id);
-    cml = cml.toJSON();
+    // let cml = await api.query.cml.cmlStore(this.form.cml_id);
+    // cml = cml.toJSON();
 
     // const map = {
     //   A: "cmlAMiningMachineCost",

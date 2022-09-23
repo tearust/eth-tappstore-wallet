@@ -93,6 +93,7 @@ const store = new Vuex.Store({
         name: account.ori_name,
         address: account.address,
         balance: account.balance,
+        eth: account.eth,
         lock_balance: account.lock_balance,
         cml: account.cml || [],
         reward: account.reward,
@@ -121,8 +122,6 @@ const store = new Vuex.Store({
       //   state[key] = init_state[key]
       // })
       state.layer1_account = init_state.layer1_account;
-      state.auction.my_auction_list = [];
-      state.auction.my_bid_list = [];
     },
 
     set_bbs(state, bbs){

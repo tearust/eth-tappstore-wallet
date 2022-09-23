@@ -1,7 +1,7 @@
 import {_} from 'tearust_utils';
 import utils from '../tea/utils';
 import store from '../store';
-import {stringToHex, hexToU8a, stringToU8a, numberToHex} from 'tearust_layer1';
+import {stringToHex, hexToU8a, stringToU8a, numberToHex, u8aToString} from 'tearust_layer1';
 
 import base from './base';
 import txn from './txn';
@@ -63,12 +63,14 @@ const F = {
     const data = permission_str;
     console.log('permission_str => '+permission_str);
     
-    const layer1_instance = self.wf.getLayer1Instance();
-
-    let sig = await layer1_instance.signMessage(data);
-    sig = utils.uint8array_to_base64(hexToU8a(sig));
+    
 
     try{
+
+      const layer1_instance = self.wf.getLayer1Instance();
+      let sig = await layer1_instance.signMessage(data);
+      sig = utils.uint8array_to_base64(hexToU8a(sig));
+
       const rs = await txn.txn_request('login', {
         tappIdB64: base.getTappId(),
         address,
@@ -132,7 +134,7 @@ const F = {
             await succ_cb();
           }
         }catch(e){
-          self.$root.showError(e);
+          self.$root.showError(e.reason || e.toString());
         }
 
         close();
@@ -145,9 +147,6 @@ const F = {
 
   async topupFromLayer1(self, succ_cb){
     const layer1_instance = self.wf.getLayer1Instance();
-    const api = layer1_instance.getApi();
-
-    const tappId = base.getTappId();
 
     self.$store.commit('modal/open', {
       key: 'common_form',
@@ -155,34 +154,26 @@ const F = {
         title: 'Topup',
         text: 'Move chain wallet (layer1) TEA funds to layer2 TApp Store wallet account',
         props: {
-          target: {
-            type: "Input",
-            disabled: true,
-            hidden: true,
-            label: "Contract address",
-            class: 'hidden',
-          },
+          
           amount: {
             type: "number",
             default: 10,
-            max: 200000,
+            max: 9999999999,
             label: "Amount (TEA)"
           }
         },
       },
       cb: async (form, close)=>{
-        if(self.layer1_account.balance < form.amount){
-          self.$root.showError("Not enough balance to topup.");
-          return false;
-        }
+        // if(self.layer1_account.balance < form.amount){
+        //   self.$root.showError("Not enough balance to topup.");
+        //   return false;
+        // }
 
         self.$root.loading(true);
-        const total = utils.layer1.amountToBalance(form.amount);
-        const amt = numberToHex(total);
+        
 
         try{
-          const tx = api.tx.teaErc20.topup(form.target, amt);
-          await layer1_instance.sendTx(self.layer1_account.address, tx);
+          await layer1_instance.topup(_.toNumber(form.amount));
         }catch(e){
           self.$root.showError(e);
           close();
@@ -195,18 +186,7 @@ const F = {
         await succ_cb()
         self.$root.loading(false);
       },
-      open_cb: async (opts)=>{
-        const rs = await common.queryTappStoreAccount();
-        
-        if(rs.address){
-          const top_acct = rs.address;
-          opts.props.target.default = top_acct;
-          // opts.text = `Contract address: ${top_acct}`;
-        }
-
-        // TODO handle error.
-        
-      }
+      
     });
   },
 

@@ -6,10 +6,7 @@
       </i>
 
       <div class="x-list" style="width: 100%">
-        <div class="x-item">
-          <b>{{ "Name" | cardTitle }}</b>
-          <span>{{ layer1_account ? layer1_account.name : "" }}</span>
-        </div>
+        
         <div class="x-item">
           <b>{{ "Address" | cardTitle }}</b>
           <span>
@@ -40,6 +37,24 @@
           <span
             :inner-html.prop="
               layer1_account ? layer1_account.balance : '' | teaIcon
+            "
+          ></span>
+        </div>
+        <div class="x-item">
+          <b>
+            {{ "Chain wallet ETH balance" }}
+            <TeaIconButton
+              style="position: relative"
+              place="right"
+              tip="
+            The amount of ETH in your layer1 wallet (e.g. Metamask wallet)
+          "
+              icon="questionmark"
+            />
+          </b>
+          <span
+            :inner-html.prop="
+              layer1_account ? layer1_account.eth : ''
             "
           ></span>
         </div>
@@ -136,34 +151,19 @@
           </el-tooltip>
 
           <el-button
-            :disabled="!(layer1_account && layer1_account.balance)"
             v-if="layer1_account"
             type="primary"
             @click="transferBalance()"
             >Send TEA</el-button
           >
           <el-button
-            :disabled="!(layer1_account && layer1_account.usd)"
             v-if="layer1_account"
             type="primary"
             @click="transferUsd()"
             >Send COFFEE</el-button
           >
 
-          <el-button
-            type="primary"
-            v-if="layer1_account && layer1_account.balance > 0"
-            @click="teaToUsd()"
-          >
-            Sell TEA ({{ rate.teaToUsd }} COFFEE/TEA)
-          </el-button>
-          <el-button
-            type="primary"
-            v-if="layer1_account && layer1_account.usd > 0"
-            @click="usdToTea()"
-          >
-            Sell COFFEE ({{ rate.usdToTea }} TEA/COFFEE)
-          </el-button>
+          
 
           <el-button
             type="primary"
@@ -239,16 +239,7 @@ export default {
       }
     );
 
-    const layer1_instance = this.wf.getLayer1Instance();
-    const api = layer1_instance.getApi();
-    const pl = api.consts.genesisExchange.interestPeriodLength.toJSON();
-    const query_rate = (
-      await api.query.genesisExchange.usdInterestRate()
-    ).toJSON();
-    const usd_interest_rate = query_rate;
-    this.usd_interest_rate =
-      usd_interest_rate / 100 + "% per " + pl + " blocks";
-    this.usd_interest_rate_number = usd_interest_rate / 100 + "%";
+    
   },
 
   methods: {
@@ -288,12 +279,9 @@ export default {
       flag && this.$root.loading(true);
       await this.wf.refreshCurrentAccount();
 
-      const layer1_account = this.layer1_account;
+      // await this.queryTokenBalance();
+      // await this.queryDeposit();
 
-      await this.queryTokenBalance();
-      await this.queryDeposit();
-
-      await this.getExchangeRate();
       flag && this.$root.loading(false);
     },
 
@@ -330,64 +318,10 @@ export default {
     },
 
     async transferBalance() {
-      const layer1_instance = this.wf.getLayer1Instance();
-      const api = layer1_instance.getApi();
-
-      this.$store.commit("modal/open", {
-        key: "transfer_balance",
-        param: {},
-        cb: async (form, closeFn) => {
-          this.$root.loading(true);
-          try {
-            const { address, amount } = form;
-
-            await this.wf.transferBalance(address, amount);
-
-            closeFn();
-            this.$root.success();
-            await this.refreshAccount();
-          } catch (e) {
-            this.$root.showError(e);
-          }
-          this.$root.loading(false);
-        },
-      });
+      this.$root.alert_success("Please use Metamask wallet to send");
     },
     async transferUsd() {
-      const layer1_instance = this.wf.getLayer1Instance();
-      const api = layer1_instance.getApi();
-
-      this.$store.commit("modal/open", {
-        key: "common_form",
-        param: {
-          title: "Send COFFEE",
-          props: {
-            target: {
-              type: "Input",
-              label: "Receiver's address",
-            },
-            amt: {
-              type: "Input",
-              label: "COFFEE amount",
-            },
-          },
-        },
-        cb: async (form, closeFn) => {
-          this.$root.loading(true);
-          try {
-            const { target, amt } = form;
-
-            await this.wf.transferBalance(target, amt, true);
-
-            closeFn();
-            this.$root.success();
-            await this.refreshAccount();
-          } catch (e) {
-            this.$root.showError(e);
-          }
-          this.$root.loading(false);
-        },
-      });
+      this.$root.alert_success("Please use Metamask wallet to send");
     },
 
     clickRefreshBtn() {
@@ -413,200 +347,10 @@ export default {
       clipboard.on("error", (e) => {});
     },
 
-    async getExchangeRate() {
-      let rs = null;
-      const tmp = await request.layer1_rpc("cml_currentExchangeRate", []);
-      console.log(`[cml_currentExchangeRate] result => ${tmp}`);
 
-      this.rate.teaToUsd = utils.layer1.balanceToAmount(tmp[0]);
-      this.rate.usdToTea = utils.layer1.balanceToAmount(tmp[1]);
-    },
+    
 
-    async teaToUsd() {
-      // sell tea
-      const layer1_instance = this.wf.getLayer1Instance();
-      const api = layer1_instance.getApi();
-
-      this.$store.commit("modal/open", {
-        key: "common_form",
-        param: {
-          title: "Sell TEA",
-          text: "",
-          props: {
-            sell_tea_amount: {
-              label: "Sell amount (TEA)",
-              type: "number",
-              // max: this.layer1_account.balance,
-              min: 0,
-              step: 0.1,
-              max: 99999999999999,
-              default: undefined,
-              tip: 'Click "Confirm" button to see how much you can convert to, or input a number below to convert back.',
-              model_action: {
-                button_text: "Sell all",
-                handler: async () => {
-                  const val = utils.layer1.roundAmount(
-                    this.layer1_account.balance - 0.01
-                  );
-                  return val;
-                },
-              },
-            },
-            coffee: {
-              label: "COFFEE",
-              type: "number",
-              default: undefined,
-              model_action: {
-                button_text: "Convert back",
-                handler: async (amount) => {
-                  const val = utils.layer1.roundAmount(
-                    this.rate.usdToTea * amount
-                  );
-                  return val;
-                },
-                ref: "sell_tea_amount",
-              },
-              tip_action: () => {
-                helper.openUrl(
-                  "https://github.com/tearust/teaproject/wiki/TEA-and-COFFEE#convert-back"
-                );
-              },
-              tip: 'Click to visit wiki for "Convert back"',
-            },
-          },
-        },
-        cb: async (form, close) => {
-          this.$root.loading(true);
-
-          const amount = form.sell_tea_amount || 0;
-          // let estimate = await request.layer1_rpc('cml_estimateAmount', [utils.layer1.amountToBalance(amount), false]);
-          try {
-            await this.$confirm(
-              `Estimated amount is <b>${utils.layer1.roundAmount(
-                this.rate.teaToUsd * amount
-              )} COFFEE</b> for this exchange. <br/> Are you sure?`,
-              {
-                dangerouslyUseHTMLString: true,
-              }
-            );
-          } catch (e) {
-            this.$root.loading(false);
-            return false;
-          }
-
-          try {
-            const tx = api.tx.genesisExchange.teaToUsd(
-              null,
-              numberToHex(utils.layer1.amountToBalance(amount))
-            );
-            await layer1_instance.sendTx(this.layer1_account.address, tx);
-            await this.refreshAccount();
-            this.$root.success();
-            close();
-          } catch (e) {
-            this.$root.showError(e);
-          }
-          this.$root.loading(false);
-        },
-        open_cb: async (opts) => {
-          await this.getExchangeRate();
-          const rate = this.rate.teaToUsd;
-          opts.text = `Current exchange rate is <b>${rate} COFFEE/TEA</b>.`;
-        },
-      });
-    },
-
-    async usdToTea() {
-      // sell usd
-      const layer1_instance = this.wf.getLayer1Instance();
-      const api = layer1_instance.getApi();
-
-      this.$store.commit("modal/open", {
-        key: "common_form",
-        param: {
-          title: "Sell COFFEE",
-          text: "",
-          props: {
-            sell_usd_amount: {
-              label: "Sell amount (COFFEE)",
-              type: "number",
-              max: this.layer1_account.usd,
-              min: 0,
-              max: 99999999999999,
-              step: 0.1,
-              default: undefined,
-              tip: 'Click "Confirm" button to see how much you can convert to, or input a number below to convert back.',
-              model_action: {
-                button_text: "Sell all",
-                handler: async () => {
-                  const val = this.layer1_account.usd;
-                  return val;
-                },
-              },
-            },
-            tea: {
-              label: "TEA",
-              type: "number",
-              default: undefined,
-              model_action: {
-                button_text: "Convert back",
-                handler: async (amount) => {
-                  const val = utils.layer1.roundAmount(
-                    this.rate.teaToUsd * amount
-                  );
-                  return val;
-                },
-                ref: "sell_usd_amount",
-              },
-              tip_action: () => {
-                helper.openUrl(
-                  "https://github.com/tearust/teaproject/wiki/TEA-and-COFFEE#convert-back"
-                );
-              },
-              tip: 'Click to visit wiki for "Convert back"',
-            },
-          },
-        },
-        cb: async (form, close) => {
-          this.$root.loading(true);
-
-          const amount = form.sell_usd_amount || 0;
-          // let estimate = await request.layer1_rpc('cml_estimateAmount', [utils.layer1.amountToBalance(amount), true]);
-
-          try {
-            await this.$confirm(
-              `Estimated amount is <b>${utils.layer1.roundAmount(
-                this.rate.usdToTea * amount
-              )} TEA</b> for this exchange. <br/> Are you sure?`,
-              {
-                dangerouslyUseHTMLString: true,
-              }
-            );
-          } catch (e) {
-            this.$root.loading(false);
-            return false;
-          }
-          try {
-            const tx = api.tx.genesisExchange.usdToTea(
-              null,
-              numberToHex(utils.layer1.amountToBalance(amount))
-            );
-            await layer1_instance.sendTx(this.layer1_account.address, tx);
-            await this.refreshAccount();
-            this.$root.success();
-            close();
-          } catch (e) {
-            this.$root.showError(e);
-          }
-          this.$root.loading(false);
-        },
-        open_cb: async (opts) => {
-          await this.getExchangeRate();
-          const rate = this.rate.usdToTea;
-          opts.text = `Current exchange rate is <b>${rate} TEA/COFFEE</b>.`;
-        },
-      });
-    },
+    
   },
 };
 </script>

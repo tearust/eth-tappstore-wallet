@@ -31,8 +31,14 @@ class Instance {
     );
 
     this.tea_contract = new ethers.Contract(
-      ContractMap.TEA,
+      ContractMap.ERC20,
       require('./abi/ERC20.sol/ERC20Token.json').abi,
+      this.provider.getSigner(),
+    );
+
+    this.coffee_contract = new ethers.Contract(
+      ContractMap.COFFEE,
+      require('./abi/Coffee.sol/COFFEE.json').abi,
       this.provider.getSigner(),
     );
 
@@ -85,10 +91,23 @@ class Instance {
     console.log('requestWalletAddressList:', list);
     return list;
   }
-  async getBalance(){
+  async getEthBalance(){
     const n = await this.signer.getBalance();
     const balance = U.formatUnits(n, 'ether');
     return balance;
+  }
+  async getTeaBalance(){
+    const erc20Token = this.tea_contract;
+    const n = await erc20Token.balanceOf(this.signer.getAddress());
+    const balance = U.formatUnits(n, 'ether');
+    return balance
+  }
+  async getCoffeeBalance(){
+    // TODO
+    return 0;
+    // const n = await this.coffee_contract.balanceOf(this.signer.getAddress());
+    // const balance = U.formatUnits(n, 'ether');
+    // return balance
   }
 
   async getChain(){

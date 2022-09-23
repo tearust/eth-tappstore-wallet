@@ -239,8 +239,6 @@ export default {
 
     this.$root.loading(true);
 
-    const layer1_instance = this.wf.getLayer1Instance();
-    const api = layer1_instance.getApi();
 
     const [cml] = await this.wf.getCmlByList([this.form.cml_id]);
 
@@ -274,7 +272,6 @@ export default {
       const x = await this.beforeAction();
       if(!x) return false;
       const layer1_instance = this.wf.getLayer1Instance();
-      const api = layer1_instance.getApi();
 
       this.$root.loading(true);
       try {

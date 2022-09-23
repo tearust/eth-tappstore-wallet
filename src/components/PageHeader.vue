@@ -197,24 +197,25 @@ export default {
     });
 
     let time = 500;
+    const wf = new Base();
+    await wf.init();
+    this.wf = wf;
+    const address = await this.wf.layer1.initCurrentAccount();
+    this.$store.commit('set_account', {
+      ...this.layer1_account,
+      address
+    });
 
     const loop = async (cb)=>{
       try{
-        const wf = new Base();
-        await wf.init();
+        
         
         const connected = wf.layer1.isConnected();
         if(connected !== this.connected){
           this.connected = connected;
 
           if(this.connected === 2){
-            this.wf = wf;
             
-            const address = await this.wf.layer1.initCurrentAccount();
-            this.$store.commit('set_account', {
-              address
-            });
-
             cb();
           }
           
@@ -239,7 +240,7 @@ export default {
 
       await this.$store.dispatch('init_user');
 
-      // helper.checkForLayer1UserChanged(this);
+      helper.checkForLayer1UserChanged(this);
 
       const tapp = {};
       this.$store.commit('set_bbs', {

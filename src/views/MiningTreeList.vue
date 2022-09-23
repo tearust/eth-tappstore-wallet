@@ -184,7 +184,6 @@ export default {
       this.list = _.filter(list, (item)=>{
         return !!item.layer2;
       });
-      console.log(444, this.list);
       
       // this.total_current_performance = s1;
       // this.total_remaining_performance = s2;

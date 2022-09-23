@@ -16,7 +16,6 @@ const F = {
   async hostTApp(self, data, succ_cb){
     const session_key = user.checkLogin(self);
     const layer1_instance = self.wf.getLayer1Instance();
-    const api = layer1_instance.getApi();
 
     self.$store.commit('modal/open', {
       key: 'host_tapp',

@@ -173,9 +173,6 @@ export default {
     },
     
     async testPlant() {
-    
-      const layer1_instance = this.wf.getLayer1Instance();
-      const api = layer1_instance.getApi();
 
       const form = this.form;
 

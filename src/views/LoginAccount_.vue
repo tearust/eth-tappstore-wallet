@@ -217,7 +217,6 @@ export default {
 
     async transferBalance(){
       const layer1_instance = this.wf.getLayer1Instance();
-      const api = layer1_instance.getApi();
 
       this.$store.commit('modal/open', {
         key: 'transfer_balance',

@@ -30,8 +30,7 @@
     <!-- <el-button type="primary" @click="topup_action()">Topup 10</el-button> -->
     <el-button type="primary" @click="withdraw_action()">Withdraw 10</el-button>
     <br/><br/>
-    <el-button type="danger" @click="query_consume_account_action()">Query consume account</el-button>
-    <el-button type="danger" @click="query_tappstore_account_action()">Query tappstore account</el-button>
+
     <el-divider />
 
     <h2>TAPP</h2>
@@ -208,16 +207,6 @@ export default {
       }catch(e){
         layer2.base.top_log(e, 'error');
       }
-      this.$root.loading(false);
-    },
-    async query_consume_account_action(){
-      this.$root.loading(true);
-      await layer2.common.queryTappAccount();
-      this.$root.loading(false);
-    },
-    async query_tappstore_account_action(){
-      this.$root.loading(true);
-      await layer2.common.queryTappStoreAccount();
       this.$root.loading(false);
     },
     

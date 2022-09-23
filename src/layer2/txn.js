@@ -217,7 +217,7 @@ const F = {
   
     if(rs){
       console.log('query_request result: ', rs);
-      return JSON.parse(rs);
+      return rs;
     }
   
     return rs;

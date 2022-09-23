@@ -53,7 +53,7 @@ const F = {
       
     }catch(e){
       self.$root.loading(false);
-      console.log('querySeatList error:', e);
+      console.log('queryOpLogs error:', e);
     }
     
   },

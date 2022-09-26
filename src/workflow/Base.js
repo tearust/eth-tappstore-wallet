@@ -181,15 +181,15 @@ export default class {
   }
 
   async getAllBalance(address) {
-    const eth = await this.layer1.getEthBalance();
+    // const eth = await this.layer1.getEthBalance();
     const tea = await this.layer1.getTeaBalance();
-    const coffee = await this.layer1.getCoffeeBalance();
+    // const coffee = await this.layer1.getCoffeeBalance();
     return {
-      eth: Math.floor(eth * 10000) / 10000,
+      eth: 0,  //Math.floor(eth * 10000) / 10000,
       free: Math.floor(tea * 10000) / 10000,
       lock: 0,
       reward: 0,
-      usd: coffee,
+      usd: 0, //coffee,
       usd_debt: 0,
     };
   }
@@ -250,8 +250,8 @@ export default class {
     // reset all state
     store.commit('reset_state');
 
-    // const cml_list = await this.getCmlListByUser(layer1_account.address);
-    // const cml_data = await this.getCmlByList(cml_list);
+    const cml_list = await this.getCmlListByUser(layer1_account.address);
+    const cml_data = await this.getCmlByList(cml_list);
 
     this._log.i("refresh current layer1_account");
     store.commit('set_account', {
@@ -260,7 +260,7 @@ export default class {
       lock_balance: balance.lock,
       address: layer1_account.address,
       ori_name: layer1_account.name||'_',
-      cml: [],
+      cml: cml_data,
       reward: balance.reward,
       
       usd: balance.usd,
@@ -276,20 +276,13 @@ export default class {
   }
 
   async getCmlListByUser(address) {
-    const user_cml_list = await request.layer1_rpc('cml_userCmlList', [
-      address
-    ])
-
-    // return user_cml_list;
-    return user_cml_list;
+    return await this.layer1.getMyCmlList();
   }
 
-  async getCmlByList(cml_list, flag=false) {
-    // todo
-    return _.map(cml_list, (id)=>{
-      return {
-        id,
-      }
+  async getCmlByList(cml_list) {
+    return _.map(cml_list, (item)=>{
+      item.data = utils.parseJSON(item.uri);
+      return item;
     });
 
   }

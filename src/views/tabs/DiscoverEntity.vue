@@ -156,7 +156,6 @@ export default {
       this.$root.loading(true);
       try{
         await layer2.entity.queryAll(this, async (list)=>{
-          console.log(222, list);
           this.list = list;
         }, {
           only_tapp: false,

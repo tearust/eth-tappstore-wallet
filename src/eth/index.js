@@ -35,6 +35,11 @@ class Instance {
       require('./abi/ERC20.sol/ERC20Token.json').abi,
       this.provider.getSigner(),
     );
+    this.cml_contract = new ethers.Contract(
+      ContractMap.ERC721,
+      require('./abi/ERC721.sol/ERC721.json').abi,
+      this.provider.getSigner(),
+    );
 
     this.coffee_contract = new ethers.Contract(
       ContractMap.COFFEE,
@@ -98,16 +103,16 @@ class Instance {
   }
   async getTeaBalance(){
     const erc20Token = this.tea_contract;
-    const n = await erc20Token.balanceOf(this.signer.getAddress());
+    const me = await this.signer.getAddress();
+    const n = await erc20Token.balanceOf(me);
     const balance = U.formatUnits(n, 'ether');
     return balance
   }
   async getCoffeeBalance(){
-    // TODO
-    return 0;
     // const n = await this.coffee_contract.balanceOf(this.signer.getAddress());
     // const balance = U.formatUnits(n, 'ether');
     // return balance
+    return 0;
   }
 
   async getChain(){
@@ -201,6 +206,24 @@ class Instance {
 
   isConnected(){
     return 2;
+  }
+
+  async getMyCmlList(){
+    const total = (await this.cml_contract.totalSupply()).toString();
+    const list = [];
+    const me = await this.signer.getAddress();
+    for(let i=0; i<total; i++){
+      const owner = await this.cml_contract.ownerOf(i);
+      if(owner === me){
+        list.push({
+          id: i,
+          owner,
+          uri: await this.cml_contract.tokenURI(i)
+        })
+      }
+      
+    }
+    return list;
   }
 
   async test(){

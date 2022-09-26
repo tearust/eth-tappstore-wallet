@@ -40,7 +40,7 @@
             "
           ></span>
         </div>
-        <div class="x-item">
+        <!-- <div class="x-item">
           <b>
             {{ "Chain wallet ETH balance" }}
             <TeaIconButton
@@ -57,13 +57,13 @@
               layer1_account ? layer1_account.eth : ''
             "
           ></span>
-        </div>
-        <div class="x-item">
+        </div> -->
+        <!-- <div class="x-item">
           <b>{{ "Chain wallet COFFEE balance" }}</b>
           <span
             :inner-html.prop="layer1_account ? layer1_account.usd : '' | usd"
           ></span>
-        </div>
+        </div> -->
 
         <div class="x-item">
           <b>
@@ -267,7 +267,6 @@ export default {
           this.$root.loading(true, "Refreshing balance ...");
           await utils.sleep(12000);
           await this.refreshAccount();
-          // await this.refreshTappBalanceHandler();
           this.$root.loading(false);
         });
       } catch (e) {
@@ -279,8 +278,8 @@ export default {
       flag && this.$root.loading(true);
       await this.wf.refreshCurrentAccount();
 
-      // await this.queryTokenBalance();
-      // await this.queryDeposit();
+      await this.queryTokenBalance();
+      await this.queryDeposit();
 
       flag && this.$root.loading(false);
     },

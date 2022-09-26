@@ -26,7 +26,6 @@ _axios.interceptors.request.use((config)=>{
 
 // set request response
 _axios.interceptors.response.use((res)=>{
-  console.log(222, res);
   if(res.data){
     if(res.data.error){
       return Promise.reject(res.data.error);

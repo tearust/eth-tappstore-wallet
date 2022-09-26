@@ -86,7 +86,7 @@ const layer1 = {
 
   },
   amountToBalance(value){
-    return _.toNumber(value) * (1000000*1000000);
+    return _.toNumber(value) * (1000000*1000000*1000000);
   },
   balanceToAmount(value){
     return layer1.formatBalance(value);
@@ -97,7 +97,7 @@ const layer1 = {
   toRealBalance(value){
     value = F.toBN(value);
     value = F.bnToBalanceNumber(value);
-    const unit = 1000000*1000000;
+    const unit = 1000000*1000000*1000000;
     return Math.floor(value * unit) / unit;
   }
 };
@@ -138,7 +138,6 @@ const crypto = {
     crypto.get_secret(address);
     _secret.rsa_key = rsa_key;
 
-    console.log(222, _secret.key);
     _secret.key_encrypted = crypto.rsaEncodeWithRsaPublickKey(_secret.key, _secret.rsa_key);
   },
 
@@ -346,7 +345,7 @@ const F = {
   },
 
   bnToBalanceNumber(bn){
-    const value = parseInt(bn.toString(),10)/(1000000*1000000);
+    const value = parseInt(bn.toString(),10)/(1000000*1000000*1000000);
     // const value = bn.div(BN_MILLION.mul(BN_MILLION)).toNumber();
     return value;
   },

@@ -358,7 +358,7 @@ export default {
     async connectToWallet(){
       try{
         await this.layer1.requestWalletAddressList();
-        const b = await this.layer1.getBalance();
+        const b = await this.layer1.getTeaBalance();
         console.log(11, b);
         alert('Balance is '+b+' ether');
       }catch(e){
@@ -402,6 +402,7 @@ export default {
     async queryCurrentBlock(){
       const rs = await this.layer1.queryCurrentBlock();
       console.log(11, rs);
+      // const rs = await this.layer1.getMyCmlList();
     }
     
   }

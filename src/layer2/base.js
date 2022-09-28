@@ -7,7 +7,7 @@ import { hexToString, numberToHex, u8aToHex } from 'tearust_layer1';
 
 const meta = {
   type: utils.get_env('TAPP_TYPE') || 'tapp',  // tappstore, miner, tapp
-  sudo: utils.get_env('LAYER1_SUDO') || '5D2od84fg3GScGR139Li56raDWNQQhzgYbV7QsEJKS4KfTGv',
+  sudo: utils.get_env('LAYER1_SUDO') || 'NO_SUDO_ACCOUNT',
   tapp_id: utils.get_env('TAPP_ID'),
   server_url: utils.get_env('LAYER2_URL'),
   server_actor: utils.get_env('LAYER2_ACTOR') || 'MAUJS3ZTZQ2GEVDPAV4P5HBVTHGBLEDSQGPDRAMDRUIYQ3CN6TBERYF7',  // default is tappstore_in_B actor

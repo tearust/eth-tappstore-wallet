@@ -39,7 +39,6 @@ const F = {
       const rs = await txn.query_request('querySeatList', opts);
 
       let total = utils.toBN(0);
-      let active_num = 1;
       let list = await Promise.all(_.map(rs.sql_query_result, async (item)=>{
         total = total.add(utils.toBN(item.price));
         _.each(['price', 'real_price', 'deal_price', 'estimate_price', 'market_deposit'], (key)=>{
@@ -54,9 +53,8 @@ const F = {
       }));
       list = _.sortBy(list, (x)=>x.real_price);
 
-      if(active_num > 0){
-        list[0].ave_price = total.div(utils.toBN(20)).toString();
-      }
+      list[0] && (list[0].ave_price = total.div(utils.toBN(list.length)).toString());
+      
       mem.set(mem_key, list);
       self.$root.loading(false);
       
@@ -117,7 +115,7 @@ const F = {
             address: self.layer1_account.address,
             authB64: session_key,
             seatId,
-            price,
+            price: utils.toBN(price).toString(),
           };
 
           const rs = await txn.txn_request('buySeat', opts);
@@ -175,7 +173,7 @@ const F = {
             address: self.layer1_account.address,
             authB64: session_key,
             seatId,
-            price,
+            price: utils.toBN(price).toString(),
           };
 
           const rs = await txn.txn_request('updateSeatEstimate', opts);

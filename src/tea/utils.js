@@ -22,10 +22,7 @@ const { _, uuid, forge } = tearust_utils;
 // window.L = require('tearust_layer1');
 
 const consts = {
-  CmlType: { A: 'A', B: 'B', C: 'C' },
-  DefrostScheduleType: { Investor: 'Investor', Team: 'Team' },
   CurveType: {Linear: 'Linear', SquareRoot: 'SquareRoot'},
-  SUDO_ACCOUNT: '5D2od84fg3GScGR139Li56raDWNQQhzgYbV7QsEJKS4KfTGv',
 
   gas_tip: (n=1)=>{
     return `This transaction has a ${n} TEA gas fee.`;
@@ -92,7 +89,7 @@ const layer1 = {
     return layer1.formatBalance(value);
   },
   roundAmount(value){
-    return Math.floor(value*10000) / 10000;
+    return Math.floor(value*1000000) / 1000000;
   },
   toRealBalance(value){
     value = F.toBN(value);

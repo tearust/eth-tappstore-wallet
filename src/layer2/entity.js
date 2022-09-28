@@ -2,7 +2,7 @@ import {_} from 'tearust_utils';
 import utils from '../tea/utils';
 import sq_root from '../tea/squareroot';
 import store from '../store';
-import {stringToHex, hexToU8a, stringToU8a} from 'tearust_layer1';
+import help from '../eth/help';
 
 import base from './base';
 import txn from './txn';
@@ -75,8 +75,8 @@ const F = {
               'filterable': true,
             },
             required: true,
-            default: type==='tapp' ? 10 : 10,
-            options: type==='tapp' ? [{id: 10}, {id: 100}, {id: 1000}, {id: 2000}, {id: 5000}, {id: 10000}] : [{id: 10}, {id: 100}, {id: 1000}, {id: 2000}],
+            default: type==='tapp' ? 1 : 10,
+            options: type==='tapp' ? [{id: 1}, {id: 10}, {id: 100}, {id: 1000}, {id: 2000}, {id: 5000}, {id: 10000}] : [{id: 10}, {id: 100}, {id: 1000}, {id: 2000}],
             rules: [{
               type: 'number',
               message: 'Initial token must be number.',
@@ -86,8 +86,8 @@ const F = {
                   return cb('Must be integer value.');
                 }
                 
-                if(_.toNumber(val)<10) 
-                  return cb('min value is 10');
+                // if(_.toNumber(val)<10) 
+                //   return cb('min value is 10');
 
                 return cb();
               }
@@ -249,6 +249,8 @@ const F = {
           }
           const initAmount = utils.layer1.amountToBalance(form.init_fund);
           const hostingAmount = utils.layer1.amountToBalance(form.hosting_amount);
+
+          const ethUtils = help.getUtils();
           const opts = {
             tappIdB64: base.getTappId(),
             address: self.layer1_account.address,
@@ -261,10 +263,10 @@ const F = {
             billingMode: form.fixed_token_mode,
             buyCurveK: 100,
             sellCurveK: theta,
-            initAmount: initAmount,
-            hostingAmount: hostingAmount,
+            initAmount: utils.toBN(initAmount).toString(),
+            hostingAmount: '1', //utils.toBN(hostingAmount).toString(),
             authB64: session_key,
-            targetTappIdB64: utils.u8aToB64(utils.randomTappId()),
+            targetTappIdB64: ethUtils.hexlify(ethUtils.randomBytes(20)),
             cmlId: type==='tapp' ? null : type_param.cml_id,
           };
           console.log("create new entity with => "+JSON.stringify(opts));
@@ -579,6 +581,7 @@ const F = {
     self.$root.loading(true);
 
     const mem_key = 'entity_queryAll_'+utils.crypto.sha256(JSON.stringify(param));
+    console.log(111, param, mem_key)
     const cache_result = mem.get(mem_key);
     if(cache_result){
       console.log('[Entity] queryAll cache result => ', cache_result);
@@ -593,7 +596,7 @@ const F = {
       onlyTapp: param.only_tapp || false,
     };
     if(param.token_id_b64){
-      opts.tokenIdB64 = param.token_id_b64;
+      opts.tokenIdHex = param.token_id_b64;
       opts.onlyTapp = false;
     }
     if(param.from){
@@ -604,7 +607,7 @@ const F = {
       const rs = await txn.query_request('queryEntityList', opts);
       const list = await Promise.all(_.map(rs.sql_query_result, async (d)=>{
         const item = {
-          id: utils.u8aToB64(d.tapp_id),
+          id: d.tapp_id,
           name: d.name,
           token_symbol: d.ticker,
           ticker: d.ticker,

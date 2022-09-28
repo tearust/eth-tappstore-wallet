@@ -68,11 +68,26 @@ export default class {
       _layer1 = await eth.get();
 
       this.layer1 = _layer1;
+      await this.initEvent();
     }
   }
 
   async initEvent() {
-    
+    utils.register('layer1_block', (key, {block})=>{
+      store.commit('set_chain', {
+        current_block: block,
+      });
+      if(utils.getEpochEndBlock() - block < 1){
+        utils.mem.set('epoch_closed', true);
+
+        // if(store.state.user && store.state.user.isLogin && store.state.user.address !== utils.consts.SUDO_ACCOUNT){
+        //   _.delay(async ()=>{
+        //     await layer2.user.logout();
+        //   }, 5000);
+        // }
+
+      }
+    });
 
   }
 
@@ -250,8 +265,8 @@ export default class {
     // reset all state
     store.commit('reset_state');
 
-    const cml_list = await this.getCmlListByUser(layer1_account.address);
-    const cml_data = await this.getCmlByList(cml_list);
+    // const cml_list = await this.getCmlListByUser(layer1_account.address);
+    // const cml_data = await this.getCmlByList(cml_list);
 
     this._log.i("refresh current layer1_account");
     store.commit('set_account', {
@@ -260,7 +275,7 @@ export default class {
       lock_balance: balance.lock,
       address: layer1_account.address,
       ori_name: layer1_account.name||'_',
-      cml: cml_data,
+      cml: [],
       reward: balance.reward,
       
       usd: balance.usd,

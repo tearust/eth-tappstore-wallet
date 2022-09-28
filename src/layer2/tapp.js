@@ -155,7 +155,7 @@ const F = {
       const rs = await txn.query_request('queryFavTappsList', opts);
       const list = await Promise.all(_.map(rs.sql_query_result, async (d)=>{
         const item = {
-          id: utils.u8aToB64(d.tapp_id),
+          id: d.tapp_id,
           name: d.name,
           token_symbol: d.ticker,
           ticker: d.ticker,

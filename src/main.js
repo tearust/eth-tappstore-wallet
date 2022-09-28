@@ -122,7 +122,7 @@ new Vue({
       helper.openUrl(url);
     },
     is_sudo(address){
-      return utils.consts.SUDO_ACCOUNT === address;
+      return utils.get_env('LAYER1_SUDO') === address;
     },
     go_wallet(url){
       helper.go_wallet(url);

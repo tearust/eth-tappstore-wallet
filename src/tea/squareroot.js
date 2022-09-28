@@ -27,7 +27,7 @@ const bn_sqrt = (n)=>{
   return z;
 };
 
-const CENT = utils.toBN('10000000000');
+const CENT = utils.toBN('10000000000000000');
 const DOLLAR = CENT.mul(utils.toBN(100));
 
 const SquareRoot = class {

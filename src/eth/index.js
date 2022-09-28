@@ -7,7 +7,6 @@ import help from './help';
 
 const U = ethers.utils;
 
-
 class Instance {
   constructor(){
     this.cache = {

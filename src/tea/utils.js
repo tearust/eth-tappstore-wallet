@@ -89,7 +89,8 @@ const layer1 = {
     return layer1.formatBalance(value);
   },
   roundAmount(value){
-    return Math.floor(value*1000000) / 1000000;
+    return value;
+    // return Math.floor(value*1000000) / 1000000;
   },
   toRealBalance(value){
     value = F.toBN(value);

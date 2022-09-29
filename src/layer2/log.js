@@ -93,7 +93,7 @@ const F = {
         item.total = total_bn.toString();
         item.init_asset = init_asset.toString();
         item.gain = gain.toString();
-        item.sort = gain.div(utils.toBN(100000000)).toNumber();
+        item.sort = gain.div(utils.toBN(100000000000000)).toNumber();
         if(item.deposit){
           item.sort = item.sort*-1;
         }

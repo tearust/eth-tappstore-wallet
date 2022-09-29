@@ -215,7 +215,7 @@ const F = {
           address: self.layer1_account.address,
           tappIdB64: tappId,
           authB64: session_key,
-          amount,
+          amount: utils.toBN(amount).toString(),
         };
 
         try{
@@ -263,7 +263,7 @@ const F = {
           address: self.layer1_account.address,
           tappIdB64: tappId,
           authB64: session_key,
-          amount,
+          amount: utils.toBN(amount).toString(),
           to: form.target,
         };
 

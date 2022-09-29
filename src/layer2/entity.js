@@ -358,7 +358,7 @@ const F = {
             address: self.layer1_account.address,
 
             targetTappIdB64: id,
-            tokenAmount: amount,
+            tokenAmount: utils.toBN(amount).toString(),
             authB64: session_key,
           };
 
@@ -467,7 +467,7 @@ const F = {
             address: self.layer1_account.address,
 
             targetTappIdB64: id,
-            tokenAmount: amount,
+            tokenAmount: utils.toBN(amount).toString(),
             authB64: session_key,
           };
 
@@ -556,7 +556,7 @@ const F = {
             tappIdB64: base.getTappId(),
             address: self.layer1_account.address,
             targetTappIdB64: id,
-            teaAmount: tea_amount,
+            teaAmount: utils.toBN(tea_amount).toString(),
             authB64: session_key,
           };
 

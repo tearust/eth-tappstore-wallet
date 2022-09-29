@@ -37,11 +37,11 @@ const SquareRoot = class {
 
   pool_balance(balance){
     const b = utils.toBN(balance);
-    return bn_sqrt(b).mul(b).mul(this.k).mul(utils.toBN(2)).div(utils.toBN('1000000')).div(utils.toBN(30));
+    return bn_sqrt(b).mul(b).div(utils.toBN(100)).mul(utils.toBN(this.k)).mul(utils.toBN(2)).div(utils.toBN('1000000000')).div(utils.toBN(3));
   }
   
   buy_price(total_supply){
-    return bn_sqrt(utils.toBN(total_supply)).mul(this.k).div(utils.toBN(10)).mul(utils.toBN(1000000));
+    return bn_sqrt(utils.toBN(total_supply)).div(utils.toBN(100)).mul(utils.toBN(this.k)).mul(utils.toBN(1000000000));
   }
 
   pool_balance_reverse(area, precision){
@@ -66,10 +66,11 @@ const SquareRoot = class {
       } else {
         x_n_plus_1 = 
           area.div(this.k)
-          .mul(utils.toBN(10000000))
+          .mul(utils.toBN(1000000000))
           .div(bn_sqrt(x_n))
-          .sub(x_n.mul(utils.toBN(2)).div(utils.toBN(3)))
-          .add(x_n);
+          .mul(utils.toBN(100))
+          // .sub(x_n.mul(utils.toBN(2)).div(utils.toBN(3)))
+          .add(x_n.div(utils.toBN(3)));
       }
 
       if(this.approximately_equals(x_n, x_n_plus_1, precision)){
@@ -95,11 +96,11 @@ const SquareRoot = class {
 
   select_nearest_reference_point(area){
 		let default_starter = utils.toBN(1100000).mul(utils.toBN(1000000));
-    
+    let area_with_k_value = area / this.k * 100;
     const loop = (areas)=>{
       let nearest_index = 0;
       _.each(areas, (item, i)=>{
-        if(item > area){
+        if(item > area_with_k_value){
           return false;
         }
         nearest_index = i;

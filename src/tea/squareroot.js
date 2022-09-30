@@ -61,7 +61,7 @@ const SquareRoot = class {
 
     while(_times<10000){
       let x_n_plus_1 = null; 
-      if(x_n.toNumber()<1){
+      if(utils.toBN(x_n).lt(utils.toBN(1))){
         x_n_plus_1 = zero;
       } else {
         x_n_plus_1 = 
@@ -145,89 +145,48 @@ const F = {
   },
 
   test(){
-    const pool_balance_works = ()=>{
-      const root_square_10 = F.create(10);
-      assert(root_square_10.pool_balance(0), 0);
-      assert(root_square_10.pool_balance('100000'), 21);
-      assert(root_square_10.pool_balance('1000000'), 666);
-      assert(root_square_10.pool_balance('10000000'), 21080);
-      assert(root_square_10.pool_balance('100000000'), 666666);
-      assert(root_square_10.pool_balance(DOLLAR), 666666666666);
-      assert(root_square_10.pool_balance(100 * DOLLAR), 666666666666666);
+    const verify_pool_balance_and_reverse = ()=>{
+      const root_square_100 = F.create(100);
+      const xx_list = [
+        0,
+        1,
+        100,
+        100000,
+        1000000000,
+        10000000000,
+        100000000000000000000,
+        18446744073709551615, //u64 max
+      ];
+      _.each(xx_list, (total_supply_in_dollar)=>{
+        total_supply_in_dollar = utils.toBN(total_supply_in_dollar);
+        let total_supply = DOLLAR.mul(total_supply_in_dollar);
+        let area = root_square_100.pool_balance(total_supply);
+        let reserved_total_supply =
+          root_square_100.pool_balance_reverse(area, 1);
+        assert(root_square_100.approximately_equals(
+          reserved_total_supply,
+          total_supply,
+          1000
+        ), true);
+      });
 
-      const root_square_7 = F.create(7);
-      assert(root_square_7.pool_balance(0), 0);
-      assert(root_square_7.pool_balance(1000000), 466);
-      assert(root_square_7.pool_balance(10000000), 14756);
-      assert(root_square_7.pool_balance(100000000), 466666);
-      assert(root_square_7.pool_balance(DOLLAR), 466666666666);
-      assert(root_square_7.pool_balance(100 * DOLLAR), 466666666666666);
-    };
+      _.each(xx_list, (total_supply_in_cents)=>{
+        total_supply_in_cents = utils.toBN(total_supply_in_cents);
+        let total_supply = CENT.mul(total_supply_in_cents);
+        let area = root_square_100.pool_balance(total_supply);
+        let reserved_total_supply =
+          root_square_100.pool_balance_reverse(area, 1);
+        assert(root_square_100.approximately_equals(
+          reserved_total_supply,
+          total_supply,
+          1000
+        ), true);
+      });
 
-    const combined_test_buy_sell_tapp_tokevin = ()=>{
-      const root_square_10 = F.create(10); // y = 10√x
-		  const root_square_7 = F.create(7); // y = 7√x
-		  let x = root_square_10.buy_price(DOLLAR);
-		  assert(x, DOLLAR);
-      x = root_square_10.buy_price(100 * DOLLAR);
-      assert(x, 10*DOLLAR);
-  
-      x = root_square_7.buy_price(DOLLAR);
-      assert(x, 0.7*DOLLAR);
-      x = root_square_7.buy_price(100 * DOLLAR);
-      assert(x, 7*DOLLAR);
-
-      const x1 = root_square_10.pool_balance(DOLLAR);
-      x = root_square_10.pool_balance_reverse(x1, 10);
-      assert(x, 999999999994);
-
-      const x2 = root_square_10.pool_balance(DOLLAR*100);
-      x = root_square_10.pool_balance_reverse(x2, 10);
-      assert(x, 100000000000003);
-
-      const x3 = root_square_7.pool_balance(DOLLAR);
-      x = root_square_7.pool_balance_reverse(x3, 10);
-      assert(x, 999999999994);
-
-      const x4 = root_square_7.pool_balance(DOLLAR*100);
-      x = root_square_7.pool_balance_reverse(x4, 10);
-      assert(x, 100000000000003);
-    };
-
-    const buy_and_sell_price_works = ()=>{
-      let root_square_10 = F.create(10); // y = 10√x
-      assert(root_square_10.buy_price(0), 0);
-      assert(root_square_10.buy_price(DOLLAR), DOLLAR);
-      assert(root_square_10.buy_price(100 * DOLLAR), 10*DOLLAR);
-      assert(
-        root_square_10.buy_price(10000 * DOLLAR),
-        100*DOLLAR
-      );
-  
-      let root_square_7 = F.create(7);
-      assert(root_square_7.buy_price(0), 0);
-      assert(root_square_7.buy_price(DOLLAR), 0.7*DOLLAR);
-      assert(root_square_7.buy_price(100*DOLLAR), 7*DOLLAR);
-      assert(root_square_7.buy_price(10000*DOLLAR), 70*DOLLAR);
     }
 
-    const check_pool_balance_multiply_overflow = ()=>{
-      let root_square_10 = F.create(10); 
-      assert(
-        root_square_10.pool_balance('1000000000000000000000000'),
-        '666666666666666666666666666666',
-      );
-  
-      assert(
-        root_square_10.pool_balance('10000000000000000000000000'),
-        '21081851067786666666666666666666'
-      );
-    }
 
-    pool_balance_works();
-    combined_test_buy_sell_tapp_tokevin();
-    buy_and_sell_price_works();
-    check_pool_balance_multiply_overflow();
+    verify_pool_balance_and_reverse();
 
     return 'Test success.';
   }

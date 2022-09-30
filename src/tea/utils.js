@@ -60,7 +60,6 @@ const cache = {
 
 };
 
-// TODO move to tearust_layer1 pkgs
 const layer1 = {
   formatBalance(value, with_icon=false) {
     let is_negative = false;

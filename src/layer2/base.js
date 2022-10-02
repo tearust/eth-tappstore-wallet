@@ -10,7 +10,8 @@ const meta = {
   sudo: utils.get_env('LAYER1_SUDO') || 'NO_SUDO_ACCOUNT',
   tapp_id: utils.get_env('TAPP_ID'),
   server_url: utils.get_env('LAYER2_URL'),
-  server_actor: utils.get_env('LAYER2_ACTOR') || 'MAUJS3ZTZQ2GEVDPAV4P5HBVTHGBLEDSQGPDRAMDRUIYQ3CN6TBERYF7',  // default is tappstore_in_B actor
+  server_actor: 'MDZ7JCLDA5UEIKTVS7ZVF6LHWKNW46PMVQWAQH4NNUGAE3E4BRHZA73X',
+  // server_actor: utils.get_env('LAYER2_ACTOR') || 'MAUJS3ZTZQ2GEVDPAV4P5HBVTHGBLEDSQGPDRAMDRUIYQ3CN6TBERYF7',  // default is tappstore_in_B actor
 };
 // console.log("layer2 meta", meta);
 

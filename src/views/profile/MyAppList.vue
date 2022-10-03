@@ -95,7 +95,6 @@
 <script>
 import SettingAccount from '../../workflow/SettingAccount';
 import {_} from 'tearust_utils';
-// import {helper} from 'tearust_layer1';
 import utils from '../../tea/utils';
 import { mapGetters, mapState } from 'vuex';
 import TeaTable from '../../components/TeaTable';

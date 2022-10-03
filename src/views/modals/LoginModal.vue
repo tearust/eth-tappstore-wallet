@@ -52,7 +52,6 @@
 </template>
 <script>
 import { mapState, mapGetters } from 'vuex';
-import {stringToHex, stringToU8a, hexToU8a, hexToString} from 'tearust_layer1';
 import store from '../../store/index';
 import utils from '../../tea/utils';
 import Base from '../../workflow/Base';

@@ -155,7 +155,6 @@ import Base from '../../workflow/Base';
 import {_} from 'tearust_utils';
 import utils from '../../tea/utils';
 import { mapGetters, mapState } from 'vuex';
-import {hexToString, stringToHex, hexToU8a, compactAddLength, u8aToHex} from 'tearust_layer1';
 import TeaTable from '../../components/TeaTable';
 import TeaIconButton from '../../components/TeaIconButton';
 import helper from '../helper';

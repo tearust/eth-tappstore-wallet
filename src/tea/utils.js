@@ -7,7 +7,7 @@ import {
   hexToString, formatBalance, hexToNumber, hexToBn, numberToHex,
   BN_MILLION, isBn, BN, u8aToHex,
 
-} from 'tearust_layer1';
+} from '@polkadot/util';
 
 import './index';
 
@@ -19,7 +19,6 @@ const str = (key) => {
 
 const { _, uuid, forge } = tearust_utils;
 
-// window.L = require('tearust_layer1');
 
 const consts = {
   CurveType: {Linear: 'Linear', SquareRoot: 'SquareRoot'},

@@ -48,10 +48,10 @@
   <el-menu-item index="/leader_board">{{'Leaderboard'}}</el-menu-item>
   <!-- <el-menu-item index="/top_tree_list">{{'Mining Camellia'}}</el-menu-item> -->
 
-  <el-menu-item v-if="miner_mode" index="/mining_home">{{'Mining'}}</el-menu-item>
+  <!-- <el-menu-item v-if="miner_mode" index="/mining_home">{{'Mining'}}</el-menu-item> -->
   
 
-  <el-menu-item index="/seat_main">{{'Seats'}}</el-menu-item>
+  <!-- <el-menu-item index="/seat_main">{{'Seats'}}</el-menu-item> -->
   <el-menu-item index="/discover">{{'TApps'}}</el-menu-item>
   <el-menu-item index="/investment">{{'Investments'}}</el-menu-item>
   

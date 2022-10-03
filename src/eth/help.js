@@ -1,9 +1,9 @@
 import { ethers, BigNumber } from "ethers";
-import * as layer1 from 'tearust_layer1';
+import * as _layer1 from '@polkadot/util';
 
 const U = ethers.utils;
 window.U = U;
-window._layer1 = layer1;
+window._layer1 = _layer1;
 
 const UNIT = BigNumber.from('1000000000000000000');
 const F = {

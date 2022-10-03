@@ -108,10 +108,8 @@
 <script>
 import Base from '../../workflow/Base';
 import {_} from 'tearust_utils';
-import {stringToHex, u8aToString} from 'tearust_layer1';
 import utils from '../../tea/utils';
 import { mapGetters, mapState } from 'vuex';
-import {hexToString} from 'tearust_layer1';
 import TeaTable from '../../components/TeaTable';
 import TeaTableColumn from '../../components/TeaTableColumn';
 import TeaIconButton from '../../components/TeaIconButton';

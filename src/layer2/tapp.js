@@ -1,7 +1,7 @@
 import {_} from 'tearust_utils';
 import utils from '../tea/utils';
 import store from '../store';
-import {stringToHex, hexToU8a, stringToU8a} from 'tearust_layer1';
+import {stringToHex, hexToU8a, stringToU8a} from '@polkadot/util';
 
 import base from './base';
 import txn from './txn';

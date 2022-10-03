@@ -1,6 +1,5 @@
 import {_, moment} from 'tearust_utils';
 import utils from '../tea/utils';
-import {stringToHex, hexToU8a, stringToU8a} from 'tearust_layer1';
 
 import base from './base';
 import txn from './txn';

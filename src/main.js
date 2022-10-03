@@ -25,7 +25,6 @@ import layer2 from './layer2';
 Vue.use(ElementUI, { locale });
 Vue.config.productionTip = false;
 
-
 router.beforeEach((to, from, next) => {
   const layer1_ready = utils.mem.get('layer1_ready');
 

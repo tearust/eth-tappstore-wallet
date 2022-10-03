@@ -7,7 +7,7 @@ import store from '../store';
 import request from '../request';
 
 import { _, forge, moment } from 'tearust_utils';
-import { hexToString, numberToHex } from 'tearust_layer1';
+import { hexToString, numberToHex } from '@polkadot/util';
 
 import '../tea/moment-precise-range';
 

@@ -150,7 +150,7 @@
             >
           </el-tooltip>
 
-          <el-button
+          <!-- <el-button
             v-if="layer1_account"
             type="primary"
             @click="transferBalance()"
@@ -161,7 +161,7 @@
             type="primary"
             @click="transferUsd()"
             >Send COFFEE</el-button
-          >
+          > -->
 
           
 
@@ -181,7 +181,6 @@
 import SettingAccount from "../workflow/SettingAccount";
 import { _ } from "tearust_utils";
 import utils from "../tea/utils";
-import { numberToHex } from "tearust_layer1";
 import { mapGetters, mapState } from "vuex";
 
 import PubSub from "pubsub-js";

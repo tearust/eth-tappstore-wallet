@@ -91,7 +91,6 @@
 import Vue from 'vue';
 import SettingAccount from '../workflow/SettingAccount';
 import {_} from 'tearust_utils';
-import {numberToHex} from 'tearust_layer1';
 import utils from '../tea/utils';
 import { mapGetters, mapState } from 'vuex';
 

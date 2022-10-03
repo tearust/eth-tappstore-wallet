@@ -112,7 +112,7 @@ import utils from '../../tea/utils';
 import Base from '../../workflow/Base';
 import {_} from 'tearust_utils';
 import TeaIconButton from '../../components/TeaIconButton';
-import {hexToU8a} from 'tearust_layer1';
+import {hexToU8a} from '@polkadot/util';
 
 import layer2 from '../../layer2';
 

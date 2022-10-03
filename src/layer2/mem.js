@@ -1,4 +1,3 @@
-import { memoize } from 'tearust_layer1';
 import {_} from 'tearust_utils';
 import utils from '../tea/utils';
 

@@ -35,7 +35,7 @@ import { mapState } from 'vuex';
 import store from '../../store/index';
 import utils from '../../tea/utils';
 import {_} from 'tearust_utils';
-import {hexToString} from 'tearust_layer1';
+import {hexToString} from '@polkadot/util';
 export default {
   data(){
     return {

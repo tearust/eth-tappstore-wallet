@@ -84,7 +84,6 @@ import Base from '../../workflow/Base';
 import {_} from 'tearust_utils';
 import request from '../../request';
 import TeaTable from '../../components/TeaTable';
-import {hexToString} from 'tearust_layer1';
 import helper from '../helper';
 import layer2 from '../../layer2';
 export default {

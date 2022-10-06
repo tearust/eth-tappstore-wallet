@@ -191,6 +191,65 @@ const F = {
     }
     
   },
+
+  async setAllowance(self, data, succ_cb){
+    const session_key = user.checkLogin(self);
+
+    self.$store.commit('modal/open', {
+      key: 'common_form', 
+      param: {
+        title: 'Set allowance',
+        confirm_text: 'Confirm',
+        text: `Set the tapp allowance`,
+        props: {
+          tapp_id: {
+            label: 'Token ID',
+            type: 'Input',
+            disabled: true,
+            default: data.id,
+          },
+          amount: {
+            label: 'Amount',
+            type: 'number',
+            max: 100000000,
+            // remove_required_rule: true,
+            default: 1,
+            // tip: 'Click "Next" button to see how much you can convert to, or input a number below to convert back.'
+          },
+        },
+      },
+      cb: async (form, close)=>{
+        if(!form.amount){
+          form.amount = 0;
+        }
+
+        const id = form.tapp_id;
+        const amount = utils.layer1.amountToBalance(form.amount);
+        
+        self.$root.loading(true);
+        try{
+          const opts = {
+            tappIdB64: base.getTappId(),
+            address: self.layer1_account.address,
+
+            targetTappIdB64: id,
+            amount: utils.toBN(amount).toString(),
+            authB64: session_key,
+          };
+
+          const rs = await txn.txn_request('setAllowance', opts);
+          console.log('setAllowance result:', rs);
+
+          close();
+          self.$root.success();
+          await succ_cb();
+        }catch(e){
+          self.$root.showError(e);
+        }
+        self.$root.loading(false);
+      },
+    });
+  }
 };
 
 export default F;

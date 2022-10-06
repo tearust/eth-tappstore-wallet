@@ -45,7 +45,7 @@
 
   <!-- <el-menu-item index="/my_notification">{{'Inbox'}}</el-menu-item> -->
 
-  <el-menu-item index="/leader_board">{{'Leaderboard'}}</el-menu-item>
+  <!-- <el-menu-item index="/leader_board">{{'Leaderboard'}}</el-menu-item> -->
   <!-- <el-menu-item index="/top_tree_list">{{'Mining Camellia'}}</el-menu-item> -->
 
   <!-- <el-menu-item v-if="miner_mode" index="/mining_home">{{'Mining'}}</el-menu-item> -->

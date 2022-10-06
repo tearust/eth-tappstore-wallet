@@ -88,6 +88,16 @@
     </TeaTableColumn>
 
     <TeaTableColumn
+      label="Allowance"
+      tip="The current allowance"
+      v-if="layer1_account && layer1_account.address"
+    >
+      <template slot-scope="scope">
+        <span :inner-html.prop="scope.row.account_balance.allowance | teaIcon"></span>
+      </template>
+    </TeaTableColumn>
+
+    <TeaTableColumn
       label="Status"
       width="100"
       tip="The online status of the TApp"
@@ -103,6 +113,11 @@
       <template v-if="user && user.isLogin" slot-scope="scope">
         <TeaIconButton v-if="scope.row.fav" tip="Remove like" icon="el-icon-star-on" @click="unfav_tapp(scope.row)" style="font-size:24px;position:relative;top:2px;" />
         <TeaIconButton v-if="!scope.row.fav" tip="Like" icon="el-icon-star-off" @click="fav_tapp(scope.row)" style="font-size:20px;position:relative;top:2px;" />
+      
+        <TeaIconButton tip="Set allowance" 
+          v-if="scope.row.ticker !== 'GLOBAL'"
+          icon="el-icon-setting" 
+          @click="set_allowance(scope.row)" style="font-size:20px;position:relative;top:2px;" />
       </template>
     </el-table-column>
 
@@ -233,6 +248,12 @@ export default {
     },
     async fav_tapp(row){
       await layer2.tapp.favTapp(this, {tapp_id: row.id}, async ()=>{
+        this.$root.success();
+        await this.refresh();
+      });
+    },
+    async set_allowance(row){
+      await layer2.tapp.setAllowance(this, {id: row.id}, async ()=>{
         this.$root.success();
         await this.refresh();
       });

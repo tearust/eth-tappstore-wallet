@@ -145,7 +145,7 @@ export default {
   },
   data(){
     return {
-      mine: true,
+      mine: false,
       list: null,
     };
   },
@@ -161,9 +161,8 @@ export default {
     this.wf = new Base();
     await this.wf.init();
 
-    console.log(1, this.user);
     if(this.user && this.user.isLogin){
-      this.mine = true;
+      this.mine = false;
     }
     else{
       this.mine = false;

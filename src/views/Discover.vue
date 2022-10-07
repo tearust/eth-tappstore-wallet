@@ -58,15 +58,6 @@
     </TeaTableColumn>
 
     <TeaTableColumn
-      label="ERC20 address"
-      tip="The smart contract address of the TApp"
-    >
-      <template slot-scope="scope">
-        <span :inner-html.prop="(scope.row.erc20_address ||'') | erc20"></span>
-      </template>
-    </TeaTableColumn>
-
-    <TeaTableColumn
       prop="market_cap"
       label="Market cap"
       width="120"
@@ -79,17 +70,16 @@
     </TeaTableColumn>
 
     <TeaTableColumn
-      label="Current/Min/Max hosts"
-      tip="The current / minimum needed / maxed allowed mining node hosts for this TApp"
+      label="Accrued balance"
     >
       <template slot-scope="scope">
-        {{scope.row.host_current}}/{{scope.row.host_n}}
+        <span :inner-html.prop="scope.row.consume_account_balance | teaIcon"></span>
       </template>
     </TeaTableColumn>
 
     <TeaTableColumn
-      label="Allowance"
-      tip="The current allowance"
+      label="Spending limit"
+      tip="Current spending limit for TApp"
       v-if="layer1_account && layer1_account.address"
     >
       <template slot-scope="scope">
@@ -114,7 +104,7 @@
         <TeaIconButton v-if="scope.row.fav" tip="Remove like" icon="el-icon-star-on" @click="unfav_tapp(scope.row)" style="font-size:24px;position:relative;top:2px;" />
         <TeaIconButton v-if="!scope.row.fav" tip="Like" icon="el-icon-star-off" @click="fav_tapp(scope.row)" style="font-size:20px;position:relative;top:2px;" />
       
-        <TeaIconButton tip="Set allowance" 
+        <TeaIconButton tip="Set spending limit" 
           v-if="scope.row.ticker !== 'GLOBAL'"
           icon="el-icon-setting" 
           @click="set_allowance(scope.row)" style="font-size:20px;position:relative;top:2px;" />
@@ -168,7 +158,7 @@ export default {
     await this.wf.init();
 
     if(this.user && this.user.isLogin){
-      this.mine = true;
+      this.mine = false;
     }
     else{
       this.mine = false;

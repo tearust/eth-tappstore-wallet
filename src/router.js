@@ -51,6 +51,7 @@ let routers = [
     name: 'investment',
     component: Investment,
     meta: {
+      keepAlive: true,
       // needLogin: true,
     }
   },
@@ -74,7 +75,9 @@ let routers = [
     path: '/discover',
     name: 'discover',
     component: Discover,
-    meta: {}
+    meta: {
+      keepAlive: true,
+    }
   },
 
 

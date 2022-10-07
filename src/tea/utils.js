@@ -437,9 +437,9 @@ const F = {
     if(_.includes(error, 'not_login')){
       return [true, 'not_login', '', '', ''];
     }
-    error = error.replace('waPC error: Host error: Error occurred during host call: Failed to invoke capability: Error occurred during host call:', '');
+    // error = error.replace('waPC error: Host error: Error occurred during host call: Failed to invoke capability: Error occurred during host call:', '');
     error = _.trim(error);
-    const reg = /([A-Z]{2})+_([0-9]+)+__(.+)$/g;
+    const reg = /([A-Z]{2})+_([0-9]+)+__(.+)/g;
     const ma = error.match(reg);
     if(ma && ma.length===1){
       error = ma[0];

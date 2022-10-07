@@ -273,6 +273,10 @@ a, a:hover, a:focus, button:focus {
   word-break: break-word;
 }
 
+.el-message-box__message p{
+  word-break: break-word;
+}
+
 @import './css/tea-notify.scss';
 @import './css/tea-toast.scss';
 @import './css/tea-card.scss';

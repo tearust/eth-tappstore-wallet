@@ -198,9 +198,9 @@ const F = {
     self.$store.commit('modal/open', {
       key: 'common_form', 
       param: {
-        title: 'Set allowance',
+        title: 'Set spending limit',
         confirm_text: 'Confirm',
-        text: `Set the tapp allowance`,
+        text: `Set the TApp's spending limit`,
         props: {
           tapp_id: {
             label: 'Token ID',

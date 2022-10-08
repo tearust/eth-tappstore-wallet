@@ -4,12 +4,14 @@
   <el-button 
     v-bind="{...$props, ...$attrs}" 
     v-on="$listeners" 
+    :loading="false"
     size="small"
     :type="type"
     :disabled="disabled"
     :class="
       'tea-icon-button'+
-      (disabled?' is-disabled':'')
+      (disabled?' is-disabled':'')+
+      (loading?' img-rotate-loading': '')
     "
     style="width:auto;"
   >
@@ -54,6 +56,10 @@ export default {
     place: {
       type: String,
       default: 'top'
+    },
+    loading: {
+      type: Boolean,
+      default: false,
     }
   },
   mounted(){    

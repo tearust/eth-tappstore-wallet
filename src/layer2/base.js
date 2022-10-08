@@ -58,6 +58,11 @@ const F = {
       self.$root.loading(true, msg);
     });
   },
+  set_special_log(self){
+    F.setLog((msg)=>{
+      // TODO
+    });
+  },
   top_log(html, level='success'){
     utils.publish('top_log', {
       top_log: html,

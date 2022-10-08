@@ -277,6 +277,21 @@ a, a:hover, a:focus, button:focus {
   word-break: break-word;
 }
 
+@-webkit-keyframes rotation{
+  from {-webkit-transform: rotate(0deg);}
+  to {-webkit-transform: rotate(360deg);}
+}
+
+.img-rotate-loading{
+  -webkit-transform: rotate(360deg);
+  transform: rotate(360deg);
+  animation: rotation 1.4s linear infinite;
+  -moz-animation: rotation 1.4s linear infinite;
+  -webkit-animation: rotation 1.4s linear infinite;
+  -o-animation: rotation 1.4s linear infinite;
+  opacity: 0.5;
+}
+
 @import './css/tea-notify.scss';
 @import './css/tea-toast.scss';
 @import './css/tea-card.scss';

@@ -75,7 +75,8 @@ const F = {
       return false;
     }
 
-    self.$root.loading(true);
+    // self.$root.loading(true);
+    data.loading(true);
 
     try{
       const opts = {
@@ -87,14 +88,16 @@ const F = {
       const rs = await txn.txn_request('favTapp', opts);
       console.log('favTapp result:', rs);
       
-      self.$root.loading(false);
+      // self.$root.loading(false);
+      data.loading(false);
       self.$root.success();
 
       await succ_cb();
       
     }catch(e){
       self.$root.showError(e);
-      self.$root.loading(false);
+      // self.$root.loading(false);
+      data.loading(false);
     }
   },
   async unfavTapp(self, data, succ_cb){

@@ -101,8 +101,8 @@
       fixed="right"
     >
       <template v-if="user && user.isLogin" slot-scope="scope">
-        <TeaIconButton v-if="scope.row.fav" tip="Remove like" icon="el-icon-star-on" @click="unfav_tapp(scope.row)" style="font-size:24px;position:relative;top:2px;" />
-        <TeaIconButton v-if="!scope.row.fav" tip="Like" icon="el-icon-star-off" @click="fav_tapp(scope.row)" style="font-size:20px;position:relative;top:2px;" />
+        <TeaIconButton v-if="scope.row.fav" tip="Remove like" icon="el-icon-star-on" @click="unfav_tapp(scope.row, scope.$index)" style="font-size:24px;position:relative;top:2px;" />
+        <TeaIconButton v-if="!scope.row.fav" tip="Like" icon="el-icon-star-off" @click="fav_tapp(scope.row, scope.$index)" :loading="scope.row.loading" style="font-size:20px;position:relative;top:2px;" />
       
         <TeaIconButton tip="Set spending limit" 
           v-if="scope.row.ticker !== 'GLOBAL'"
@@ -230,23 +230,45 @@ export default {
       }
 
     },
-    async unfav_tapp(row){
+    async unfav_tapp(row, i){
+      layer2.base.set_special_log(this);
+      const opts = {
+        tapp_id: row.id,
+        loading: (f)=>{
+          this.list_loading(i, f);
+        }
+      };
       await layer2.tapp.unfavTapp(this, {tapp_id: row.id}, async ()=>{
         this.$root.success();
         await this.refresh();
       });
+      layer2.base.set_global_log(this);
     },
-    async fav_tapp(row){
-      await layer2.tapp.favTapp(this, {tapp_id: row.id}, async ()=>{
+    async fav_tapp(row, i){
+      layer2.base.set_special_log(this);
+      const opts = {
+        tapp_id: row.id,
+        loading: (f)=>{
+          this.list_loading(i, f);
+        }
+      };
+      await layer2.tapp.favTapp(this, opts, async ()=>{
         this.$root.success();
         await this.refresh();
       });
+
+      layer2.base.set_global_log(this);
     },
     async set_allowance(row){
       await layer2.tapp.setAllowance(this, {id: row.id}, async ()=>{
         this.$root.success();
         await this.refresh();
       });
+    },
+    list_loading(i, f=false){
+      const list = _.cloneDeep(this.list);
+      _.set(list[i], 'loading', f);
+      this.list = list;
     }
   }
 }

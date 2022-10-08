@@ -74,6 +74,11 @@ class Instance {
       this.cache.block = block;
       utils.publish('layer1_block', {block});
     });
+
+    window.ethereum.on('accountsChanged', function (accounts) {
+      console.log('Wallet account changed =>', accounts)
+      location.reload(true);
+    });
   }
 
   async initCache(){

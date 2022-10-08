@@ -90,7 +90,7 @@
             plain
             icon="el-icon-refresh"
             circle
-            @click="refreshTappBalanceHandler()"
+            @click="refreshTappBalanceHandler($event)"
             style="right: 0; position: absolute"
           ></el-button>
         </div>
@@ -120,7 +120,7 @@
             plain
             icon="el-icon-refresh"
             circle
-            @click="refreshTappDepositHandler()"
+            @click="refreshTappDepositHandler($event)"
             style="right: 0; position: absolute"
           ></el-button>
         </div>
@@ -283,15 +283,17 @@ export default {
       flag && this.$root.loading(false);
     },
 
-    async refreshTappBalanceHandler() {
+    async refreshTappBalanceHandler(e) {
       this.$root.loading(true, "Refreshing TApp balance ...");
       await this.queryTokenBalance();
       this.$root.loading(false);
+      e && e.target && e.target.blur();
     },
-    async refreshTappDepositHandler() {
-      // this.$root.loading(true, "Refreshing TApp deposit ...");
+    async refreshTappDepositHandler(e) {
+      this.$root.loading(true, "Refreshing TApp deposit ...");
       await this.queryDeposit();
-      // this.$root.loading(false);
+      this.$root.loading(false);
+      e && e.target && e.target.blur();
     },
 
     async queryTokenBalance() {

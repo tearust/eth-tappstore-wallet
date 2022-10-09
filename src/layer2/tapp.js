@@ -216,7 +216,7 @@ const F = {
             type: 'number',
             max: 100000000,
             // remove_required_rule: true,
-            default: 1,
+            default: data.amount || 1,
             // tip: 'Click "Next" button to see how much you can convert to, or input a number below to convert back.'
           },
         },

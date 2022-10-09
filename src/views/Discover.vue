@@ -260,7 +260,7 @@ export default {
       layer2.base.set_global_log(this);
     },
     async set_allowance(row){
-      await layer2.tapp.setAllowance(this, {id: row.id}, async ()=>{
+      await layer2.tapp.setAllowance(this, {id: row.id, amount: 100}, async ()=>{
         this.$root.success();
         await this.refresh();
       });

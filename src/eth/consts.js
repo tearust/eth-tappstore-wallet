@@ -17,6 +17,7 @@ export const ContractMap = {
 };
 
 export const VestingUsers = [
+  '0xc1DB0471429481eB47f34b901f18606b907fE3bD',
   '0xe6b546c65bd1758c8c4ff9e850fe44ec552a3257',
   '0x76de295e07368c9f339ca4c323b7a33bf889614f',
   '0xcc71c8f84e97943f9f8e2f15c0d1a89c54d319ff',

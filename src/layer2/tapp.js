@@ -212,10 +212,10 @@ const F = {
         },
         props: {
           tapp_id: {
-            label: 'Token ID',
+            label: 'Name',
             type: 'Input',
             disabled: true,
-            default: data.id,
+            default: data.name,
           },
           amount: {
             label: 'Amount',

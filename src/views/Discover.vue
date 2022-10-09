@@ -29,8 +29,7 @@
       tip="ID of the TApp"
     >
       <template slot-scope="scope">
-        <span class="one-line" v-if="scope.row.id==='0x40e5adf63d3e44ab31c7146806dfc62aaea4d448'">{{scope.row.id}}</span>
-        <el-button v-if="scope.row.id!=='0x40e5adf63d3e44ab31c7146806dfc62aaea4d448'" size="small" type="text" @click="clickToOpen(scope.row)">{{scope.row.id}}</el-button>
+        <span class="one-line">{{scope.row.id}}</span>
       </template>
     </TeaTableColumn>
 
@@ -41,10 +40,8 @@
       tip="Name of TApp"
     >
       <template slot-scope="scope">
-        <span v-if="!(scope.row.active_block && scope.row.status==='Active')">{{scope.row.name}}</span>
-        <el-button v-if="scope.row.active_block && scope.row.status==='Active'" size="small" type="text" @click="$root.open_tapp_link(scope.row)">{{scope.row.name}}</el-button>
-        
-        
+        <span class="one-line" v-if="scope.row.id==='0x40e5adf63d3e44ab31c7146806dfc62aaea4d448'">{{scope.row.name}}</span>
+        <el-button v-if="scope.row.id!=='0x40e5adf63d3e44ab31c7146806dfc62aaea4d448'" size="small" type="text" @click="clickToOpen(scope.row)">{{scope.row.name}}</el-button>
       </template>
     </TeaTableColumn>
 

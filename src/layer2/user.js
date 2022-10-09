@@ -104,12 +104,12 @@ const F = {
     const _axios = base.getAxios();
     address = address || store.getters.layer1_account.address;
     if(address){
-      await _axios.post('/logout', {
-        address,
-      });
+      // await _axios.post('/logout', {
+      //   address,
+      // });
       utils.cache.remove(F.getUserId(address));
     }
-    
+    await utils.sleep(500);
     location.reload(true);
     // store.dispatch('init_user');
   },

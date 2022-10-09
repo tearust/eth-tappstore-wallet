@@ -30,6 +30,8 @@ import SeatMain from './views/SeatMain';
 import UserDetail from './views/UserDetail';
 import LogIndex from './views/log/Index';
 
+import TokenVesting from './views/TokenVesting';
+
 Vue.use(Router);
 
 
@@ -171,6 +173,14 @@ let routers = [
     path: '/log',
     name: 'log',
     component: LogIndex,
+  },
+  {
+    path: '/token_vesting',
+    name: 'token_vesting',
+    component: TokenVesting,
+    meta: {
+      
+    }
   }
   
   

@@ -55,7 +55,7 @@
   <el-menu-item index="/discover">{{'TApps'}}</el-menu-item>
   <el-menu-item index="/investment">{{'Investments'}}</el-menu-item>
   
-
+  <el-menu-item v-if="layer1_account && $root.inTokenVestingUserList(layer1_account.address)" index="/token_vesting">{{'Token vesting'}}</el-menu-item>
   
 </el-menu>
 

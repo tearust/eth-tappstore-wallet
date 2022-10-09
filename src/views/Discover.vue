@@ -29,7 +29,8 @@
       tip="ID of the TApp"
     >
       <template slot-scope="scope">
-        <el-button size="small" type="text" @click="$root.to_entity_detail(scope.row.id)">{{scope.row.id}}</el-button>
+        <span class="one-line" v-if="scope.row.id==='0x40e5adf63d3e44ab31c7146806dfc62aaea4d448'">{{scope.row.id}}</span>
+        <el-button v-if="scope.row.id!=='0x40e5adf63d3e44ab31c7146806dfc62aaea4d448'" size="small" type="text" @click="clickToOpen(scope.row)">{{scope.row.id}}</el-button>
       </template>
     </TeaTableColumn>
 
@@ -209,7 +210,6 @@ export default {
 
         const all_list = _.concat(mine_list, not_min_list);
         this.list = all_list;
-        console.log(11, this.list);
 
         this.$root.loading(false);
       }, param);
@@ -259,8 +259,8 @@ export default {
 
       layer2.base.set_global_log(this);
     },
-    async set_allowance(row){
-      await layer2.tapp.setAllowance(this, {id: row.id, amount: 100}, async ()=>{
+    async set_allowance(row, extra=null){
+      await layer2.tapp.setAllowance(this, {id: row.id, amount: 100, extra}, async ()=>{
         this.$root.success();
         await this.refresh();
       });
@@ -269,6 +269,47 @@ export default {
       const list = _.cloneDeep(this.list);
       _.set(list[i], 'loading', f);
       this.list = list;
+    },
+    async clickToOpen(row){
+      if(row.id === '0x1000000000000000000000000000000000000000'){
+        // seat
+        if(_.toNumber(row.account_balance.allowance) < 1200){
+          await this.set_allowance(row, {
+            allowance: 1200,
+            url: utils.get_env('seat_url'),
+          });
+        }
+        else{
+          window.open(utils.get_env('seat_url'), '_blank');
+        }
+        
+      }
+      else if(row.id === '0x1000000000000000000000000000000000000001'){
+        // leaderboard
+        if(_.toNumber(row.account_balance.allowance) < 20){
+          await this.set_allowance(row, {
+            allowance: 20,
+            url: utils.get_env('lb_url'),
+          });
+        }
+        else{
+          window.open(utils.get_env('lb_url'), '_blank');
+        }
+        
+      }
+      else if (row.id === '0x1000000000000000000000000000000000000002'){
+        // cml
+        if(_.toNumber(row.account_balance.allowance) < 100){
+          await this.set_allowance(row, {
+            allowance: 100,
+            url: utils.get_env('cml_url'),
+          });
+        }
+        else{
+          window.open(utils.get_env('cml_url'), '_blank');
+        }
+        
+      }
     }
   }
 }

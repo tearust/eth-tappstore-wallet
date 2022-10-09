@@ -97,6 +97,8 @@
       <el-button size="small" :disabled="loading" type="primary" @click="confrim()">
         {{param.confirm_text || 'Confirm'}}
       </el-button>
+
+      <el-button v-if="param.extra_button" style="float:left;" size="small" @click="param.extra_button_action">{{param.extra_button}}</el-button>
     </span>
 
   </el-dialog>

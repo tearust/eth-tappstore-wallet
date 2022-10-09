@@ -1,6 +1,6 @@
 import { ethers, BigNumber } from "ethers";
 import utils from '../tea/utils';
-import { ChainMap, ContractMap } from "./consts";
+import { ChainMap, ContractMap, VestingUsers } from "./consts";
 import {_, moment} from 'tearust_utils';
 import store from '../store';
 import help from './help';
@@ -46,9 +46,14 @@ class Instance {
       this.provider.getSigner(),
     );
 
+    this.token_vesting_contract = new ethers.Contract(
+      ContractMap.TOKENVESTING,
+      require('./abi/TokenVesting.sol/TokenVesting.json').abi,
+      this.provider.getSigner(),
+    );
+
     this.signer = this.provider.getSigner();
 
-    
 
   }
   async init(){
@@ -231,6 +236,41 @@ class Instance {
       
     }
     return list;
+  }
+
+  async scheduleListForVesting(address){
+    address = address || this.signer.getAddress();
+    const rs = await this.token_vesting_contract.getVestingSchedulesCountByBeneficiary(address);
+    const list = []
+    for(let i=0; i<rs.toNumber(); i++){
+      const sid = await this.token_vesting_contract.computeVestingScheduleIdForAddressAndIndex(address, i);
+
+      const xxx = await this.token_vesting_contract.computeReleasableAmount(sid);
+      const details = await this.token_vesting_contract.getVestingSchedule(sid);
+      
+      const item = {
+        index: i,
+        schedule_id: sid,
+        amount: xxx.toString(),
+        details,
+        info: {
+          total: details.amountTotal.toString(),
+          released: details.released.toString(),
+          available: details.amountTotal.sub(details.released).toString(),
+          start: moment(details.start.toNumber()*1000).format('YYYY-MM-DD'),
+          duration: details.duration.toNumber(),
+          cliff: moment(details.cliff.toNumber()*1000).format('YYYY-MM-DD'),
+        },
+      };
+
+      list.push(item);
+    }
+    console.log('token_vesting list =>', list);
+    return list;
+  }
+  async releaseTeaForVesting(schedule_id, amount){
+    await this.token_vesting_contract.release(schedule_id, amount);
+    return true;
   }
 
   async test(){

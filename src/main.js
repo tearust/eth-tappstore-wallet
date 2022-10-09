@@ -21,6 +21,7 @@ import helper from './views/helper';
 
 import './filter';
 import layer2 from './layer2';
+import {VestingUsers} from './eth/consts';
 
 Vue.use(ElementUI, { locale });
 Vue.config.productionTip = false;
@@ -134,6 +135,9 @@ new Vue({
     },
     async open_tapp_link(tapp_row){
       helper.showTAppLink(this, tapp_row);
+    },
+    inTokenVestingUserList(address){
+      return _.includes(VestingUsers, _.toLower(address));
     }
   },
   render: h => h(App),

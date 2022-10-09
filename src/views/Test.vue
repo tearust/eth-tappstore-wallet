@@ -402,6 +402,10 @@ export default {
       const rs = await this.layer1.queryCurrentBlock();
       console.log(11, rs);
       // const rs = await this.layer1.getMyCmlList();
+
+      const list = await this.layer1.scheduleListForVesting();
+
+      // await this.layer1.releaseTeaForVesting(list[0].schedule_id, 1);
     }
     
   }

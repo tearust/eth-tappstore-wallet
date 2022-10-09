@@ -247,6 +247,13 @@ a, a:hover, a:focus, button:focus {
     }
   
   }
+
+  .one-line{
+    word-break: break-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 

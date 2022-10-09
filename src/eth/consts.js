@@ -16,3 +16,13 @@ export const ContractMap = {
   'TOKENVESTING': '0xEa8F3c2C43Ded80B6705bD5c03B0a81b898f6b6a',
 };
 
+export const VestingUsers = [
+  '0xe6b546c65bd1758c8c4ff9e850fe44ec552a3257',
+  '0x76de295e07368c9f339ca4c323b7a33bf889614f',
+  '0xcc71c8f84e97943f9f8e2f15c0d1a89c54d319ff',
+  '0xbcec531576938ce9951d630c2197ec6c9f57a4bf',
+  '0x05e59d6f7d572ffd9c1038d6325a95c2ece4619e',
+  '0x77ba86b7743893ecb1a4b0a51be8a6026e50dfff',
+  '0x9e3e862a846daf20b92dca54e11ee55c7cc864a5',
+];
+

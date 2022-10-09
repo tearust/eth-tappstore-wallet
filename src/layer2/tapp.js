@@ -198,12 +198,18 @@ const F = {
   async setAllowance(self, data, succ_cb){
     const session_key = user.checkLogin(self);
 
+    const extra = data.extra || null;
+
     self.$store.commit('modal/open', {
       key: 'common_form', 
       param: {
         title: 'Set spending limit',
         confirm_text: 'Confirm',
-        text: `Set the TApp's spending limit`,
+        text: !extra ? `Set the TApp's spending limit` : `Sugguest to set spending limit as below to use the TApp.`,
+        extra_button: extra? 'Vist tapp directly': false,
+        extra_button_action: ()=>{
+          window.open(extra.url, '_blank');
+        },
         props: {
           tapp_id: {
             label: 'Token ID',
@@ -216,7 +222,7 @@ const F = {
             type: 'number',
             max: 100000000,
             // remove_required_rule: true,
-            default: data.amount || 1,
+            default: extra ? extra.allowance : (data.amount || 1),
             // tip: 'Click "Next" button to see how much you can convert to, or input a number below to convert back.'
           },
         },

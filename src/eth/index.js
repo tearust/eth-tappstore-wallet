@@ -257,9 +257,9 @@ class Instance {
           total: details.amountTotal.toString(),
           released: details.released.toString(),
           available: details.amountTotal.sub(details.released).toString(),
-          start: moment(details.start.toNumber()*1000).format('MMM Do, YYYY'),
+          start: moment.utc(details.start.toNumber()*1000).format('MMM Do, YYYY'),
           duration: Math.ceil(details.duration.toNumber()/(3600*24)),
-          cliff: moment(details.cliff.toNumber()*1000).format('MMM Do, YYYY'),
+          cliff: moment.utc(details.cliff.toNumber()*1000).format('MMM Do, YYYY'),
         },
       };
 

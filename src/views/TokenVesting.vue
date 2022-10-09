@@ -1,6 +1,6 @@
 <template>
 <div class="tea-page">
-  <h4>Token vesting</h4>
+  <h4>Tea vesting</h4>
   <el-button size="small" style="top: 0px;" class="tea-refresh-btn" type="primary" plain icon="el-icon-refresh" circle @click="refreshList()"></el-button>
 
   <TeaTable
@@ -42,7 +42,15 @@
       label="Duration"
     >
       <template slot-scope="scope">
-        <span>{{scope.row.info.duration}}d</span>
+        <span>{{scope.row.info.duration}}</span>
+      </template>
+    </el-table-column>
+
+    <el-table-column
+      label="Slice period"
+    >
+      <template slot-scope="scope">
+        <span>{{scope.row.info.period}}</span>
       </template>
     </el-table-column>
 
@@ -123,12 +131,12 @@ export default {
       this.$store.commit('modal/open', {
         key: 'common_form', 
         param: {
-          title: 'Release token',
+          title: 'Release Tea',
           confirm_text: 'Confirm',
-          text: `Input the amount you wanna released.`,
+          text: `Input the tea amount you wanna released.`,
           props: {
             amount: {
-              label: 'Amount',
+              label: 'Tea amount',
               type: 'number',
               default: _.toNumber(row.info.available),
               min: 1,

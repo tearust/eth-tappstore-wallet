@@ -242,11 +242,16 @@ class Instance {
     address = address || this.signer.getAddress();
     const rs = await this.token_vesting_contract.getVestingSchedulesCountByBeneficiary(address);
     const list = []
+
+    const day = 3600*24;
     for(let i=0; i<rs.toNumber(); i++){
       const sid = await this.token_vesting_contract.computeVestingScheduleIdForAddressAndIndex(address, i);
 
       const xxx = await this.token_vesting_contract.computeReleasableAmount(sid);
       const details = await this.token_vesting_contract.getVestingSchedule(sid);
+
+      const dur = details.duration.toNumber();
+      const per = details.slicePeriodSeconds.toNumber();
       
       const item = {
         index: i,
@@ -258,8 +263,9 @@ class Instance {
           released: details.released.toString(),
           available: details.amountTotal.sub(details.released).toString(),
           start: moment.utc(details.start.toNumber()*1000).format('MMM Do, YYYY'),
-          duration: Math.ceil(details.duration.toNumber()/(3600*24)),
+          duration: dur < day ? '< 1d' : (Math.floor(dur/day)+'d'),
           cliff: moment.utc(details.cliff.toNumber()*1000).format('MMM Do, YYYY'),
+          period: per < day ? '< 1d' : (Math.floor(per/day)+'d'),
         },
       };
 

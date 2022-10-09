@@ -117,7 +117,7 @@ export default class {
   }
 
   blockToDay(block) {
-    const hour = 60 * 60 / 6;
+    const hour = 60 * 60 / 12;
     const d = Math.ceil(block / hour);
     if(d < 0) return '0';
 

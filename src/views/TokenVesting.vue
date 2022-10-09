@@ -31,7 +31,7 @@
     </el-table-column>
 
     <el-table-column
-      label="Relesable"
+      label="Unreleased"
     >
       <template slot-scope="scope">
         <span>{{scope.row.info.available}}</span>
@@ -39,7 +39,23 @@
     </el-table-column>
 
     <el-table-column
-      label="Released date"
+      label="Duration"
+    >
+      <template slot-scope="scope">
+        <span>{{scope.row.info.duration}}d</span>
+      </template>
+    </el-table-column>
+
+    <el-table-column
+      label="Cliff"
+    >
+      <template slot-scope="scope">
+        <span>{{scope.row.info.cliff}}</span>
+      </template>
+    </el-table-column>
+
+    <el-table-column
+      label="Started on"
     >
       <template slot-scope="scope">
         <span>{{scope.row.info.start}}</span>

@@ -23,7 +23,5 @@ export const VestingUsers = [
   '0xcc71c8f84e97943f9f8e2f15c0d1a89c54d319ff',
   '0xbcec531576938ce9951d630c2197ec6c9f57a4bf',
   '0x05e59d6f7d572ffd9c1038d6325a95c2ece4619e',
-  '0x77ba86b7743893ecb1a4b0a51be8a6026e50dfff',
-  '0x9e3e862a846daf20b92dca54e11ee55c7cc864a5',
 ];
 

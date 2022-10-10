@@ -344,9 +344,9 @@ const F = {
   },
 
   bnToBalanceNumber(bn){
-    const value = bn.div(F.toBN('1000000000000000000'));
-    // const value = bn.div(BN_MILLION.mul(BN_MILLION)).toNumber();
-    return value.toNumber();
+    // const value = parseInt(bn.toString()) / 1000000000000000000;
+    const value = Number(BigInt(bn.toString())/1000000000000000000n);
+    return value;
   },
 
 

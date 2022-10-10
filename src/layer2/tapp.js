@@ -232,7 +232,7 @@ const F = {
           form.amount = 0;
         }
 
-        const id = form.tapp_id;
+        const id = data.id;
         const amount = utils.layer1.amountToBalance(form.amount);
         
         self.$root.loading(true);

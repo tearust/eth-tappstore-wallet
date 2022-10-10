@@ -43,9 +43,11 @@ const mem = {
 
 const cache = {
   put(id, data) {
+    id = location.pathname+'__'+id;
     localStorage.setItem(id, JSON.stringify(data));
   },
   get(id) {
+    id = location.pathname+'__'+id;
     const d = localStorage.getItem(id);
     try {
       return JSON.parse(d);
@@ -54,6 +56,7 @@ const cache = {
     }
   },
   remove(id) {
+    id = location.pathname+'__'+id;
     localStorage.removeItem(id);
   },
 
@@ -341,9 +344,9 @@ const F = {
   },
 
   bnToBalanceNumber(bn){
-    const value = parseInt(bn.toString(),10)/(1000000*1000000*1000000);
+    const value = bn.div(F.toBN('1000000000000000000'));
     // const value = bn.div(BN_MILLION.mul(BN_MILLION)).toNumber();
-    return value;
+    return value.toNumber();
   },
 
 

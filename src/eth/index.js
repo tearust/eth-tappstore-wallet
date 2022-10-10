@@ -259,9 +259,9 @@ class Instance {
         amount: xxx.toString(),
         details,
         info: {
-          total: details.amountTotal.toString(),
-          released: details.released.toString(),
-          available: details.amountTotal.sub(details.released).toString(),
+          total: utils.layer1.balanceToAmount(details.amountTotal.toString()),
+          released: utils.layer1.balanceToAmount(details.released.toString()),
+          available: utils.layer1.balanceToAmount(details.amountTotal.sub(details.released).toString()),
           start: moment.utc(details.start.toNumber()*1000).format('MMM Do, YYYY'),
           duration: dur < day ? '< 1d' : (Math.floor(dur/day)+'d'),
           cliff: moment.utc(details.cliff.toNumber()*1000).format('MMM Do, YYYY'),

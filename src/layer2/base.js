@@ -12,6 +12,9 @@ const meta = {
   server_actor: utils.get_env('LAYER2_ACTOR') || 'MAUJS3ZTZQ2GEVDPAV4P5HBVTHGBLEDSQGPDRAMDRUIYQ3CN6TBERYF7',  // default is tappstore_in_B actor
 };
 // console.log("layer2 meta", meta);
+if(_.toLower(process.env.NODE_ENV) === 'production'){
+  meta.server_url = location.protocol+'//'+location.hostname+':8000';
+}
 
 const _axios = axios.create({
   baseURL: meta.server_url,

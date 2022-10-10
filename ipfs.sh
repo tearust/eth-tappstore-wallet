@@ -1,8 +1,4 @@
 
 
 npm run build
-
-
-ipfs add -r dist --api /ip4/134.209.69.224/tcp/5001/p2p/12D3KooWGxoDVaK6a5wYfdFzUVhnZ6cmKrYGAbx9Cw1pw7hTgyjm
-
-ipfs add -r dist --api /ip4/143.244.154.7/tcp/5001/p2p/12D3KooWH9po4TzMLHu54zFfE5McHnh3f6CJn5C27zeSUUVfrGrV
+ipfs add -r dist --api /ip4/64.227.49.206/tcp/5001/p2p/12D3KooWScg336x2Rzc97ZnHbYAEd592P3DqkYJFZRQneGopjsyT

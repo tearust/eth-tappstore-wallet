@@ -94,6 +94,7 @@ import utils from '../tea/utils';
 import Base from '../workflow/Base';
 import { mapGetters, mapState } from 'vuex';
 import layer2 from '../layer2';
+import eth from '../eth';
 
 export default {
   components: {
@@ -147,7 +148,7 @@ export default {
         cb: async (form, close)=>{
           this.$root.loading(true);
           try{
-            await this.wf.layer1.releaseTeaForVesting(row.schedule_id, form.amount);
+            await this.wf.layer1.releaseTeaForVesting(row.schedule_id, eth.help.unit(form.amount));
             close();
             this.$root.alert_success('You will receive Tea after layer1 confirmed.');
             await this.refreshList();

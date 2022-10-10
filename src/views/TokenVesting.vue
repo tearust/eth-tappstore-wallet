@@ -71,12 +71,12 @@
     </el-table-column>
 
     <el-table-column
-      label="Actions"
+      label="Release"
       width="100"
       fixed="right"
     >
       <template slot-scope="scope">
-        <TeaIconButton tip="Click to release your token." icon="el-icon-check" @click="releaseAction(scope.row)" style="font-size:24px;position:relative;top:2px;" />
+        <TeaIconButton tip="Click to release your token." icon="unlock" @click="releaseAction(scope.row)" icon_style="font-size:20px;" />
       
       </template>
     </el-table-column>

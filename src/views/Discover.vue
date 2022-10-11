@@ -207,7 +207,7 @@ export default {
 
         const all_list = _.concat(mine_list, not_min_list);
         this.list = all_list;
-
+        console.log('tapp list =>', this.list);
         this.$root.loading(false);
       }, param);
     },

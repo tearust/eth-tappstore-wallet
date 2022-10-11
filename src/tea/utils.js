@@ -1,7 +1,7 @@
 
 import http from './http';
 import Pubsub from 'pubsub-js';
-
+import { ethers } from "ethers";
 import * as tearust_utils from 'tearust_utils';
 import { 
   hexToString, formatBalance, hexToNumber, hexToBn, numberToHex,
@@ -344,9 +344,9 @@ const F = {
   },
 
   bnToBalanceNumber(bn){
-    // const value = parseInt(bn.toString()) / 1000000000000000000;
-    const value = Number(BigInt(bn.toString())/1000000000000000000n);
-    return value;
+    const value = ethers.utils.formatUnits(bn.toString(), 'ether');
+    // const value = Number(BigInt(bn.toString())/1000000000000000000n);
+    return _.toNumber(value);
   },
 
 

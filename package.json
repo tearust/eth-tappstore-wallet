@@ -6,6 +6,7 @@
     "start": "npm run local",
     "local": "vue-cli-service serve --mode test",
     "build": "vue-cli-service build --mode prod",
+    "build:wallet": "vue-cli-service build --mode prod_wallet",
     "testnet": "vue-cli-service build --mode stage",
     "dell": "vue-cli-service build --mode dell"
   },

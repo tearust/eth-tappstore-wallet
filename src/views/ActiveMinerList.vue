@@ -1,8 +1,8 @@
 <template>
 <div id="app">
 
-<div class="c-pageheader">
-  <div class="p-header">
+<div class="c-pageheader1">
+  <div class="p-header1">
     <a href="javascript:void(0)" onClick="location.reload()" style="float:left;">
       <el-image
         src="https://wallet.teaproject.org/tea_logo/logo.png"
@@ -149,7 +149,7 @@ export default {
   width: 1080px;
   padding: 24px 0 40px;
 }
-.c-pageheader{
+.c-pageheader1{
   position: sticky;
   top: 0;
   display: block;
@@ -158,7 +158,7 @@ export default {
   text-align: center;
 }
 
-.p-header{
+.p-header1{
   padding: 0 0 10px;
   width: 1080px;
   margin: 0 auto !important;

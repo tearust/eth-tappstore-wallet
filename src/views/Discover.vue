@@ -40,8 +40,8 @@
       tip="Name of TApp"
     >
       <template slot-scope="scope">
-        <span class="one-line" v-if="(!user || !user.isLogin) || scope.row.id==='0x40e5adf63d3e44ab31c7146806dfc62aaea4d448'">{{scope.row.name}}</span>
-        <el-button v-if="(user && user.isLogin) && scope.row.id!=='0x40e5adf63d3e44ab31c7146806dfc62aaea4d448'" size="small" type="text" @click="clickToOpen(scope.row)">{{scope.row.name}}</el-button>
+        <span class="one-line" v-if="(!user || !user.isLogin) || scope.row.name==='tappstore'">{{scope.row.name}}</span>
+        <el-button v-if="(user && user.isLogin) && scope.row.name!=='tappstore'" size="small" type="text" @click="clickToOpen(scope.row)">{{scope.row.name}}</el-button>
       </template>
     </TeaTableColumn>
 

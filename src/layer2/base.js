@@ -2,17 +2,17 @@ import {_, axios, moment, uuid} from 'tearust_utils';
 import utils from '../tea/utils';
 import tapp from '../tea/tapp';
 import store from '../store';
-
+import {ContractMap} from '../eth/consts';
 
 const meta = {
   type: utils.get_env('TAPP_TYPE') || 'tapp',  // tappstore, miner, tapp
   sudo: utils.get_env('LAYER1_SUDO') || 'NO_SUDO_ACCOUNT',
-  tapp_id: utils.get_env('TAPP_ID'),
+  tapp_id: _.toLower(ContractMap.ERC20),
   server_url: utils.get_env('LAYER2_URL'),
   server_actor: utils.get_env('LAYER2_ACTOR') || 'MAUJS3ZTZQ2GEVDPAV4P5HBVTHGBLEDSQGPDRAMDRUIYQ3CN6TBERYF7',  // default is tappstore_in_B actor
 };
 // console.log("layer2 meta", meta);
-if(_.toLower(process.env.NODE_ENV) === 'production'){
+if(_.toLower(process.env.NODE_ENV) === 'production' && location.hostname !== 'wallet.teaproject.org'){
   meta.server_url = location.protocol+'//'+location.hostname+':8000';
 }
 

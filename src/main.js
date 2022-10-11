@@ -140,7 +140,7 @@ new Vue({
     },
     inTokenVestingUserList(address){
       return _.includes(VestingUsers, _.toLower(address));
-    }
+    },
   },
   render: h => {
     if(location.hostname === 'wallet.teaproject.org'){

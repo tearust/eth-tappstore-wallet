@@ -91,7 +91,7 @@ const store = new Vuex.Store({
     set_account(state, account) {
       state.layer1_account = {
         name: account.ori_name,
-        address: account.address,
+        address: _.toLower(account.address),
         balance: account.balance,
         eth: account.eth,
         lock_balance: account.lock_balance,

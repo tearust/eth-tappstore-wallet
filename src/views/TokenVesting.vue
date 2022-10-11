@@ -23,6 +23,14 @@
     </el-table-column>
 
     <el-table-column
+      label="Releasable"
+    >
+      <template slot-scope="scope">
+        <span>{{scope.row.amount}}</span>
+      </template>
+    </el-table-column>
+
+    <el-table-column
       label="Released"
     >
       <template slot-scope="scope">

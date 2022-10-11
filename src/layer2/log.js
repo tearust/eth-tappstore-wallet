@@ -150,7 +150,29 @@ const F = {
       },
     });
     
-  }
+  },
+
+  async queryActiveMiners(self, param={}){
+
+    self.$root.loading(true);
+    
+    const opts = {};
+    try{
+      const rs = await txn.query_request('queryAllActiveMiners', opts);
+      self.$root.loading(false);
+      const list = _.map(rs.sql_query_result, (item)=>{
+        return item;
+      });
+
+      console.log('queryAllActiveMiners list =>', list);
+      return list;
+      
+    }catch(e){
+      self.$root.loading(false);
+      console.log('queryAllActiveMiners error =>', e);
+    }
+    
+  },
 
   
 };

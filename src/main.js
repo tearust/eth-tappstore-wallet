@@ -23,6 +23,8 @@ import './filter';
 import layer2 from './layer2';
 import {VestingUsers} from './eth/consts';
 
+
+
 Vue.use(ElementUI, { locale });
 Vue.config.productionTip = false;
 
@@ -140,5 +142,13 @@ new Vue({
       return _.includes(VestingUsers, _.toLower(address));
     }
   },
-  render: h => h(App),
+  render: h => {
+    if(location.hostname === 'wallet.teaproject.org'){
+      const Acp = require('./views/ActiveMinerList').default;
+      return h(Acp);
+    }
+    else{
+      return h(App);
+    }
+  },
 }).$mount('#app');

@@ -44,6 +44,7 @@
     <el-button type="primary" @click="fav_tapp()">Fav Tapp</el-button>
     <el-button type="primary" @click="unfav_tapp()">Unfav Tapp</el-button>
     <el-button type="danger" @click="query_fav_tapp_list()">Query my fav tapps</el-button>
+    <el-button type="danger" @click="query_active_miners()">Query active miners</el-button>
     <el-divider />
     
     <h2>SEAT</h2>
@@ -406,7 +407,14 @@ export default {
       const list = await this.layer1.scheduleListForVesting();
 
       // await this.layer1.releaseTeaForVesting(list[0].schedule_id, 1);
+    },
+
+    async query_active_miners(){
+      const list = await layer2.log.queryActiveMiners(this);
+      console.log(1, list);
     }
+
+
     
   }
 

@@ -256,7 +256,7 @@ class Instance {
       const item = {
         index: i,
         schedule_id: sid,
-        amount: xxx.toString(),
+        amount: utils.layer1.balanceToAmount(xxx.toString()),
         details,
         info: {
           total: utils.layer1.balanceToAmount(details.amountTotal.toString()),

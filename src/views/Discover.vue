@@ -45,27 +45,7 @@
       </template>
     </TeaTableColumn>
 
-    <TeaTableColumn
-      label="Ticker"
-      width="100"
-      tip="Symbol of TApp"
-    >
-      <template slot-scope="scope">
-        {{scope.row.ticker}}
-      </template>
-    </TeaTableColumn>
-
-    <TeaTableColumn
-      prop="market_cap"
-      label="Market cap"
-      width="120"
-      sortable
-      tip="Total market capitalization of the TApp's token"
-    >
-      <template slot-scope="scope">
-        <span :inner-html.prop="scope.row.market_cap | teaIcon"></span>
-      </template>
-    </TeaTableColumn>
+    
 
     <TeaTableColumn
       label="Accrued balance"
@@ -81,7 +61,8 @@
       v-if="layer1_account && layer1_account.address"
     >
       <template slot-scope="scope">
-        <span :inner-html.prop="scope.row.account_balance.allowance | teaIcon"></span>
+        <span v-if="scope.row.name==='tappstore'" :inner-html.prop="'N/A'"></span>
+        <span v-if="scope.row.name!=='tappstore'" :inner-html.prop="scope.row.account_balance.allowance | teaIcon"></span>
       </template>
     </TeaTableColumn>
 

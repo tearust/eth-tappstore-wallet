@@ -147,7 +147,7 @@ export default {
             amount: {
               label: 'Tea amount',
               type: 'number',
-              default: _.toNumber(row.info.available),
+              default: Math.floor(_.toNumber(row.amount)),
               min: 1,
               max: _.toNumber(row.info.available),
             },

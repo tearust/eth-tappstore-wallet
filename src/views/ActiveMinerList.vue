@@ -68,6 +68,14 @@
     </el-table-column>
 
     <el-table-column
+      label="Ipfs cid"
+    >
+      <template slot-scope="scope">
+        <span>{{cid}}</span>
+      </template>
+    </el-table-column>
+
+    <el-table-column
       label="Status"
       width="120"
     >
@@ -108,7 +116,7 @@ export default {
   data(){
     return {
       list: null,
-      
+      cid: '',
     };
   },
   computed: {
@@ -117,6 +125,7 @@ export default {
     ]),
   },
   async mounted(){
+    this.cid = utils.get_env('TAPPSTORE_CID');
     this.wf = new Base();
     await this.wf.init();
 
@@ -129,7 +138,7 @@ export default {
     },
 
     openTo(row){
-      const cid = utils.get_env('TAPPSTORE_CID');
+      const cid = this.cid;
       window.open(`http://${row.ip}:8080/ipfs/${cid}`, '_blank');
     }
 

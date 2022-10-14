@@ -38,7 +38,7 @@
         </div>
 
         <ul style="margin-top: 40px; list-style:none;padding:0;">
-          <li>These limits can be set in the TApps tab of the TAppStore wallet</li>
+          <li>These permissions are necessary for the TApp to perform actions on behalf of the user.</li>
           
         </ul>
 

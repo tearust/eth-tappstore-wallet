@@ -205,8 +205,8 @@ const F = {
       param: {
         title: 'Set spending limit',
         confirm_text: 'Confirm',
-        text: !extra ? `Set the TApp's spending limit` : `Sugguest to set spending limit as below to use the TApp.`,
-        extra_button: extra? 'Vist tapp directly': false,
+        text: !extra ? `Set the TApp's spending limit` : `Set spending limit for this TApp.`,
+        extra_button: extra? 'Visit TApp directly': false,
         extra_button_action: ()=>{
           window.open(extra.url, '_blank');
         },

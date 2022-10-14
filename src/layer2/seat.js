@@ -10,8 +10,8 @@ import mem from './mem';
 const F = {
   getMeta(){
     return {
-      day_block: 300,
-      disabled_block: 30,
+      day_block: 150,
+      disabled_block: 15,
     };
   },
   async querySeatList(self, param={}){

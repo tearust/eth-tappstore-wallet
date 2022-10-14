@@ -30,11 +30,16 @@
             <el-checkbox v-model="purchase">In-app purchases</el-checkbox>
             <span style="margin-left: 30px;">Allow this app to spend your funds for app-related functions.</span>
           </div>
+          <div style="margin-top:12px;">
+            <el-checkbox v-model="bonding_curve">Manage investments</el-checkbox>
+            <span style="margin-left: 30px;">Allow this app to buy, sell, or transfer your token assets.</span>
+          </div>
+
 
           <el-tooltip style="margin-top:12px;" content="Allow TApp to view your token balances" effect="light" placement="top"><el-checkbox v-model="read" disabled>Read</el-checkbox></el-tooltip>
           <el-tooltip content="Allow TApp to withdraw your app funds back to your main wallet" effect="light" placement="top"><el-checkbox v-model="withdraw">Withdraw</el-checkbox></el-tooltip>
           <el-tooltip content="Allow TApp to spend your app funds" effect="light" placement="top"><el-checkbox v-model="consume">Spend</el-checkbox></el-tooltip>
-          <el-tooltip content="Allow TApp to manage your various token investments" effect="light" placement="top"><el-checkbox v-model="bonding_curve">Manage investments</el-checkbox></el-tooltip>
+         
         </div>
 
         <ul style="margin-top: 40px; list-style:none;padding:0;">
@@ -80,10 +85,11 @@ export default {
       consume: true,
       withdraw: true,
       consume: true,
-      bonding_curve: true,
+      
 
       move: true,
       purchase: true,
+      bonding_curve: true,
     };
   },
   computed: {

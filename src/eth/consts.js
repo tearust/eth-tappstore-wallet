@@ -1,3 +1,5 @@
+import {_} from 'tearust_utils';
+
 export const ChainMap = {
   1: 'Mainnet',
   3: 'Ropsten',
@@ -16,7 +18,7 @@ export const ContractMap = {
   'TOKENVESTING': '0xB32b3F69158bC249fa723D172176F00A73CA1195',
 };
 
-export const VestingUsers = [
+export const VestingUsers = _.map([
   '0xe0EdE3A80785654D6352B10a2Cdac142D7804fCC',
   '0xb24a7bDbb569dDaF6c4B5289E9201b56886B82f1',
   '0xcc3dbff214afe29e5d6026548e7b932a899c4e4f',
@@ -49,5 +51,5 @@ export const VestingUsers = [
   '0x05e59d6f7d572ffd9c1038d6325a95c2ece4619e',
   '0x77ba86b7743893ecb1a4b0a51be8a6026e50dfff',
   '0x9e3e862a846daf20b92dca54e11ee55c7cc864a5',
-];
+], (s)=>_.toLower(s));
 

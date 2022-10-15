@@ -251,7 +251,7 @@ export default {
     async clickToOpen(row){
       if(row.id === '0x1000000000000000000000000000000000000000'){
         // seat
-        if(_.toNumber(row.account_balance.allowance) < 1200){
+        if(_.toNumber(row.account_balance.allowance) < 10){
           await this.set_allowance(row, {
             allowance: 1200,
             url: utils.get_env('seat_url'),
@@ -264,7 +264,7 @@ export default {
       }
       else if(row.id === '0x1000000000000000000000000000000000000001'){
         // leaderboard
-        if(_.toNumber(row.account_balance.allowance) < 20){
+        if(_.toNumber(row.account_balance.allowance) < 10){
           await this.set_allowance(row, {
             allowance: 20,
             url: utils.get_env('lb_url'),
@@ -277,7 +277,7 @@ export default {
       }
       else if (row.id === '0x1000000000000000000000000000000000000002'){
         // cml
-        if(_.toNumber(row.account_balance.allowance) < 100){
+        if(_.toNumber(row.account_balance.allowance) < 10){
           await this.set_allowance(row, {
             allowance: 100,
             url: utils.get_env('cml_url'),

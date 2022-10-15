@@ -27,18 +27,17 @@
             <span style="margin-left: 30px;">Allow this app to transfer your funds to other users.</span>
           </div>
           <div style="margin-top:12px;">
-            <el-checkbox v-model="purchase">In-app purchases</el-checkbox>
+            <el-checkbox v-model="consume">In-app purchases</el-checkbox>
             <span style="margin-left: 30px;">Allow this app to spend your funds for app-related functions.</span>
           </div>
           <div style="margin-top:12px;">
             <el-checkbox v-model="bonding_curve">Manage investments</el-checkbox>
             <span style="margin-left: 30px;">Allow this app to buy, sell, or transfer your token assets.</span>
           </div>
-
-
-          <el-tooltip style="margin-top:12px;" content="Allow TApp to view your token balances" effect="light" placement="top"><el-checkbox v-model="read" disabled>Read</el-checkbox></el-tooltip>
-          <el-tooltip content="Allow TApp to withdraw your app funds back to your main wallet" effect="light" placement="top"><el-checkbox v-model="withdraw">Withdraw</el-checkbox></el-tooltip>
-          <el-tooltip content="Allow TApp to spend your app funds" effect="light" placement="top"><el-checkbox v-model="consume">Spend</el-checkbox></el-tooltip>
+          <div style="margin-top:12px;">
+            <el-checkbox v-model="withdraw">Withdraw</el-checkbox>
+            <span style="margin-left: 30px;">Allow this app to move funds from TEA's layer-2 to Ethereum's layer-1 blockchain.</span>
+          </div>
          
         </div>
 
@@ -81,14 +80,10 @@ export default {
       form: {
         
       },
-      read: true,
-      consume: true,
+      read: false,
       withdraw: true,
       consume: true,
-      
-
       move: true,
-      purchase: true,
       bonding_curve: true,
     };
   },
@@ -119,10 +114,8 @@ export default {
       const cb = utils.mem.get('login');
 
       const tmp = [];
-      if(this.move) tmp.push('move');
-      if(this.purchase) tmp.push('purchase');
-
       if(this.read) tmp.push('read');
+      if(this.move) tmp.push('move');
       if(this.withdraw) tmp.push('withdraw');
       if(this.consume) tmp.push('consume');
       if(this.bonding_curve) tmp.push('bonding_curve');

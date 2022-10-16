@@ -7,7 +7,14 @@
       src="https://wallet.teaproject.org/tea_logo/logo.png"
       fit="fit">
     </el-image>
-    
+    <span style="
+        position: absolute;
+        color: #35a696;
+        font-size: 20px;
+        left: 84px;
+        top: 24px;
+        font-weight: bold;
+    ">TAppStore</span>
   </a>
   
 
@@ -34,28 +41,11 @@
   
 
   <el-menu-item index="/log">{{'Log'}}</el-menu-item>
-
-  
   <el-menu-item index="/welcome">{{'Help'}}</el-menu-item>
-  
-  
-  <el-menu-item index="/account_profile">{{'Account'}}</el-menu-item>
-  
-  <!-- <el-menu-item index="/log">{{'Log'}}</el-menu-item> -->
-
-  <!-- <el-menu-item index="/my_notification">{{'Inbox'}}</el-menu-item> -->
-
-  <!-- <el-menu-item index="/leader_board">{{'Leaderboard'}}</el-menu-item> -->
-  <!-- <el-menu-item index="/top_tree_list">{{'Mining Camellia'}}</el-menu-item> -->
-
-  <!-- <el-menu-item v-if="miner_mode" index="/mining_home">{{'Mining'}}</el-menu-item> -->
-  
-
-  <!-- <el-menu-item index="/seat_main">{{'Seats'}}</el-menu-item> -->
-  <el-menu-item index="/discover">{{'TApps'}}</el-menu-item>
   <el-menu-item index="/investment">{{'Investments'}}</el-menu-item>
-  
   <el-menu-item v-if="layer1_account && $root.inTokenVestingUserList(layer1_account.address)" index="/token_vesting">{{'Tea vesting'}}</el-menu-item>
+  <el-menu-item index="/account_profile">{{'Account'}}</el-menu-item>
+  <el-menu-item index="/discover">{{'TApps'}}</el-menu-item>
   
 </el-menu>
 

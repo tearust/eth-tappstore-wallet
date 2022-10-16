@@ -27,6 +27,7 @@
     <TeaTableColumn
       label="ID"
       tip="ID of the TApp"
+      width="300"
     >
       <template slot-scope="scope">
         <span class="one-line">{{scope.row.id}}</span>
@@ -36,12 +37,12 @@
     <TeaTableColumn
       prop="name"
       label="Name"
-      width="100"
+      width="150"
       tip="Name of TApp"
     >
       <template slot-scope="scope">
-        <span class="one-line" v-if="(!user || !user.isLogin) || scope.row.name==='tappstore'">{{scope.row.name}}</span>
-        <el-button v-if="(user && user.isLogin) && scope.row.name!=='tappstore'" size="small" type="text" @click="clickToOpen(scope.row)">{{scope.row.name}}</el-button>
+        <span class="one-line" v-if="(!user || !user.isLogin) || $root.is_tappstore(scope.row.id)">{{scope.row.name}}</span>
+        <el-button v-if="(user && user.isLogin) && !$root.is_tappstore(scope.row.id)" size="small" type="text" @click="clickToOpen(scope.row)">{{scope.row.name}}</el-button>
       </template>
     </TeaTableColumn>
 
@@ -61,8 +62,8 @@
       v-if="layer1_account && layer1_account.address"
     >
       <template slot-scope="scope">
-        <span v-if="scope.row.name==='tappstore'" :inner-html.prop="'N/A'"></span>
-        <span v-if="scope.row.name!=='tappstore'" :inner-html.prop="scope.row.account_balance.allowance | teaIcon"></span>
+        <span v-if="$root.is_tappstore(scope.row.id)" :inner-html.prop="'N/A'"></span>
+        <span v-if="!$root.is_tappstore(scope.row.id)" :inner-html.prop="scope.row.account_balance.allowance | teaIcon"></span>
       </template>
     </TeaTableColumn>
 
@@ -84,7 +85,7 @@
         <TeaIconButton v-if="!scope.row.fav" tip="Like" icon="el-icon-star-off" @click="fav_tapp(scope.row, scope.$index)" :loading="scope.row.loading" style="font-size:20px;position:relative;top:2px;" />
       
         <TeaIconButton tip="Set spending limit" 
-          v-if="scope.row.ticker !== 'GLOBAL'"
+          v-if="!$root.is_tappstore(scope.row.id)"
           icon="el-icon-setting" 
           @click="set_allowance(scope.row)" style="font-size:20px;position:relative;top:2px;" />
       </template>

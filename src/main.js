@@ -21,7 +21,7 @@ import helper from './views/helper';
 
 import './filter';
 import layer2 from './layer2';
-import {VestingUsers} from './eth/consts';
+import {VestingUsers, ContractMap} from './eth/consts';
 
 
 
@@ -125,6 +125,9 @@ new Vue({
     },
     is_sudo(address){
       return utils.get_env('LAYER1_SUDO') === address;
+    },
+    is_tappstore(address){
+      return _.toLower(address) === _.toLower(ContractMap.ERC20);
     },
     go_wallet(url){
       helper.go_wallet(url);

@@ -30,7 +30,7 @@
       label="ID"
     >
       <template slot-scope="scope">
-        <el-button size="small" type="text" @click="toEntityDetail(scope)">{{scope.row.id}}</el-button>
+        <el-button :title="scope.row.id" size="small" type="text" @click="toEntityDetail(scope)">{{scope.row.id}}</el-button>
       </template>
     </el-table-column>
 

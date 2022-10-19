@@ -15,11 +15,13 @@
 <section class="tea-section">
 <div class="tea-page">
   <h4>Active miner list</h4>
-
+  
   <el-button size="small" style="top: 0px;" class="tea-refresh-btn" type="primary" plain icon="el-icon-refresh" circle @click="refreshList()"></el-button>
 
+
+  <div style="margin-top: 20px;">These are the currently available mining nodes hosting the TAppStore. The TAppStore can be launched by clicking the Visit link in the desired miner's row listing.</div>
   <TeaTable
-    style="margin-top: 15px;"
+    style="margin-top: 5px;"
     :data="list || []"
     name="active_miner_list_table"
   >

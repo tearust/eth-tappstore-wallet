@@ -54,24 +54,26 @@
       </template>
     </el-table-column>
 
-    <el-table-column
+    <TeaTableColumn
       label="Slice period"
+      tip="The length of the periodic intervals at which tokens are released."
     >
       <template slot-scope="scope">
         <span>{{scope.row.info.period}}</span>
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
-    <el-table-column
+    <TeaTableColumn
       label="Cliff"
+      tip="The date at which the vesting schedule begins to release tokens."
     >
       <template slot-scope="scope">
         <span>{{scope.row.info.cliff}}</span>
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
     <el-table-column
-      label="Started on"
+      label="Start date"
     >
       <template slot-scope="scope">
         <span>{{scope.row.info.start}}</span>
@@ -84,7 +86,7 @@
       fixed="right"
     >
       <template slot-scope="scope">
-        <TeaIconButton tip="Click to release your token." icon="unlock" @click="releaseAction(scope.row)" icon_style="font-size:20px;" />
+        <TeaIconButton tip="Click to release your tokens" icon="unlock" @click="releaseAction(scope.row)" icon_style="font-size:20px;" />
       
       </template>
     </el-table-column>

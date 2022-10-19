@@ -35,39 +35,25 @@
             />
           </b>
           <span
+            style="margin-right: 34px"
             :inner-html.prop="
               layer1_account ? layer1_account.balance : '' | teaIcon
             "
           ></span>
+          <el-button
+            size="mini"
+            type="primary"
+            plain
+            icon="el-icon-refresh"
+            circle
+            @click="refreshLayer1Balance($event)"
+            style="right: 0; position: absolute"
+          ></el-button>
         </div>
-        <!-- <div class="x-item">
-          <b>
-            {{ "Chain wallet ETH balance" }}
-            <TeaIconButton
-              style="position: relative"
-              place="right"
-              tip="
-            The amount of ETH in your layer1 wallet (e.g. Metamask wallet)
-          "
-              icon="questionmark"
-            />
-          </b>
-          <span
-            :inner-html.prop="
-              layer1_account ? layer1_account.eth : ''
-            "
-          ></span>
-        </div> -->
-        <!-- <div class="x-item">
-          <b>{{ "Chain wallet COFFEE balance" }}</b>
-          <span
-            :inner-html.prop="layer1_account ? layer1_account.usd : '' | usd"
-          ></span>
-        </div> -->
 
         <div class="x-item">
           <b>
-            {{ "TApp store wallet TEA balance" }}
+            {{ "TApp Store wallet TEA balance" }}
             <TeaIconButton
               style="position: relative"
               place="right"
@@ -97,7 +83,7 @@
 
         <div class="x-item">
           <b>
-            {{ "TApp store wallet TEA deposit" }}
+            {{ "TApp Store wallet TEA deposit" }}
             <!-- <TeaIconButton
               style="position: relative"
               place="right"
@@ -292,6 +278,12 @@ export default {
     async refreshTappDepositHandler(e) {
       this.$root.loading(true, "Refreshing TApp deposit ...");
       await this.queryDeposit();
+      this.$root.loading(false);
+      e && e.target && e.target.blur();
+    },
+    async refreshLayer1Balance(e) {
+      this.$root.loading(true);
+      await this.wf.refreshCurrentAccount();
       this.$root.loading(false);
       e && e.target && e.target.blur();
     },

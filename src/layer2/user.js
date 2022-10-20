@@ -68,13 +68,15 @@ const F = {
     try{
 
       const layer1_instance = self.wf.getLayer1Instance();
-      let sig = await layer1_instance.signMessage(data);
-      sig = utils.uint8array_to_base64(hexToU8a(sig));
+      let [sig, pk, msg] = await layer1_instance.signMessage(data);
+      
 
+      sig = utils.uint8array_to_base64(hexToU8a(sig));
       const rs = await txn.txn_request('login', {
         tappIdB64: base.getTappId(),
         address,
-        data: utils.forge.util.encode64(`<Bytes>${data}</Bytes>`),
+        pk: utils.uint8array_to_base64(hexToU8a(pk)),
+        data: utils.uint8array_to_base64(msg),
         signature: sig,
       });
 

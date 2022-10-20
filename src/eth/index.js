@@ -191,9 +191,17 @@ class Instance {
   }
 
   async signMessage(message){
+    message = 'tearust';
     await this.connect();
-    const signature = await this.signer.signMessage(message);
-    return signature;
+    const msg1 = U.sha256(U.arrayify(U.toUtf8Bytes(message)));
+    // const signature = await this.signer._legacySignMessage(U.arrayify(msg1));
+    const signature = await this.signer.signMessage(msg1);
+    
+    const pk = U.recoverPublicKey(U.hashMessage(msg1), signature);
+      const sig = U.splitSignature(signature);
+    console.log(11, msg1, sig.compact);
+
+    return [sig.compact, pk, U.toUtf8Bytes(message)];
   }
 
   async getMaintainerAddressList(){

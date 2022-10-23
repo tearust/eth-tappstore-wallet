@@ -191,7 +191,6 @@ class Instance {
   }
 
   async signMessage(message){
-    message = 'tearust';
     await this.connect();
     const msg1 = U.sha256(U.arrayify(U.toUtf8Bytes(message)));
     // const signature = await this.signer._legacySignMessage(U.arrayify(msg1));

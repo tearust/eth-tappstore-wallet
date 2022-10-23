@@ -173,6 +173,9 @@ let routers = [
     path: '/log',
     name: 'log',
     component: LogIndex,
+    meta: {
+      needLogin: true,
+    },
   },
   {
     path: '/token_vesting',

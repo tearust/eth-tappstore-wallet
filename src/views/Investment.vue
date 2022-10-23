@@ -62,6 +62,14 @@
       </template>
     </el-table-column>
 
+    <el-table-column
+      label="Accrued balance"
+    >
+      <template slot-scope="scope">
+        <span :inner-html.prop="scope.row.consume_account_balance | teaIcon"></span>
+      </template>
+    </el-table-column>
+
 
     <el-table-column
       prop="total_supply"

@@ -48,13 +48,13 @@
 
     
 
-    <TeaTableColumn
+    <!-- <TeaTableColumn
       label="Accrued balance"
     >
       <template slot-scope="scope">
         <span :inner-html.prop="scope.row.consume_account_balance | teaIcon"></span>
       </template>
-    </TeaTableColumn>
+    </TeaTableColumn> -->
 
     <TeaTableColumn
       label="Spending limit"
@@ -288,6 +288,17 @@ export default {
           window.open(utils.get_env('cml_url'), '_blank');
         }
         
+      }
+      else if (row.id === '0x1000000000000000000000000000000000000003'){
+        if(_.toNumber(row.account_balance.allowance) < 10){
+          await this.set_allowance(row, {
+            allowance: 200,
+            url: utils.get_env('seed_url'),
+          });
+        }
+        else{
+          window.open(utils.get_env('seed_url'), '_blank');
+        }
       }
     }
   }

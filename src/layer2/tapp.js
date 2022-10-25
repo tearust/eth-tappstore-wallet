@@ -147,7 +147,6 @@ const F = {
       return cache_result;
     }
     
-
     const opts = {
       tappIdB64: base.getTappId(),
       address: self.layer1_account.address,

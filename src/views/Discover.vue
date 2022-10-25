@@ -175,7 +175,10 @@ export default {
         const mine_list = [];
         const not_min_list = [];
 
-        const my_fav = await this.query_my_fav_list();
+        let my_fav = [];
+        if(this.user && this.user.isLogin){
+          my_fav = await this.query_my_fav_list();
+        }
         _.each(list, (item)=>{
           if(_.find(my_fav, (x)=>x.id===item.id)){
             item.fav = true;

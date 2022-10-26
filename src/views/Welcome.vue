@@ -22,7 +22,7 @@ The <b>Investments tab</b> allows you to purchase the tokenized assets of the va
 
 The <b>TEA Vesting</b> tab shows the release schedule of any TEA that is due to the user from community rewards or investment.
 <br/><br/>
-If you have any questions, please ask it in our TG community - <a href="https://t.me/teaprojectorg" target="_blank">https://t.me/teaprojectorg</a> <br/>
+If you have any questions, please ask them in our TG community - <a href="https://t.me/teaprojectorg" target="_blank">https://t.me/teaprojectorg</a> <br/>
 
 TEA project team will answer them there.
 </p>

@@ -186,17 +186,12 @@ export default {
       tapp_balance: null,
       tapp_deposit: null,
 
-      rate: {
-        usdToTea: null,
-        teaToUsd: null,
-      },
-      usd_interest_rate: null,
-      usd_interest_rate_number: null,
     };
   },
 
   computed: {
     ...mapGetters(["layer1_account"]),
+    ...mapState(['user'])
   },
 
   async created() {
@@ -210,7 +205,7 @@ export default {
     layer2.base.set_global_log(this);
 
     this.$root.loading(true);
-
+    await utils.sleep(1500);
     this.wf = new SettingAccount();
     await this.wf.init();
     await this.refreshAccount();
@@ -263,9 +258,12 @@ export default {
       flag && this.$root.loading(true);
       await this.wf.refreshCurrentAccount();
 
-      await this.queryTokenBalance();
-      await this.queryDeposit();
-
+      if(this.user && this.user.isLogin){
+        await this.queryTokenBalance();
+        await this.queryDeposit();
+      }
+      
+      
       flag && this.$root.loading(false);
     },
 

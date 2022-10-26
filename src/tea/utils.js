@@ -401,16 +401,6 @@ const F = {
     return rs ? rs.value : null;
   },
 
-  parseJSON(str, default_value=null){
-    let rs;
-    try{
-      rs = JSON.parse(str);
-    }catch(e){
-      rs = default_value
-    }
-
-    return rs;
-  },
 
   isValidIP(ip){
     var reg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
@@ -462,6 +452,10 @@ const F = {
   getEpochEndBlock(){
     return _.toNumber(F.get_env('end_block')||'20000000');
   },
+
+  nextTick(cb){
+    setTimeout(cb, 1);
+  }
 
 
 };

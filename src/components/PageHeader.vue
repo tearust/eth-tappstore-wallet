@@ -212,7 +212,7 @@ export default {
         }
         
         if(this.connected > 0){
-          time = 2000;
+          time = 1000;
         }
 
       }catch(e){

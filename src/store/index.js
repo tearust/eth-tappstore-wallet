@@ -164,12 +164,9 @@ const store = new Vuex.Store({
 console.log('refresh user => ', me);
       if(!me){
         store.commit('set_user', null);
-        store.commit('set_miner_mode', false);
       }
       else{
         store.commit('set_user', me);
-
-        store.commit('set_miner_mode', layer1_account.cml.length>0);
       }
       
     }

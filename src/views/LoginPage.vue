@@ -1,8 +1,8 @@
 <template>
 <div class="tea-page">
-  <p style="font-size: 28px;" v-if="user">Login success. account is "{{user.address}}"</p>
+  <p style="font-size: 28px;" v-if="user && user.isLogin">Login success. account is "{{user.address}}"</p>
 
-  <div v-if="!user" style="text-align:center;">
+  <div v-if="!user || !user.isLogin" style="text-align:center;">
     <p>You must login first to continue.</p>
     <el-button style="width: 200px;" type="primary" size="large" @click="loginHander()">Click to login</el-button>
   </div>

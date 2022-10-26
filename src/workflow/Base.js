@@ -267,7 +267,6 @@ export default class {
 
     // const cml_list = await this.getCmlListByUser(layer1_account.address);
     // const cml_data = await this.getCmlByList(cml_list);
-
     this._log.i("refresh current layer1_account");
     store.commit('set_account', {
       eth: balance.eth,
@@ -286,7 +285,6 @@ export default class {
     });
 
     
-    store.commit('set_miner_mode', false);
     await store.dispatch('init_user');
   }
 

@@ -39,17 +39,14 @@ const F = {
     const user = F.current(address);
     if (!user || !user.isLogin) {
 
-      self.$root.alert_success('Session expired.', 'Session expired, please login again.');
-      F.logout();
-      return false;
-
-      throw NOT_LOGIN;
+      self.$root.alert_success('Session expired or Not login', 'Please login again.', ()=>{
+        F.logout();
+      });
+      
+      return 'NA';
     }
 
     return user.session_key;
-  },
-  getSession(){
-
   },
 
   async login(self, permission_str) {

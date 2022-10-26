@@ -95,10 +95,11 @@ new Vue({
         type: 'error'
       });
     },
-    alert_success(message='Success', title=''){
+    alert_success(message='Success', title='', cb=null){
       this.$alert(message, title, {
         type: 'success',
         dangerouslyUseHTMLString: true,
+        callback: cb || (()=>{}),
       });
     },
     success(message='', type='success'){

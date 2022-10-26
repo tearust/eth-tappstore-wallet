@@ -54,10 +54,9 @@ class Instance {
 
     this.signer = this.provider.getSigner();
 
-
+    this._init = 0;
   }
   async init(){
-    
     await this.initCache();
     await this.initEvent();
 
@@ -67,6 +66,8 @@ class Instance {
     await this.connect();
     const acct = await this.getAccountList();
     console.log('current account =>', acct);
+
+    this._init = 1;
     return _.first(acct);
   }
 
@@ -82,9 +83,7 @@ class Instance {
 
     window.ethereum.on('accountsChanged', function (accounts) {
       console.log('Wallet account changed =>', accounts);
-      _.delay(()=>{
-        location.reload(true);
-      }, 1000);
+      location.reload(true);
       
     });
   }
@@ -224,7 +223,12 @@ class Instance {
   }
 
   isConnected(){
-    return 2;
+    if(this._init > 1) return 2;
+    if(this._init === 1){
+      this._init++;
+      return 1;
+    }
+    return this._init;
   }
 
   async getMyCmlList(){

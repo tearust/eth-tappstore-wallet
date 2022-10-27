@@ -164,16 +164,20 @@ const F = {
         },
       },
       cb: async (form, close) => {
-        // if(self.layer1_account.balance < form.amount){
-        //   self.$root.showError("Not enough balance to topup.");
-        //   return false;
-        // }
+
+        const amt = _.toNumber(form.amount);
+        if(self.layer1_account.balance < amt){
+          self.$root.showError("Not enough balance to topup.");
+          return false;
+        }
+        if(amt < 1) {
+          self.$root.showError('Minimum topup amount is 1T.');
+          return false;
+        }
 
         self.$root.loading(true);
-
-
         try {
-          await layer1_instance.topup(_.toNumber(form.amount));
+          await layer1_instance.topup(amt);
         } catch (e) {
           self.$root.showError(e);
           close();

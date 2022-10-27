@@ -25,13 +25,19 @@ export default class {
     return 'Base';
   }
 
+  async __init__(){
+    await this.initLayer1();
+    _init = true;
+  }
+
   async init() {
     if(_init){
       return true;
     }
 
-    const init_loop = (resolve) => {
-      if (!_init) {
+    const init_loop = async (resolve) => {
+      const layer1_ready = utils.mem.get('layer1_ready');
+      if (!_init || !layer1_ready) {
         _.delay(() => {
           init_loop(resolve);
         }, 300);
@@ -41,13 +47,12 @@ export default class {
       }
     };
 
-
     return new Promise(async (resolve) => {
       if (!_init) {
         await this.initLayer1();
         _init = true;
       }
-      init_loop(resolve);
+      await init_loop(resolve);
     });
 
   }

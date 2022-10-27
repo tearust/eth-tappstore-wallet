@@ -84,7 +84,6 @@ class Instance {
     window.ethereum.on('accountsChanged', function (accounts) {
       console.log('Wallet account changed =>', accounts);
       location.reload(true);
-      
     });
   }
 

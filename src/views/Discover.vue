@@ -133,6 +133,7 @@ export default {
       'user'
     ])
   },
+
   async mounted(){
     this.wf = new Base();
     await this.wf.init();

@@ -581,7 +581,7 @@ const F = {
     self.$root.loading(true);
 
     const mem_key = 'entity_queryAll_'+utils.crypto.sha256(JSON.stringify(param));
-    console.log(111, param, mem_key)
+
     const cache_result = mem.get(mem_key);
     if(cache_result){
       console.log('[Entity] queryAll cache result => ', cache_result);

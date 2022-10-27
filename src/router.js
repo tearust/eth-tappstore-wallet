@@ -78,7 +78,7 @@ let routers = [
     name: 'discover',
     component: Discover,
     meta: {
-      keepAlive: true,
+      // keepAlive: true,
     }
   },
 

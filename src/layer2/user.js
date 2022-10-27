@@ -62,7 +62,6 @@ const F = {
     console.log('permission_str => ' + permission_str);
 
 
-
     try {
 
       const layer1_instance = self.wf.getLayer1Instance();

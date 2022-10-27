@@ -179,16 +179,10 @@ export default {
   async mounted(){
     layer2.base.set_global_log(this);
     const id = layer2.base.getTappId();
-  
-
-    this.$store.commit('set_bbs', {
-      id,
-      channel: 'NA',
-    });
 
     let time = 500;
     const wf = new Base();
-    await wf.init();
+    await wf.__init__();
     this.wf = wf;
     const address = await this.wf.layer1.initCurrentAccount();
     this.$store.commit('set_account', {
@@ -225,9 +219,6 @@ export default {
     };
 
     loop(async ()=>{
-      utils.mem.set('layer1_ready', true);
-      console.log('----- layer1 ready ------');
-
       await this.$store.dispatch('init_user');
 
       helper.checkForLayer1UserChanged(this);
@@ -237,6 +228,9 @@ export default {
         id,
         tapp,
       });
+
+      utils.mem.set('layer1_ready', true);
+      console.log('----- layer1 ready ------');
 
       this.initRoutePage();
     });

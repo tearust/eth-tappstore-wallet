@@ -129,7 +129,7 @@ export default {
   async mounted(){
     this.cid = utils.get_env('TAPPSTORE_CID');
     this.wf = new Base();
-    await this.wf.init();
+    await this.wf.__init__();
 
     await this.refreshList();
   },

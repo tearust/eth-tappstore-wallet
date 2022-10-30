@@ -190,15 +190,13 @@ class Instance {
 
   async signMessage(message){
     await this.connect();
-    const msg1 = U.sha256(U.arrayify(U.toUtf8Bytes(message)));
+    const msg1 = (U.toUtf8Bytes(message));
     // const signature = await this.signer._legacySignMessage(U.arrayify(msg1));
     const signature = await this.signer.signMessage(msg1);
-    
     const pk = U.recoverPublicKey(U.hashMessage(msg1), signature);
-      const sig = U.splitSignature(signature);
-    console.log(11, msg1, sig.compact);
+    const sig = signature
 
-    return [sig.compact, pk, U.toUtf8Bytes(message)];
+    return [sig, pk, U.toUtf8Bytes(message)];
   }
 
   async getMaintainerAddressList(){
@@ -271,7 +269,7 @@ class Instance {
         info: {
           total: utils.layer1.balanceToAmount(details.amountTotal.toString()),
           released: utils.layer1.balanceToAmount(details.released.toString()),
-          available: utils.layer1.balanceToAmount(details.amountTotal.sub(details.released).toString()),
+          available: utils.layer1.balanceToAmount(details.amountTotal.sub(details.released).sub(xxx).toString()),
           start: moment.utc(details.start.toNumber()*1000).format('MMM Do, YYYY'),
           duration: dur < day ? '< 1d' : (Math.floor(dur/day)+'d'),
           cliff: moment.utc(details.cliff.toNumber()*1000).format('MMM Do, YYYY'),

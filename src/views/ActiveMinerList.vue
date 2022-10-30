@@ -78,6 +78,22 @@
     </el-table-column>
 
     <el-table-column
+      label="Epoch"
+    >
+      <template slot-scope="scope">
+        <span>{{epoch}}</span>
+      </template>
+    </el-table-column>
+
+    <el-table-column
+      label="Version"
+    >
+      <template slot-scope="scope">
+        <span>{{version}}</span>
+      </template>
+    </el-table-column>
+
+    <el-table-column
       label="Status"
       width="120"
     >
@@ -88,6 +104,7 @@
 
     <el-table-column
       label="Link"
+      width="80"
     >
       <template slot-scope="scope">
         <el-button size="small" type="text" @click="openTo(scope.row)">Visit</el-button>
@@ -119,6 +136,8 @@ export default {
     return {
       list: null,
       cid: '',
+      version: '',
+      epoch: '',
     };
   },
   computed: {
@@ -128,6 +147,8 @@ export default {
   },
   async mounted(){
     this.cid = utils.get_env('TAPPSTORE_CID');
+    this.version = utils.get_env('VERSION');
+    this.epoch = utils.get_env('EPOCH_VERSION');
     this.wf = new Base();
     await this.wf.__init__();
 

@@ -39,7 +39,7 @@
     </el-table-column>
 
     <el-table-column
-      label="Unreleased"
+      label="Locked"
     >
       <template slot-scope="scope">
         <span>{{scope.row.info.available}}</span>

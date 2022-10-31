@@ -127,7 +127,7 @@
       width="100"
       fixed="right"
     >
-      <template v-if="user && user.isLogin" slot-scope="scope">
+      <template v-if="user && user.isLogin && !$root.is_tappstore(scope.row.id)" slot-scope="scope">
         <TeaIconButton tip="Buy" icon="buy" @click="buy_token(scope.row)" />
         <TeaIconButton tip="Sell" icon="sell" @click="sell_token(scope.row)" />
       </template>

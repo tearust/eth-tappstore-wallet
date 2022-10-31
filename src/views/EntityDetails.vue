@@ -36,7 +36,7 @@
 
     </el-table>
     
-    <div style="margin-top: 12px;">
+    <div v-if="token_id && !$root.is_tappstore(token_id)" style="margin-top: 12px;">
       
       <TeaIconButton 
         type="primary"

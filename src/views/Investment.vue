@@ -30,7 +30,8 @@
       label="ID"
     >
       <template slot-scope="scope">
-        <el-button :title="scope.row.id" size="small" type="text" @click="toEntityDetail(scope)">{{scope.row.id}}</el-button>
+        <el-button v-if="!$root.is_tappstore(scope.row.id)" :title="scope.row.id" size="small" type="text" @click="toEntityDetail(scope)">{{scope.row.id}}</el-button>
+        <span :title="scope.row.id" class="one-line" v-if="$root.is_tappstore(scope.row.id)">{{scope.row.id}}</span>
       </template>
     </el-table-column>
 
@@ -51,14 +52,18 @@
       prop="token_symbol"
       label="Ticker"
       width="70"
-    />
+    >
+      <template slot-scope="scope">
+        {{$root.is_tappstore(scope.row.id) ? '' : scope.row.token_symbol}}
+      </template>
+    </el-table-column>
 
     <el-table-column
       label="Owner"
     >
       <template slot-scope="scope">
-        <el-button size="small" type="text" @click="$root.to_user_detail(scope.row.owner)">{{scope.row.owner}}</el-button>
-        <!-- <span>{{scope.row.owner}}</span> -->
+        <!-- <el-button size="small" type="text" @click="$root.to_user_detail(scope.row.owner)">{{scope.row.owner}}</el-button> -->
+        <span class="one-line">{{$root.is_tappstore(scope.row.id) ? '' : scope.row.owner}}</span>
       </template>
     </el-table-column>
 
@@ -76,7 +81,11 @@
       label="Total supply"
       width="110"
       sortable
-    />
+    >
+      <template slot-scope="scope">
+        {{$root.is_tappstore(scope.row.id) ? '' : scope.row.total_supply}}
+      </template>
+    </el-table-column>
 
     <el-table-column
       prop="buy_price"
@@ -85,7 +94,7 @@
       sortable
     >
       <template slot-scope="scope">
-        <span :inner-html.prop="scope.row.buy_price | teaIcon"></span>
+        <span v-if="!$root.is_tappstore(scope.row.id)" :inner-html.prop="scope.row.buy_price | teaIcon"></span>
       </template>
     </el-table-column>
     <el-table-column
@@ -95,7 +104,7 @@
       sortable
     >
       <template slot-scope="scope">
-        <span :inner-html.prop="scope.row.sell_price | teaIcon"></span>
+        <span v-if="!$root.is_tappstore(scope.row.id)" :inner-html.prop="scope.row.sell_price | teaIcon"></span>
       </template>
     </el-table-column>
       
@@ -103,11 +112,11 @@
     <el-table-column
       prop="market_cap"
       label="Market cap"
-      width="120"
+      width="100"
       sortable
     >
       <template slot-scope="scope">
-        <span :inner-html.prop="scope.row.market_cap | teaIcon"></span>
+        <span v-if="!$root.is_tappstore(scope.row.id)" :inner-html.prop="scope.row.market_cap | teaIcon"></span>
       </template>
     </el-table-column>
 
@@ -115,10 +124,11 @@
    <el-table-column
       prop="token_balance"
       label="My holdings"
+      width="110"
       sortable
     >
       <template slot-scope="scope">
-        <span :inner-html.prop="scope.row.token_balance"></span>
+        <span v-if="!$root.is_tappstore(scope.row.id)" :inner-html.prop="scope.row.token_balance"></span>
       </template>
     </el-table-column>
 

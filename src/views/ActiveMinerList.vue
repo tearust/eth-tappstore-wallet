@@ -94,11 +94,10 @@
     </el-table-column>
 
     <el-table-column
-      label="Status"
-      width="120"
+      label="IP"
     >
       <template slot-scope="scope">
-        <span>{{scope.row.mining_status}}</span>
+        <span>{{scope.row.ip}}</span>
       </template>
     </el-table-column>
 

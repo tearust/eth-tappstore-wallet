@@ -112,6 +112,15 @@
         </div>
 
         <div class="x-bottom">
+
+          <el-button
+            type="primary"
+            style="margin-right: 20px"
+            v-if="layer1_account"
+            @click="toUniswap()"
+          >
+            TEA | COFFEE Exchange
+          </el-button>
           
           <el-tooltip
             effect="light"
@@ -161,6 +170,7 @@
         </div>
       </div>
     </div>
+
   </div>
 </template>
 <script>
@@ -337,7 +347,10 @@ export default {
       clipboard.on("error", (e) => {});
     },
 
-
+    toUniswap(){
+      const url = utils.get_env('UNISWAP_URL') || 'NA';
+      window.open(url, "_blank");
+    }
     
 
     

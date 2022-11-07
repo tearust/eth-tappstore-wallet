@@ -304,6 +304,17 @@ export default {
           window.open(utils.get_env('seed_url'), '_blank');
         }
       }
+      else if (row.id === '0x1000000000000000000000000000000000000004'){
+        if(_.toNumber(row.account_balance.allowance) < 10){
+          await this.set_allowance(row, {
+            allowance: 20,
+            url: utils.get_env('fluencer_url'),
+          });
+        }
+        else{
+          window.open(utils.get_env('fluencer_url'), '_blank');
+        }
+      }
     }
   }
 }

@@ -165,7 +165,7 @@ const F = {
       });
 
       console.log('queryAllActiveMiners list =>', list);
-      return list;
+      return _.reverse(_.sortBy(list, (x)=>x.plantd_at));
       
     }catch(e){
       self.$root.loading(false);

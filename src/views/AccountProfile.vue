@@ -113,14 +113,14 @@
 
         <div class="x-bottom">
 
-          <el-button
+          <!-- <el-button
             type="primary"
             style="margin-right: 20px"
             v-if="layer1_account"
             @click="toUniswap()"
           >
             TEA | COFFEE Exchange
-          </el-button>
+          </el-button> -->
           
           <el-tooltip
             effect="light"
@@ -160,13 +160,13 @@
 
           
 
-          <el-button
+          <!-- <el-button
             type="primary"
             v-if="layer1_account"
             @click="transferTea()"
           >
             Transfer TEA
-          </el-button>
+          </el-button> -->
         </div>
       </div>
     </div>

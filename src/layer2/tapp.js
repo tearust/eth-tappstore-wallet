@@ -189,6 +189,7 @@ const F = {
       
     }catch(e){
       self.$root.loading(false);
+      self.$root.processError(e);
       console.log('queryFavTappList error:', e);
     }
     
@@ -198,6 +199,8 @@ const F = {
     const session_key = user.checkLogin(self);
 
     const extra = data.extra || null;
+
+    let current_balance = 0;
 
     self.$store.commit('modal/open', {
       key: 'common_form', 
@@ -231,9 +234,14 @@ const F = {
           form.amount = 0;
         }
 
+        if(form.amount > current_balance){
+          self.$root.showError('Not enough balance.');
+          return false;
+        }
+
         const id = data.id;
         const amount = utils.layer1.amountToBalance(form.amount);
-        
+
         self.$root.loading(true);
         try{
           const opts = {
@@ -256,6 +264,10 @@ const F = {
         }
         self.$root.loading(false);
       },
+      async open_cb(param){
+        const r = await user.query_balance(self);
+        current_balance = r;
+      }
     });
   }
 };

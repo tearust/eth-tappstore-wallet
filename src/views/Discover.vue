@@ -316,6 +316,12 @@ export default {
         // }
         window.open(utils.get_env('fluencer_url'), '_blank');
       }
+      else if(row.ori.tapp_type === 'fluencer'){
+        window.open(utils.get_env('fluencer_url')+'?v='+row.id+'&t=fluencer', '_blank');
+      }
+      else{
+        this.$root.showError("Invalid tapp url");
+      }
     }
   }
 }

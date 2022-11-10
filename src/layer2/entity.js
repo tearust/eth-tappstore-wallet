@@ -10,7 +10,7 @@ import user from './user';
 import mem from './mem';
 
 const template = {
-  list: [
+  list: ()=>[
     {
       key: 'fluencer',
       label: 'Tea Fluencer',
@@ -21,7 +21,7 @@ const template = {
     }
   ],
   getLabel(value){
-    return _.get(template.list()[value], 'label');
+    return _.get(_.find(template.list(), x=>x.key===value), 'label');
   },
 };
 
@@ -133,13 +133,15 @@ const F = {
             type: 'radio-group',
             required: true,
             options: [
-              ..._.map(template.list(), (v)=>{
+              ..._.map(template.list(), (item)=>{
+                const v = item.key;
                 return {
                   label: template.getLabel(v),
                   value: v,
                 }
               }),
             ],
+            default: 'fluencer',
             
             tip: 'Tea fluencer tapp for Epoch12',
             // tip_action: ()=>{
@@ -147,13 +149,13 @@ const F = {
             // }
           },
 
-          max_allowed_hosts: {
-            type: 'number',
-            required: true,
-            default: 10,
-            min: 3,
-            class: type==='tapp' ? '' : 'hidden',
-          },
+          // max_allowed_hosts: {
+          //   type: 'number',
+          //   required: true,
+          //   default: 10,
+          //   min: 3,
+          //   class: type==='tapp' ? '' : 'hidden',
+          // },
 
           // fixed_token_mode: {
           //   label: 'Billing model',
@@ -177,37 +179,6 @@ const F = {
           //   ],
           // },
 
-          hosting_amount: {
-            type: 'select_number',
-            label: 'Staked tokens per miner',
-            class: type==='tapp' ? '' : 'hidden',
-            el_props: {
-              'allow-create': true,
-              'filterable': true,
-            },
-            options: [
-              {id: 10}, {id: 50}, {id: 100}, {id: 200}, {id: 500}, {id: 1000}, {id: 2000},
-              {id: 5000}, {id: 10000},
-            ],
-            default: 100,
-            required: true,
-            rules: {
-              validator: (rule, val, cb)=>{
-                if(!(/^[0-9]+$/g).test(val.toString())){
-                  return cb('Must be integer value.');
-                }
-                
-                if(_.toNumber(val)<1) 
-                  return cb('min value is 1');
-
-                return cb();
-              }
-            },
-            // tip: 'Click to visit wiki',
-            // tip_action: ()=>{
-            //   helper.openUrl('https://github.com/tearust/teaproject/wiki/TApps---Creating-a-TApp#create-new-tapp---staked-token-amount')
-            // }
-          },
 
           theta: {
             label: 'Theta',
@@ -253,7 +224,6 @@ const F = {
             throw 'Theta can\'t be more than 30';
           }
           const initAmount = utils.layer1.amountToBalance(form.init_fund);
-          const hostingAmount = utils.layer1.amountToBalance(form.hosting_amount);
 
           const ethUtils = help.getUtils();
           const opts = {
@@ -262,10 +232,10 @@ const F = {
             name: form.name,
             ticker: form.ticker,
             detail: form.detail,
-            link: 'test_link',
-            maxAllowedHosts: form.max_allowed_hosts,
-            tappType: 'Twitter',
-            billingMode: 'dummy',
+            link: 'NA',
+            maxAllowedHosts: 3,
+            tappType: form.template,
+            billingMode: 'Dummy',
             buyCurveK: 100,
             sellCurveK: theta,
             initAmount: utils.toBN(initAmount).toString(),

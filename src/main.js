@@ -72,6 +72,16 @@ new Vue({
         C._loading = null;
       }
     },
+    processError(e){
+      if(_.includes(e.toString(), '"login" cannot be none')){
+        this.$alert("Login session expired.", 'Session error', {
+          type: 'error'
+        });
+        _.delay(()=>{
+          layer2.user.logout();
+        }, 2000);
+      }
+    },
     showError(e, title = 'Error message') {
       if(_.includes(e.toString(), 'not_login')){
         _.delay(()=>{

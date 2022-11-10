@@ -9,6 +9,22 @@ import txn from './txn';
 import user from './user';
 import mem from './mem';
 
+const template = {
+  list: [
+    {
+      key: 'fluencer',
+      label: 'Tea Fluencer',
+      link: ()=>{},
+      url(id, tid){
+
+      }
+    }
+  ],
+  getLabel(value){
+    return _.get(template.list()[value], 'label');
+  },
+};
+
 const F = {
   // @param type: tapp, cml
   async createEntity(self, succ_cb, type, type_param){
@@ -112,35 +128,24 @@ const F = {
             }
           },
 
-          // ReferralCode: {
-          //   label: 'Referral info',
-          //   type: 'Input',
-          //   required: true,
-          //   condition: {
-          //     target: 'template',
-          //     value: 'ReferralCode'
-          //   },
-          //   el_props: {
-          //     type: 'textarea',
-          //     rows: 4,
-          //     style: {
-          //       width: '800px'
-          //     }
-          //   },
-          // },
-          // code: {
-          //   label: 'Referral Code',
-          //   type: 'Input',
-          //   disabled: true,
-          //   model: 'ticker',
-          // },
-          
-          // min_hosts: {
-          //   label: 'Min hosts',
-          //   type: 'number',
-          //   default: 3,
-          //   disabled: true,
-          // },
+          template: {
+            label: 'TApp template',
+            type: 'radio-group',
+            required: true,
+            options: [
+              ..._.map(template.list(), (v)=>{
+                return {
+                  label: template.getLabel(v),
+                  value: v,
+                }
+              }),
+            ],
+            
+            tip: 'Tea fluencer tapp for Epoch12',
+            // tip_action: ()=>{
+              
+            // }
+          },
 
           max_allowed_hosts: {
             type: 'number',
@@ -150,27 +155,27 @@ const F = {
             class: type==='tapp' ? '' : 'hidden',
           },
 
-          fixed_token_mode: {
-            label: 'Billing model',
-            type: 'radio-group',
-            required: true,
-            class: type==='tapp' ? '' : 'hidden',
+          // fixed_token_mode: {
+          //   label: 'Billing model',
+          //   type: 'radio-group',
+          //   required: true,
+          //   class: type==='tapp' ? '' : 'hidden',
             
-            // default: type==='tapp' ? undefined : 'FixedHostingFee',
-            default: 'FixedHostingFee',
-            options: [
-              {
-                label: 'Fixed TEA payment per 1000 blocks',
-                value: 'FixedHostingFee',
-                disabled: type==='tapp' ? false : true,
-              },
-              {
-                label: 'Fixed TApp token and dividend payments per 1000 blocks',
-                value: 'FixedHostingToken',
-                disabled: type==='tapp' ? false : true,
-              }
-            ],
-          },
+          //   // default: type==='tapp' ? undefined : 'FixedHostingFee',
+          //   default: 'FixedHostingFee',
+          //   options: [
+          //     {
+          //       label: 'Fixed TEA payment per 1000 blocks',
+          //       value: 'FixedHostingFee',
+          //       disabled: type==='tapp' ? false : true,
+          //     },
+          //     {
+          //       label: 'Fixed TApp token and dividend payments per 1000 blocks',
+          //       value: 'FixedHostingToken',
+          //       disabled: type==='tapp' ? false : true,
+          //     }
+          //   ],
+          // },
 
           hosting_amount: {
             type: 'select_number',
@@ -260,7 +265,7 @@ const F = {
             link: 'test_link',
             maxAllowedHosts: form.max_allowed_hosts,
             tappType: 'Twitter',
-            billingMode: form.fixed_token_mode,
+            billingMode: 'dummy',
             buyCurveK: 100,
             sellCurveK: theta,
             initAmount: utils.toBN(initAmount).toString(),

@@ -98,7 +98,7 @@
     text-align: right;
   ">
 
-    <el-button v-if="user && user.isLogin && $root.is_sudo(user.address)" style="width:400px;" type="primary" @click="createNewTApp()">Create new TApp</el-button>
+    <el-button v-if="user && user.isLogin" style="width:400px;" type="primary" @click="createNewTApp()">Create new TApp</el-button>
   </div>
 
 </div>
@@ -305,15 +305,16 @@ export default {
         }
       }
       else if (row.id === '0x1000000000000000000000000000000000000004'){
-        if(_.toNumber(row.account_balance.allowance) < 10){
-          await this.set_allowance(row, {
-            allowance: 20,
-            url: utils.get_env('fluencer_url'),
-          });
-        }
-        else{
-          window.open(utils.get_env('fluencer_url'), '_blank');
-        }
+        // if(_.toNumber(row.account_balance.allowance) < 10){
+        //   await this.set_allowance(row, {
+        //     allowance: 20,
+        //     url: utils.get_env('fluencer_url'),
+        //   });
+        // }
+        // else{
+        //   window.open(utils.get_env('fluencer_url'), '_blank');
+        // }
+        window.open(utils.get_env('fluencer_url'), '_blank');
       }
     }
   }

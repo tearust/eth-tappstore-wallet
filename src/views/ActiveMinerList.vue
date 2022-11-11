@@ -94,6 +94,14 @@
     </el-table-column>
 
     <el-table-column
+      label="Status"
+    >
+      <template slot-scope="scope">
+        <span>{{scope.row.node_status}}</span>
+      </template>
+    </el-table-column>
+
+    <el-table-column
       label="IP"
     >
       <template slot-scope="scope">
@@ -106,7 +114,7 @@
       width="80"
     >
       <template slot-scope="scope">
-        <el-button size="small" type="text" @click="openTo(scope.row)">Visit</el-button>
+        <el-button :disabled="scope.row.node_status!=='active'" size="small" type="text" @click="openTo(scope.row)">Visit</el-button>
       </template>
     </el-table-column>
 

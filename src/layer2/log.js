@@ -160,9 +160,10 @@ const F = {
     try{
       const rs = await txn.query_request('queryAllActiveMiners', opts);
       self.$root.loading(false);
-      const list = _.map(rs.sql_query_result, (item)=>{
-        return item;
+      const list = _.filter(rs.sql_query_result, (item)=>{
+        return item.node_status === 'active';
       });
+      
 
       console.log('queryAllActiveMiners list =>', list);
       return _.reverse(_.sortBy(list, (x)=>x.plantd_at));

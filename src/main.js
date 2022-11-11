@@ -157,7 +157,7 @@ new Vue({
     },
   },
   render: h => {
-    if(location.hostname === 'wallet.teaproject.org'){
+    if(true || location.hostname === 'wallet.teaproject.org'){
       const Acp = require('./views/ActiveMinerList').default;
       return h(Acp);
     }

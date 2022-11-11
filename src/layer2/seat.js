@@ -74,7 +74,7 @@ const F = {
       param: {
         title: 'Buy seat',
         confirm_text: 'Confirm',
-        text: `Please note that every seat requires 1000T as a deposit, which will be withdrawn from your account automatically when a seat is purchased.<br/>${utils.consts.gas_tip()}`,
+        text: `Please note that every seat requires 300T as a deposit, which will be withdrawn from your account automatically when a seat is purchased.<br/>${utils.consts.gas_tip()}`,
         props: {
           seat_id: {
             label: 'Seat ID',
@@ -102,7 +102,6 @@ const F = {
         }
 
         
-
         self.$root.loading(true);
         
         const seatId = form.seat_id;

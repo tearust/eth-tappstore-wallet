@@ -234,8 +234,8 @@ const F = {
           form.amount = 0;
         }
 
-        if(form.amount > current_balance){
-          self.$root.showError('Not enough balance.');
+        if(current_balance < 1){
+          self.$root.showError("You'll need to Topup funds to your TApp Store wallet account before you can set spending limits.");
           return false;
         }
 

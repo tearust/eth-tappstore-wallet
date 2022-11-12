@@ -160,13 +160,13 @@
 
           
 
-          <!-- <el-button
+          <el-button
             type="primary"
-            v-if="layer1_account"
+            v-if="layer1_account && $root.is_sudo(layer1_account.address)"
             @click="transferTea()"
           >
             Transfer TEA
-          </el-button> -->
+          </el-button>
         </div>
       </div>
     </div>

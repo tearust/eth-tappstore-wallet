@@ -152,6 +152,7 @@
           >
             Transfer TEA
           </el-button>
+
         </div>
       </div>
     </div>
@@ -213,8 +214,6 @@ export default {
         await this.refreshAccount();
       }
     );
-
-    console.log(11, this.user);
   },
 
   methods: {

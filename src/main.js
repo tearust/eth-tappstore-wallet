@@ -135,7 +135,10 @@ new Vue({
       helper.openUrl(url);
     },
     is_sudo(address){
-      return utils.get_env('LAYER1_SUDO') === address;
+      return this.$root.eq(utils.get_env('LAYER1_SUDO'), address);
+    },
+    eq(str1, str2){
+      return _.toLower(str1) === _.toLower(str2);
     },
     is_tappstore(address){
       return _.toLower(address) === _.toLower(ContractMap.ERC20);

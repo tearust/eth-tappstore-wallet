@@ -144,25 +144,10 @@
               >Topup</el-button
             >
           </el-tooltip>
-
-          <!-- <el-button
-            v-if="layer1_account"
-            type="primary"
-            @click="transferBalance()"
-            >Send TEA</el-button
-          >
-          <el-button
-            v-if="layer1_account"
-            type="primary"
-            @click="transferUsd()"
-            >Send COFFEE</el-button
-          > -->
-
           
-
           <el-button
             type="primary"
-            v-if="layer1_account && $root.is_sudo(layer1_account.address)"
+            v-if="user && user.isLogin && $root.is_sudo(user.address)"
             @click="transferTea()"
           >
             Transfer TEA

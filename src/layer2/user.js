@@ -53,7 +53,7 @@ const F = {
     const address = self.layer1_account.address;
 
     const chain = await self.wf.layer1.getChain();
-    if(true || chain.name !== 'Goerli'){
+    if(chain.name !== 'Goerli'){
       throw('Current epoch only accept Goerli network. <br> please visit <a href="https://www.youtube.com/watch?v=nsAuqfAQCag" target="_blank">this link<a> to config.');
     }
 

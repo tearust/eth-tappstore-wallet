@@ -52,6 +52,12 @@ const F = {
   async login(self, permission_str) {
     const address = self.layer1_account.address;
 
+    const chain = await self.wf.layer1.getChain();
+    if(true || chain !== 'Goerli'){
+      self.$root.showError('Current epoch only accept Goerli network. <br> please visit <a href="https://www.youtube.com/watch?v=nsAuqfAQCag" target="_blank">this link<a> to config.');
+      return false;
+    }
+
     const epoch_closed = utils.mem.get('epoch_closed');
     if (epoch_closed && !self.$root.is_sudo(address)) {
       throw 'Current epoch finished, can\'t login.';

@@ -102,7 +102,8 @@ new Vue({
       }
       let ex = _.get(layer1_error_tips, err, default_error);
       this.$alert(ex, title, {
-        type: 'error'
+        type: 'error',
+        dangerouslyUseHTMLString: true,
       });
     },
     alert_success(message='Success', title='', cb=null){

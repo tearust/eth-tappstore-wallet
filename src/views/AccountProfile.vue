@@ -141,7 +141,7 @@
               style="margin-right: 20px"
               v-if="layer1_account"
               @click="rechargeHandler()"
-              >Topup1</el-button
+              >Topup</el-button
             >
           </el-tooltip>
           
@@ -214,7 +214,7 @@ export default {
       }
     );
 
-    
+    console.log(11, this.user);
   },
 
   methods: {

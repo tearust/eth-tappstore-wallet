@@ -22,7 +22,7 @@
             <!-- <span @click="showAddressQrcode(layer1_account.address)" style="margin-left: 5px;" title="qrcode" class="iconfont tea-icon-btn icon-qr_code"></span> -->
           </span>
         </div>
-        <div class="x-item">
+        <div class="x-item" v-if="layer1_account && !layer1_account.email">
           <b>
             {{ "Chain wallet TEA balance" }}
             <TeaIconButton
@@ -123,6 +123,7 @@
           </el-button> -->
           
           <el-tooltip
+            v-if="layer1_account && !layer1_account.email"
             effect="light"
             placement="top"
             content="Move TEA funds back to your chain wallet(layer1)."
@@ -133,6 +134,7 @@
           </el-tooltip>
 
           <el-tooltip
+            v-if="layer1_account && !layer1_account.email"
             effect="light"
             placement="top"
             content="Move chain wallet (layer1) TEA funds to layer2 TApp Store wallet account."

@@ -295,14 +295,39 @@ class Instance {
   }
 }
 
+const Empty_Instance = class {
+  constructor(){}
+  initCurrentAccount(){
+    return null;
+  }
+  getChain(){
+    return {
+      id: 10000,
+      name: 'Offline'
+    }
+  }
+  isConnected(){
+    return 2;
+  }
+  getTeaBalance(){
+    return 0;
+  }
+};
+
 let instance = null;
 export default {
   help,
   async get(){
     if(instance) return instance;
-    instance = new Instance();
-    await instance.init();
-    return instance;
+    try{
+      instance = new Instance();
+      await instance.init();
+      return instance;
+    }catch(e){
+      instance = new Empty_Instance();
+      return instance;
+    }
+    
   },
   
 };

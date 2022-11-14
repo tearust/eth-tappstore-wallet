@@ -8,6 +8,8 @@ import MyNotification from './views/MyNotification';
 
 import MiningTreeList from './views/MiningTreeList';
 
+import LoginWithEmail from './views/LoginWithEmail';
+
 
 import PlantHelper from './views/PlantHelper';
 import PlantConfirm from './views/PlantConfirm';
@@ -62,6 +64,11 @@ let routers = [
     path: '/login_page',
     name: 'login_page',
     component: LoginPage,
+  },
+  {
+    path: '/login_with_email',
+    name: 'login_with_email',
+    component: LoginWithEmail,
   },
 
   {

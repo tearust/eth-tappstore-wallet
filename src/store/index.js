@@ -42,6 +42,7 @@ const initState = () => {
   return {
     layer1_account: {
       name: null,
+      email: null,
       address: null,
       balance: null,
       cml: [],
@@ -89,9 +90,12 @@ const store = new Vuex.Store({
 
   mutations: {
     set_account(state, account) {
+      const address = account.email ? utils.emailToAddress(account.email) : account.address;
+
       state.layer1_account = {
         name: account.ori_name,
-        address: _.toLower(account.address),
+        email: account.email,
+        address: _.toLower(address),
         balance: account.balance,
         eth: account.eth,
         lock_balance: account.lock_balance,
@@ -159,7 +163,7 @@ const store = new Vuex.Store({
         throw 'Invalid layer1 account';
       }
 
-      const address = layer1_account.address;
+      const address = layer1_account.email ? utils.emailToAddress(layer1_account.email) : layer1_account.address;
       const me = layer2.user.current(address);
 console.log('refresh user => ', me);
       if(!me){

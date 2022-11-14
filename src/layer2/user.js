@@ -13,6 +13,9 @@ const F = {
   getUserId(address) {
     return `profile__${address}`;
   },
+  getOfflineId(){
+    return 'tea_offline_id';
+  },
   current(address) {
     const key = F.getUserId(address);
     const user = utils.cache.get(key);
@@ -53,6 +56,9 @@ const F = {
     const address = self.layer1_account.address;
 
     const chain = await self.wf.layer1.getChain();
+    if(chain.name === 'Offline'){
+      throw('You did not install metamask wallet, please login with your email address.');
+    }
     if(chain.name !== 'Goerli'){
       throw('Current epoch only accept Goerli network. <br> please visit <a href="https://www.youtube.com/watch?v=nsAuqfAQCag" target="_blank">this link<a> to config.');
     }
@@ -104,6 +110,60 @@ const F = {
     }
   },
 
+  async sendOtpForEmail(self, email){
+    try{
+      const opts = {
+        email,
+        tokenId: base.getTappId(),
+      };
+      const rs = await txn.txn_request('send_otp_for_email_login', opts);
+      self.$root.success('Login success.');
+      return rs;
+    }catch(e){
+      self.$root.showError(e);
+    }
+  },
+
+  async loginWithEmail(self, data){
+    try{
+      const rs = await txn.txn_request('login_with_email', {
+        tokenId: base.getTappId(),
+        email: data.email,
+        data: utils.forge.util.encode64(data.msg),
+        otp: data.otp,
+      });
+
+      const address = utils.emailToAddress(data.email);
+      if (rs.auth_key) {
+        const user = {
+          address,
+          isLogin: true,
+          email: data.email,
+          session_key: rs.auth_key,
+          expird_time: Date.now() + 1800 * 1000,
+        };
+
+        utils.cache.put(F.getOfflineId(), data.email);
+        utils.cache.put(F.getUserId(address), user);
+        self.$store.commit('set_account', {
+          ...self.layer1_account,
+          email: data.email,
+          address,
+        });
+
+        await store.dispatch('init_user');
+
+        base.top_log(null);
+
+        self.$root.goPath('/account_profile');
+        return true;
+      }
+
+    }catch(e){
+      self.$root.showError(e);
+    }
+  },
+
   async logout(address = null) {
     const _axios = base.getAxios();
     address = address || store.getters.layer1_account.address;
@@ -112,6 +172,7 @@ const F = {
       //   address,
       // });
       utils.cache.remove(F.getUserId(address));
+      utils.cache.remove(F.getOfflineId());
     }
     await utils.sleep(500);
     location.reload(true);

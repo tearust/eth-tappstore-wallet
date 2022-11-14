@@ -15,35 +15,30 @@
     <div v-if="!loading" style="text-align:left;">
       <div style="font-size: 15px;" v-if="layer1_account.address">
 
-        <h4>Please confirm the following permissions:</h4>
-
-        <div>
-          
-        </div>
+        <h4 style="margin:0 0 10px 0;">Please confirm the following permissions:</h4>
 
         <div>
           <div>
             <el-checkbox v-model="move">Move</el-checkbox>
             <span style="margin-left: 30px;">Allow this app to transfer your funds to other users.</span>
           </div>
-          <div style="margin-top:12px;">
+          <div style="margin-top:4px;">
             <el-checkbox v-model="consume">In-app purchases</el-checkbox>
             <span style="margin-left: 30px;">Allow this app to spend your funds for app-related functions.</span>
           </div>
-          <div style="margin-top:12px;">
+          <div style="margin-top:4px;">
             <el-checkbox v-model="bonding_curve">Manage investments</el-checkbox>
             <span style="margin-left: 30px;">Allow this app to buy, sell, or transfer your token assets.</span>
           </div>
-          <div style="margin-top:12px;">
+          <div style="margin-top:4px;">
             <el-checkbox v-model="withdraw">Withdraw</el-checkbox>
             <span style="margin-left: 30px;">Allow this app to move funds from TEA's layer-2 to Ethereum's layer-1 blockchain.</span>
           </div>
          
         </div>
 
-        <ul style="margin-top: 40px; list-style:none;padding:0;">
+        <ul style="margin-top: 12px; list-style:none;padding:0;">
           <li>These permissions are necessary for the TApp to perform actions on behalf of the user.</li>
-          
         </ul>
 
       </div>
@@ -56,6 +51,8 @@
     
 
     <span slot="footer" class="dialog-footer">
+      <el-button style="float:left;" size="small" @click="close(); $root.goPath('/login_with_email')" type="primary">No wallet? login with email</el-button>
+
       <el-button size="small" @click="close()">Cancel</el-button>
       <el-button size="small" type="primary" @click="confirm()">Login</el-button>
     </span>

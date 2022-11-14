@@ -20,7 +20,7 @@
 
 
   <div style="margin-left: 20px;" class="el-menu-item">
-    <el-tooltip v-if="layer1_account.address" effect="light" :content="layer1_account.address">
+    <el-tooltip v-if="layer1_account.email || layer1_account.address" effect="light" :content="layer1_account.email || layer1_account.address">
     <div style="
       display: inline-block;
       font-size: 14px;
@@ -34,7 +34,7 @@
       text-overflow: ellipsis;
       overflow: hidden;
       position: relative;
-    ">{{layer1_account.address}}</div></el-tooltip>
+    ">{{layer1_account.email || layer1_account.address}}</div></el-tooltip>
 
     <el-button style="margin-left: 10px; font-size: 17px;" @click="loginOrLogout()" type="text">{{user ? 'Logout' : 'Login'}}</el-button>
   </div>
@@ -132,29 +132,6 @@ export default {
 
     },
 
-    async initAllPluginAccount(wf){
-      const layer1_instance = wf.getLayer1Instance();
-      let tmp = await wf.getAllLayer1Account();
-      tmp = _.map(tmp||[], (item)=>{
-        (async ()=>{
-          // item.balance = await layer1_instance.getAccountBalance(item.address);
-          item.ori_name = _.clone(item.name);
-          item.name = item.name + '  -  ' + item.balance;
-        })();
-        return item;
-      });
-
-      if(tmp.length < 1){
-        this.no_plugin_account = true;
-      }
-      else{
-        this.no_plugin_account = false;
-      }
-
-      this.all_account = tmp;
-    },
-
-
     async loginOrLogout(){
       if(!this.user){
         layer2.user.showLoginModal(this);
@@ -184,15 +161,24 @@ export default {
     const wf = new Base();
     await wf.__init__();
     this.wf = wf;
-    const address = await this.wf.layer1.initCurrentAccount();
+
+    let address = await this.wf.layer1.initCurrentAccount();
+    let email = null;
+    
+    if(!address){
+      address = 'no_wallet';
+      email = utils.cache.get(layer2.user.getOfflineId());
+    }
+    console.log(11, address, email);
+    
     this.$store.commit('set_account', {
       ...this.layer1_account,
+      email,
       address
     });
 
     const loop = async (cb)=>{
       try{
-        
         
         const connected = wf.layer1.isConnected();
         if(connected !== this.connected){

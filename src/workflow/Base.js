@@ -260,7 +260,7 @@ export default class {
   async refreshCurrentAccount() {
 
     const layer1_account = store.getters.layer1_account;
-    if (!layer1_account.address) {
+    if (!layer1_account.address && !layer1_account.email) {
       return false;
     }
 
@@ -278,6 +278,7 @@ export default class {
       balance: balance.free,
       lock_balance: balance.lock,
       address: layer1_account.address,
+      email: layer1_account.email,
       ori_name: layer1_account.name||'_',
       cml: [],
       reward: balance.reward,

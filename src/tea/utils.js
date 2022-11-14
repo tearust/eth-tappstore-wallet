@@ -455,6 +455,11 @@ const F = {
 
   nextTick(cb){
     setTimeout(cb, 1);
+  },
+
+  emailToAddress(email){
+    const str = F.crypto.sha256(email);
+    return '0x'+str.substring(0, 40);
   }
 
 

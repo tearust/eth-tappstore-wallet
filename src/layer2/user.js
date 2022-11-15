@@ -5,6 +5,7 @@ import { stringToHex, hexToU8a, stringToU8a, numberToHex, u8aToString } from '@p
 
 import base from './base';
 import txn from './txn';
+import eth from '../eth';
 import common from './common';
 
 export const NOT_LOGIN = 'not_login';
@@ -310,32 +311,44 @@ const F = {
       key: 'common_form',
       param: {
         title: 'Transfer TEA',
+        label_width: 200,
         text: `Transfer TEA to another user using your TApp store wallet (layer2). ${utils.consts.gas_tip()}`,
         props: {
           target: {
             type: 'Input',
-            label: 'Target address',
+            label: 'Target address or email',
             required: true,
           },
           amount: {
             type: 'number',
-            default: 0,
-            label: 'Amount'
+            default: 1,
+            label: 'Amount',
+            min: 1,
           }
         },
       },
       cb: async (form, close) => {
-        self.$root.loading(true);
+        
         const amount = utils.layer1.amountToBalance(form.amount);
+        let tar = form.target;
+        if(!utils.isEmail(tar) && !eth.help.getUtils().isAddress(tar)){
+          self.$root.showError('Invalid address or email');
+          return false;
+        }
+
+        if(utils.isEmail(tar)){
+          tar = utils.emailToAddress(tar);
+        }
 
         const param = {
           address: self.layer1_account.address,
           tappIdB64: tappId,
           authB64: session_key,
           amount: utils.toBN(amount).toString(),
-          to: form.target,
+          to: tar,
         };
 
+        self.$root.loading(true);
         try {
           await txn.txn_request('transferTea', param);
           self.$root.success();

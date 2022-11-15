@@ -51,7 +51,7 @@
     
 
     <span slot="footer" class="dialog-footer">
-      <el-button style="float:left;" size="small" @click="close(); $root.goPath('/login_with_email')" type="primary">No wallet? login with email</el-button>
+      <!-- <el-button style="float:left;" size="small" @click="close(); $root.goPath('/login_with_email')" type="primary">No wallet? login with email</el-button> -->
 
       <el-button size="small" @click="close()">Cancel</el-button>
       <el-button size="small" type="primary" @click="confirm()">Login</el-button>

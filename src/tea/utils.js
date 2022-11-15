@@ -458,9 +458,14 @@ const F = {
   },
 
   emailToAddress(email){
-    const str = F.crypto.sha256(email);
+    const str = F.crypto.sha256(_.toLower(email));
     return '0x'+str.substring(0, 40);
-  }
+  },
+
+  isEmail(email){
+    const reg = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return reg.test(email);
+  },
 
 
 };

@@ -149,7 +149,7 @@
           
           <el-button
             type="primary"
-            v-if="user && user.isLogin && $root.is_sudo(user.address)"
+            v-if="user && user.isLogin"
             @click="transferTea()"
           >
             Transfer TEA

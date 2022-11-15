@@ -41,8 +41,8 @@
       tip="Name of TApp"
     >
       <template slot-scope="scope">
-        <span class="one-line" v-if="(!user || !user.isLogin) || $root.is_tappstore(scope.row.id)">{{scope.row.name}}</span>
-        <el-button v-if="(user && user.isLogin) && !$root.is_tappstore(scope.row.id)" size="small" type="text" @click="clickToOpen(scope.row)">{{scope.row.name}}</el-button>
+        <span class="one-line" v-if="$root.is_tappstore(scope.row.id)">{{scope.row.name}}</span>
+        <el-button v-if="!$root.is_tappstore(scope.row.id)" size="small" type="text" @click="clickToOpen(scope.row)">{{scope.row.name}}</el-button>
       </template>
     </TeaTableColumn>
 
@@ -256,7 +256,7 @@ export default {
     async clickToOpen(row){
       if(row.id === '0x1000000000000000000000000000000000000000'){
         // seat
-        if(_.toNumber(row.account_balance.allowance) < 10){
+        if(_.toNumber(row.account_balance.allowance) < 10 && this.user && this.user.isLogin){
           await this.set_allowance(row, {
             allowance: 1200,
             url: utils.get_env('seat_url'),
@@ -269,7 +269,7 @@ export default {
       }
       else if(row.id === '0x1000000000000000000000000000000000000001'){
         // leaderboard
-        if(_.toNumber(row.account_balance.allowance) < 10){
+        if(_.toNumber(row.account_balance.allowance) < 10 && this.user && this.user.isLogin){
           await this.set_allowance(row, {
             allowance: 20,
             url: utils.get_env('lb_url'),
@@ -282,7 +282,7 @@ export default {
       }
       else if (row.id === '0x1000000000000000000000000000000000000002'){
         // cml
-        if(_.toNumber(row.account_balance.allowance) < 10){
+        if(_.toNumber(row.account_balance.allowance) < 10 && this.user && this.user.isLogin){
           await this.set_allowance(row, {
             allowance: 100,
             url: utils.get_env('cml_url'),
@@ -294,7 +294,7 @@ export default {
         
       }
       else if (row.id === '0x1000000000000000000000000000000000000003'){
-        if(_.toNumber(row.account_balance.allowance) < 10){
+        if(_.toNumber(row.account_balance.allowance) < 10 && this.user && this.user.isLogin){
           await this.set_allowance(row, {
             allowance: 200,
             url: utils.get_env('seed_url'),

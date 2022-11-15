@@ -15,7 +15,7 @@ const F = {
   },
   getUtils(){
     return U;
-  }
+  },
 };
 
 export default F;

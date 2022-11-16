@@ -598,6 +598,7 @@ const F = {
           active_block: d.start_height,
           status: d.status,
           ori: d,
+          cid: d.cid,
           consume_account_balance: utils.layer1.balanceToAmount(d.consume_account_balance),
         };
         item.market_cap = utils.layer1.roundAmount(item.sell_price * item.total_supply);

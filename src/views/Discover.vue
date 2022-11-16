@@ -75,9 +75,18 @@
       <template slot-scope="scope">{{scope.row.status}}</template>
     </TeaTableColumn>
 
+    <TeaTableColumn
+      label="Ipfs cid"
+      width="200"
+    >
+      <template slot-scope="scope">
+        <span class="one-line">{{scope.row.cid}}</span>
+      </template>
+    </TeaTableColumn>
+
     <el-table-column
       label="Actions"
-      width="100"
+      width="120"
       fixed="right"
     >
       <template v-if="user && user.isLogin" slot-scope="scope">
@@ -88,6 +97,11 @@
           v-if="!$root.is_tappstore(scope.row.id)"
           icon="el-icon-setting" 
           @click="set_allowance(scope.row)" style="font-size:20px;position:relative;top:2px;" />
+        
+        <TeaIconButton tip="Update tapp" 
+          v-if="user && user.isLogin && $root.is_sudo(user.address)"
+          icon="el-icon-s-tools" 
+          @click="updateTapp(scope.row)" style="font-size:20px;position:relative;top:2px;" />
       </template>
     </el-table-column>
 
@@ -97,6 +111,7 @@
     margin-top: 40px;
     text-align: right;
   ">
+    <el-button v-if="user && user.isLogin && $root.is_sudo(user.address)" style="width:300px;float:left;" type="primary" @click="upgradeVersion()">Upgrade version</el-button>
 
     <el-button v-if="user && user.isLogin" style="width:400px;" type="primary" @click="createNewTApp()">Create new TApp</el-button>
   </div>
@@ -213,6 +228,16 @@ export default {
       }
 
     },
+    async updateTapp(row){
+      try{
+        await layer2.tapp.updateTapp(this, row, async (rs)=>{
+          this.$root.success("Update tapp success");
+          await this.refresh();
+        });
+      }catch(e){
+        this.$root.showError(e);
+      }
+    },
     async unfav_tapp(row, i){
       layer2.base.set_special_log(this);
       const opts = {
@@ -253,17 +278,31 @@ export default {
       _.set(list[i], 'loading', f);
       this.list = list;
     },
+
+    tapp_url(row, t){
+      let url = utils.get_env(t);
+      if(row.cid){
+        url = url.replace(/[a-z0-9]{46}/i, (cid)=>{
+          if(row.cid){
+            return row.cid;
+          }
+        });
+        
+      }
+      return url;
+    },
+
     async clickToOpen(row){
       if(row.id === '0x1000000000000000000000000000000000000000'){
         // seat
         if(_.toNumber(row.account_balance.allowance) < 10 && this.user && this.user.isLogin){
           await this.set_allowance(row, {
             allowance: 1200,
-            url: utils.get_env('seat_url'),
+            url: this.tapp_url(row, 'seat_url'),
           });
         }
         else{
-          window.open(utils.get_env('seat_url'), '_blank');
+          window.open(this.tapp_url(row, 'seat_url'), '_blank');
         }
         
       }
@@ -272,11 +311,11 @@ export default {
         if(_.toNumber(row.account_balance.allowance) < 10 && this.user && this.user.isLogin){
           await this.set_allowance(row, {
             allowance: 20,
-            url: utils.get_env('lb_url'),
+            url: this.tapp_url(row, 'lb_url'),
           });
         }
         else{
-          window.open(utils.get_env('lb_url'), '_blank');
+          window.open(this.tapp_url(row, 'lb_url'), '_blank');
         }
         
       }
@@ -285,11 +324,11 @@ export default {
         if(_.toNumber(row.account_balance.allowance) < 10 && this.user && this.user.isLogin){
           await this.set_allowance(row, {
             allowance: 100,
-            url: utils.get_env('cml_url'),
+            url: this.tapp_url(row, 'cml_url'),
           });
         }
         else{
-          window.open(utils.get_env('cml_url'), '_blank');
+          window.open(this.tapp_url(row, 'cml_url'), '_blank');
         }
         
       }
@@ -297,11 +336,11 @@ export default {
         if(_.toNumber(row.account_balance.allowance) < 10 && this.user && this.user.isLogin){
           await this.set_allowance(row, {
             allowance: 200,
-            url: utils.get_env('seed_url'),
+            url: this.tapp_url(row, 'seed_url'),
           });
         }
         else{
-          window.open(utils.get_env('seed_url'), '_blank');
+          window.open(this.tapp_url(row, 'seed_url'), '_blank');
         }
       }
       else if (row.id === '0x1000000000000000000000000000000000000004'){
@@ -314,14 +353,23 @@ export default {
         // else{
         //   window.open(utils.get_env('fluencer_url'), '_blank');
         // }
-        window.open(utils.get_env('fluencer_url'), '_blank');
+        window.open(this.tapp_url(row, 'fluencer_url'), '_blank');
       }
       else if(row.ori.tapp_type === 'fluencer'){
-        window.open(utils.get_env('fluencer_url')+'?v='+row.id+'&t=fluencer', '_blank');
+        window.open(this.tapp_url(row, 'fluencer_url')+'?v='+row.id+'&t=fluencer', '_blank');
+      }
+      else if(row.id === '0x1000000000000000000000000000000000000005'){
+        window.open(this.tapp_url(row, 'email_url'), '_blank');
       }
       else{
         this.$root.showError("Invalid tapp url");
       }
+    },
+
+    async upgradeVersion(){
+      await layer2.log.upgrade_version(this, {}, async ()=>{
+        this.$root.success();
+      });
     }
   }
 }

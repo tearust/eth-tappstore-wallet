@@ -175,6 +175,58 @@ const F = {
     
   },
 
+  async upgrade_version(self, data, succ_cb){
+    const session_key = user.checkLogin(self);
+
+    self.$store.commit('modal/open', {
+      key: 'common_form', 
+      param: {
+        title: 'Upgrade version',
+        text: ``,
+        props: {
+          type: {
+            label: 'Type',
+            type: 'select',
+            options: [{id: 'client'}, {id: 'provider'}],
+            required: true,
+          },
+          url: {
+            label: 'Url',
+            type: 'Input',
+            required: true,
+          },
+          version: {
+            label: 'Version',
+            type: 'Input',
+            required: true,
+          }
+        },
+      },
+      cb: async (form, close)=>{
+        self.$root.loading(true);
+
+        const opts = {
+          urlB64: utils.forge.util.encode64(form.url),
+          type: form.type,
+          version: form.version,
+        };
+        try{
+          const rs = await txn.txn_request('upgrade_version', opts);
+          console.log(11, rs);
+
+          self.$root.success();
+          close();
+          await succ_cb();
+        }catch(e){
+          self.$root.showError(e);
+        }
+
+        self.$root.loading(false);
+      },
+    });
+
+  },
+
   
 };
 

@@ -269,6 +269,60 @@ const F = {
         current_balance = r;
       }
     });
+  },
+  async updateTapp(self, data, succ_cb){
+    const session_key = user.checkLogin(self);
+
+    self.$store.commit('modal/open', {
+      key: 'common_form', 
+      param: {
+        title: 'Update CID',
+        confirm_text: 'Confirm',
+        text: '',
+        props: {
+          token_id: {
+            label: 'Tapp Id',
+            type: 'Input',
+            disabled: true,
+            default: data.id,
+          },
+          cid: {
+            label: 'Ipfs CID',
+            type: 'Input',
+            default: '',
+          },
+        },
+      },
+      cb: async (form, close)=>{
+
+        self.$root.loading(true);
+        try{
+          const opts = {
+            tappIdB64: base.getTappId(),
+            address: self.layer1_account.address,
+            authB64: session_key,
+
+            tokenId: data.id,
+            ticker: data.token_symbol,
+            detail: data.detail,
+            link: data.ori.link,
+            tappType: data.ori.tapp_type,
+            cid: form.cid,
+            
+          };
+
+          const rs = await txn.txn_request('updateTapp', opts);
+          console.log('updateTapp result:', rs);
+
+          close();
+          self.$root.success();
+          await succ_cb();
+        }catch(e){
+          self.$root.showError(e);
+        }
+        self.$root.loading(false);
+      },
+    });
   }
 };
 

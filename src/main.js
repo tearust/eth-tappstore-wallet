@@ -83,6 +83,16 @@ new Vue({
       }
     },
     showError(e, title = 'Error message') {
+      console.log(e);
+      try{
+        const json = JSON.parse(e.toString());
+        
+        return this.$alert(json.human, title, {
+          type: 'error',
+          dangerouslyUseHTMLString: true,
+        });
+      }catch(ee){}
+      
       if(_.includes(e.toString(), 'not_login')){
         _.delay(()=>{
           layer2.user.logout();

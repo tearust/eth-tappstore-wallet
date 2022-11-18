@@ -1,5 +1,16 @@
 <template>
   <div class="tea-page">
+    <el-alert
+      v-if="!!top_log"
+      effect="dark"
+      @close="top_log=null"
+      center
+      :closable="true"
+      :title="top_log"
+      style="margin-top:-24px; margin-bottom:20px;"
+      type="warning">
+    </el-alert>
+
     <div class="tea-card">
       <i class="x-icon">
         <img src="fav.png" />
@@ -184,6 +195,7 @@ export default {
       tapp_balance: null,
       tapp_deposit: null,
 
+      top_log: null,
     };
   },
 
@@ -227,23 +239,26 @@ export default {
       layer2.user.topupFromLayer1(this, async () => {
         this.$root.success("Topup success.");
 
-        await utils.sleep(2000);
-        this.$root.loading(true, "Refreshing balance ...");
-        await utils.sleep(8000);
+        // await utils.sleep(2000);
+        // this.$root.loading(true, "Refreshing balance ...");
+        // await utils.sleep(8000);
 
-        await this.refreshAccount();
-        this.$root.loading(false);
+        // await this.refreshAccount();
+        // this.$root.loading(false);
+        await this.smartRefreshBalance();
       });
     },
 
     async withdrawHandler() {
       try {
         layer2.user.withdrawFromLayer2(this, 1, async () => {
-          await utils.sleep(2000);
-          this.$root.loading(true, "Refreshing balance ...");
-          await utils.sleep(12000);
-          await this.refreshAccount();
-          this.$root.loading(false);
+          // await utils.sleep(2000);
+          // this.$root.loading(true, "Refreshing balance ...");
+          // await utils.sleep(12000);
+          // await this.refreshAccount();
+          // this.$root.loading(false);
+          this.$root.success("Withdraw success.");
+          await this.smartRefreshBalance();
         });
       } catch (e) {
         this.$root.showError(e);
@@ -336,6 +351,36 @@ export default {
     toUniswap(){
       const url = utils.get_env('UNISWAP_URL') || 'NA';
       window.open(url, "_blank");
+    },
+
+    async smartRefreshBalance(){
+      const max_time = 8;
+      const last_layer1 = _.clone(this.layer1_account.balance);
+      const last_balance = _.clone(this.tapp_balance);
+
+      let n = 1;
+
+      this.$root.loading(false);
+      this.top_log = "Refreshing balance ...";
+      const loop = async ()=>{
+        await this.wf.refreshCurrentAccount(); 
+        await this.queryTokenBalance();
+
+        if(n > max_time){
+          this.top_log = null;
+          return false;
+        }
+
+        if(last_layer1 === this.layer1_account.balance){
+          await utils.sleep(5000);
+          n++;
+          await loop();
+        }
+
+        this.top_log = null;
+      };
+
+      await loop();
     }
     
 

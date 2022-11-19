@@ -3,15 +3,12 @@
   
 
   <div style="text-align:left;">
-    <!-- <div v-if="layer1_account && $root.is_sudo(layer1_account.address) && user && user.isLogin">
-    <h2>ADMIN</h2>
-    <el-button type="danger" @click="query_balance_action('5Hq3maxnpUx566bEDcLARMVAnGEqtoV7ytzXbtqieen7dXhs')">DAO-RESERVE Balance</el-button>
-    <el-button type="danger" @click="query_special_balance_action(null, '5HrN7fHLXWcFiXPwwtq2EkSGns9eMt5P7SpeTPewumZy6ftb')">CONSUME-ACCT Balance</el-button>
-    <el-button type="danger" @click="query_special_balance_action(null, '5C62Ck4UrFPiBtoCmeSrgF7x9yv9mn38446dhCpsi2mLHiFT')">BONDING-CURVE-ACCT Balance</el-button>
-    <br/><br/>
-    <el-button type="danger" @click="query_special_balance_action()">Speical Balance</el-button>
-    <el-divider />
-    </div> -->
+    <div v-if="layer1_account && user && user.isLogin">
+      <h2>Admin Query</h2>
+      
+      <el-button type="danger" @click="queryExpiredWithdraw()">Query expired withdraws</el-button>
+      <el-button type="danger" @click="queryExpiredCmls()">Query expired mint cmls</el-button>
+    </div>
 
     <h2>ETH</h2>
     <el-button type="primary" @click="connectToWallet()">Connect Metamask wallet</el-button>
@@ -412,7 +409,17 @@ export default {
     async query_active_miners(){
       const list = await layer2.log.queryActiveMiners(this);
       console.log(1, list);
-    }
+    },
+
+    async queryExpiredWithdraw(){
+      let list = await layer2.log.queryExpiredWithdraw(this);
+      this.$root.alert_success(JSON.stringify(list));
+    },
+
+    async queryExpiredCmls(){
+      let list = await layer2.log.queryExpiredCmls(this);
+      this.$root.alert_success(JSON.stringify(list));
+    },
 
 
     

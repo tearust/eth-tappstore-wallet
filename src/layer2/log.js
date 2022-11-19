@@ -6,6 +6,7 @@ import txn from './txn';
 import entity from './entity';
 import user from './user';
 import mem from './mem';
+import tapp from './tapp';
 
 const F = {
   
@@ -159,9 +160,13 @@ const F = {
     const opts = {};
     try{
       const rs = await txn.query_request('queryAllActiveMiners', opts);
+      const meta = await tapp.query_meta_data(self);
       self.$root.loading(false);
-      const list = _.filter(rs.sql_query_result, (item)=>{
+      const list = _.map(_.filter(rs.sql_query_result, (item)=>{
         return item.node_status === 'active';
+      }), (item)=>{
+        item.cid = meta.cid;
+        return item;
       });
       
 
@@ -225,6 +230,42 @@ const F = {
       },
     });
 
+  },
+
+  async queryExpiredWithdraw(self, param={}){
+
+    self.$root.loading(true);
+    
+    const opts = {};
+    try{
+      const rs = await txn.query_request('adminQueryExpiredWithdraws', opts);
+      self.$root.loading(false);
+      
+      console.log('queryExpiredWithdraw list =>', rs);
+      return rs;
+      
+    }catch(e){
+      self.$root.loading(false);
+      console.log('queryExpiredWithdraw error =>', e);
+    }
+    
+  },
+  async queryExpiredCmls(self, param={}){
+    self.$root.loading(true);
+    
+    const opts = {};
+    try{
+      const rs = await txn.query_request('adminQueryExpiredCmls', opts);
+      self.$root.loading(false);
+      
+      console.log('queryExpiredCmls list =>', rs);
+      return rs;
+      
+    }catch(e){
+      self.$root.loading(false);
+      console.log('queryExpiredCmls error =>', e);
+    }
+    
   },
 
   

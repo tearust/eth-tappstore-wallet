@@ -270,6 +270,28 @@ const F = {
       }
     });
   },
+  async query_meta_data(self){
+    const opts = {
+      tokenId: base.getTappId(),
+    };
+
+    const mem_key = 'tapp_query_metadata';
+    const cache_result = mem.get(mem_key);
+    if(cache_result){
+      console.log('[Tapp] tapp_query_metadata cache result => ', cache_result);
+      return cache_result;
+    }
+
+    try{
+      const rs = await txn.query_request('query_tapp_metadata', opts);
+      const data = rs.sql_query_result;
+      mem.set(mem_key, data);
+      return data
+    }catch(e){
+      self.$root.showError(e);
+      return null;
+    }
+  },
   async updateTapp(self, data, succ_cb){
     const session_key = user.checkLogin(self);
 

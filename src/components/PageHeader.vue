@@ -151,6 +151,18 @@ export default {
         }
       }
     },
+
+    checkCurrentVersion(){
+      layer2.tapp.query_meta_data(this).then((rs)=>{
+        console.log(22, rs);
+        if(location.hostname !== '127.0.0.1' && rs.cid && !_.includes(location.pathname, rs.cid)){
+          alert("Your TApp needs to be updated. Click OK to get the latest version.");
+          location.href = location.href.replace(/[a-z0-9]{46}/i, (b)=>{
+            return rs.cid;
+          });
+        }
+      });
+    }
     
   },
   async mounted(){
@@ -177,6 +189,7 @@ export default {
       address
     });
 
+    this.checkCurrentVersion();
     const loop = async (cb)=>{
       try{
         

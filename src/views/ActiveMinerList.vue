@@ -73,7 +73,7 @@
       label="Ipfs cid"
     >
       <template slot-scope="scope">
-        <span>{{cid}}</span>
+        <span>{{scope.row.cid || cid}}</span>
       </template>
     </el-table-column>
 
@@ -168,7 +168,7 @@ export default {
     },
 
     openTo(row){
-      const cid = this.cid;
+      const cid = row.cid || this.cid;
       window.open(`http://${row.ip}:8080/ipfs/${cid}`, '_blank');
     }
 

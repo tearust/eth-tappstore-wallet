@@ -204,6 +204,22 @@ const F = {
             label: 'Version',
             type: 'Input',
             required: true,
+          },
+          actor_name: {
+            label: 'Actor name',
+            type: 'Input',
+            el_props: {
+              type: 'textarea',
+              rows: 5,
+            }
+          },
+          actor_url: {
+            label: 'Actor url',
+            type: 'Input',
+            el_props: {
+              type: 'textarea',
+              rows: 5,
+            }
           }
         },
       },
@@ -214,6 +230,8 @@ const F = {
           urlB64: utils.forge.util.encode64(form.url),
           type: form.type,
           version: form.version,
+          actorName: _.map(form.actor_name.split(','), (x)=>x),
+          actorUrl: _.map(form.actor_url.split(','), (x)=>utils.forge.util.encode64(x)),
         };
         try{
           const rs = await txn.txn_request('upgrade_version', opts);

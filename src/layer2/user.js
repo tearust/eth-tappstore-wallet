@@ -306,15 +306,20 @@ const F = {
   async send_email_for_transfer_tea(from_address, email, amount){
     const url = location.protocol+'//'+location.host+utils.get_env('email_url');
     const content = `Hello,<br />
-  The following Ethereum address has sent you <b>${amount}</b> TEA tokens so you can join the TEA Project:
-  <br />
-  ${from_address}
-  <br />
-  <br />
-  Please click <a href="${url}">Here</a> to open the TEA Project email wallet app to check your balance.
-  <br />
-  <br />
-  The TEA Project brings decentralized computing to Ethereum through an independent compute layer. By claiming these TEA tokens, you understand that they're testnet TEA tokens and are used as proxies for purposes of competing for mainnet TEA vouchers. The email wallet is designed for users who are new to the TEA Project and don't have a MetaMask wallet setup yet. The email wallet allows you to interact with TApps in the TEA ecosystem but you will not be able to withdraw to the Ethereum chain through the email wallet app (you'll need to setup MetaMask if you want to interact with Ethereum). By following the link, you'll be prompted to enter your verification code and to create your email wallet. Please familiarize yourself with the current Epoch's rules by visiting our <a href="https://t.me/teaprojectorg">Telegram</a> or <a href="https://discord.com/invite/nvtaneQgGb">Discord</a>.`;
+    The following email address has sent you <b>${amount}</b> TEA tokens so you can join the TEA Project:
+    <br />
+    ${from_address}
+    <br />
+    <br />
+    You may claim them by visiting the following link and setting up your TEA Project email wallet.
+    <br />
+    <a href="${url}">Click here</a>
+    <br />
+    <br />
+    You'll need to generate a verification code from the email wallet in order to login which will be sent to your email address.
+    <br />
+    <br />
+    The TEA Project brings decentralized computing to Ethereum through an independent compute layer. By claiming these TEA tokens, you understand that they're testnet TEA tokens and are used as proxies for purposes of competing for mainnet TEA vouchers. Please visit our <a href="https://t.me/teaprojectorg">Telegram</a> or <a href="https://discord.com/invite/nvtaneQgGb">Discord</a> if you have any questions.`;
     const opts = {
       to: email,
       subjectB64: utils.forge.util.encode64('Someone Sent You '+amount+' TEA'),

@@ -124,14 +124,14 @@
 
         <div class="x-bottom">
 
-          <!-- <el-button
+          <el-button
             type="primary"
             style="margin-right: 20px"
             v-if="layer1_account"
             @click="toUniswap()"
           >
-            TEA | COFFEE Exchange
-          </el-button> -->
+            TEA | ETH Exchange
+          </el-button>
           
           <el-tooltip
             v-if="layer1_account && !layer1_account.email"
@@ -349,7 +349,7 @@ export default {
     },
 
     toUniswap(){
-      const url = utils.get_env('UNISWAP_URL') || 'NA';
+      const url = 'https://app.uniswap.org/#/pool/45825';
       window.open(url, "_blank");
     },
 

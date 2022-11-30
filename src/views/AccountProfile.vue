@@ -349,7 +349,7 @@ export default {
     },
 
     toUniswap(){
-      const url = 'https://app.uniswap.org/#/pool/45825';
+      const url = 'https://app.uniswap.org/#/pool/45838';
       window.open(url, "_blank");
     },
 

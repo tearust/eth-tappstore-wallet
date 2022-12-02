@@ -162,9 +162,10 @@ const F = {
       const rs = await txn.query_request('queryAllActiveMiners', opts);
       const meta = await tapp.query_meta_data(self);
       self.$root.loading(false);
-      const list = _.map(_.filter(rs.sql_query_result, (item)=>{
-        return item.node_status === 'active';
-      }), (item)=>{
+      const list = _.map(rs.sql_query_result, (item)=>{
+        if(item.node_status !== 'active'){
+          item.plantd_at -= 1000000000;
+        }
         item.cid = meta.cid;
         return item;
       });

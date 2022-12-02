@@ -118,7 +118,7 @@ export default {
       if(this.bonding_curve) tmp.push('bonding_curve');
   
       if(cb){
-        await cb(tmp.join("_"), this.close);
+        await cb('sig_'+tmp.join("_"), this.close);
       }
     },
     async openHandler(){

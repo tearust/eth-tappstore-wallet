@@ -81,13 +81,18 @@ const F = {
 
 
       sig = utils.uint8array_to_base64(hexToU8a(sig));
-      const rs = await txn.txn_request('login', {
+      let rs = await txn.txn_request('login', {
         tappIdB64: base.getTappId(),
         address,
         pk: utils.uint8array_to_base64(hexToU8a(pk)),
         data: utils.uint8array_to_base64(msg),
         signature: sig,
       });
+      rs = await txn.query_request('query_session_key', {
+        tappIdB64: base.getTappId(),
+        address,
+      });
+      console.log(333, rs);
 
       if (rs.auth_key) {
         const user = {

@@ -29,6 +29,7 @@ const F = {
 
     try{
       const rs = await txn.query_request('queryOpLogs', opts);
+      console.log(1111, rs);
       self.$root.loading(false);
 
       rs.logs = _.map(rs.logs, (item)=>{

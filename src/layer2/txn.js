@@ -186,7 +186,7 @@ const F = {
       console.log("Continue query...");
     }
     
-    utils.sleep(5000);
+    await utils.sleep(5000);
 
     // base.log("Start to second query request...");
     console.log("Start to second query request...");
@@ -194,7 +194,7 @@ const F = {
     let rs = null;
     let n = 0;
     const loop2 = async ()=>{
-      if(n>5){
+      if(n>10){
         throw "timeout, please retry.";
       }
       try{

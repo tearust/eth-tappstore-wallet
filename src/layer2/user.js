@@ -77,15 +77,16 @@ const F = {
     try {
 
       const layer1_instance = self.wf.getLayer1Instance();
-      let [sig, pk, msg] = await layer1_instance.signMessage(data);
+      let [sig, pk, msg_bytes, msg] = await layer1_instance.signMessage(data);
 
 
-      sig = utils.uint8array_to_base64(hexToU8a(sig));
+      // sig = utils.uint8array_to_base64(hexToU8a(sig));
+      sig = sig.replace(/^0x/, '');
       let rs = await txn.txn_request('login', {
         tappIdB64: base.getTappId(),
         address,
         pk: utils.uint8array_to_base64(hexToU8a(pk)),
-        data: utils.uint8array_to_base64(msg),
+        data: msg,
         signature: sig,
       });
       rs = await txn.query_request('query_session_key', {

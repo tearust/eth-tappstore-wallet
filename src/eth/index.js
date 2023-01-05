@@ -196,7 +196,7 @@ class Instance {
     const pk = U.recoverPublicKey(U.hashMessage(msg1), signature);
     const sig = signature
 
-    return [sig, pk, U.toUtf8Bytes(message)];
+    return [sig, pk, U.toUtf8Bytes(message), message];
   }
 
   async getMaintainerAddressList(){

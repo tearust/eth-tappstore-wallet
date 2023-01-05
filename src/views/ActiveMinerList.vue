@@ -22,7 +22,7 @@
   <div style="margin-top: 20px;">
   These are the currently available mining nodes hosting the TAppStore. The TAppStore can be launched by clicking the Visit link in the desired miner's row listing.
   <br/>
-  If your hosted node is not active on this list, use the <a href="https://github.com/tearust/teaproject/wiki/Mining:-Required-Open-Ports" target="_blank">following guide</a> to troubleshoot.
+  <!-- If your hosted node is not active on this list, use the <a href="https://github.com/tearust/teaproject/wiki/Mining:-Required-Open-Ports" target="_blank">following guide</a> to troubleshoot. -->
   </div>
   <TeaTable
     style="margin-top: 5px;"
@@ -125,6 +125,10 @@
     
 
   </TeaTable>
+  <ul>
+    <li>If your hosted node is not active on this list, use the <a href="https://github.com/tearust/teaproject/wiki/Mining:-Required-Open-Ports" target="_blank">following guide</a> to troubleshoot. </li>
+    <li>For more information on how to run a mining node, please visit our <a href="https://www.youtube.com/playlist?list=PLOhw_qkI0ILWh5HDI8ZiFARjfkfvNPqev" target="_blank">YouTube playlist</a>.</li>
+  </ul>
 
 </div>
 </section></div>

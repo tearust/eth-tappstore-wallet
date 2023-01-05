@@ -101,7 +101,11 @@
       label="Status"
     >
       <template slot-scope="scope">
-        <span>{{scope.row.node_status}}</span>
+        <span v-if="scope.row.node_status!=='pending'">{{scope.row.node_status}}</span>
+        <span v-if="scope.row.node_status==='pending'">
+          {{scope.row.node_status}} 
+          <a style="margin-left: 5px;font-weight:bold;" href="https://github.com/tearust/teaproject/wiki/Mining:-Required-Open-Ports" target="_blank">(why?)</a>
+        </span>
       </template>
     </el-table-column>
 

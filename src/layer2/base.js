@@ -9,10 +9,11 @@ const meta = {
   sudo: utils.get_env('LAYER1_SUDO') || 'NO_SUDO_ACCOUNT',
   tapp_id: _.toLower(ContractMap.ERC20),
   server_url: utils.get_env('LAYER2_URL'),
+  mode: utils.get_env('mode') || 'dev',
   server_actor: 'com.tea.client-actor',  // default is tappstore_in_B actor
 };
 // console.log("layer2 meta", meta);
-if(_.toLower(process.env.NODE_ENV) === 'production' && location.hostname !== 'wallet.teaproject.org'){
+if(_.toLower(process.env.NODE_ENV) === 'production' && location.hostname !== 'wallet.teaproject.org' && mode === 'production'){
   meta.server_url = location.protocol+'//'+location.hostname+':8000';
 }
 

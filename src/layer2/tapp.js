@@ -284,7 +284,7 @@ const F = {
 
     try{
       const rs = await txn.query_request('query_tapp_metadata', opts);
-      const data = rs.sql_query_result;
+      const data = rs.sql_query_result || {};
       mem.set(mem_key, data);
       return data
     }catch(e){

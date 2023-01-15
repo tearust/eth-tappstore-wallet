@@ -33,6 +33,7 @@ import UserDetail from './views/UserDetail';
 import LogIndex from './views/log/Index';
 
 import TokenVesting from './views/TokenVesting';
+import ActiveMinerListForMetadata from './views/ActiveMinersListForMetadata';
 
 Vue.use(Router);
 
@@ -191,7 +192,22 @@ let routers = [
     meta: {
       
     }
-  }
+  },
+  {
+    path: '/app/:ticker',
+    name: 'ActiveMinerListForMetadata_app_ticker',
+    component: ActiveMinerListForMetadata,
+  },
+  {
+    path: '/node/:cml_id/:ticker',
+    name: 'ActiveMinerListForMetadata_cml_ticker',
+    component: ActiveMinerListForMetadata,
+  },
+  {
+    path: '/node/:cml_id',
+    name: 'ActiveMinerListForMetadata_cml',
+    component: ActiveMinerListForMetadata,
+  },
   
   
 ];

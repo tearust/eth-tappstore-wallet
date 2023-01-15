@@ -154,7 +154,52 @@ const F = {
     
   },
 
-  async queryActiveMiners(self, param={}){
+  async queryActiveMetadata(self, data){
+    
+    self.$root.loading(true);
+    
+    const opts = {};
+    try{
+      const rs = await txn.query_request('queryAllActiveMiners', opts);
+      const meta = await tapp.query_meta_data(self);
+      let dd = await txn.query_request('queryActiveMetadata', {
+        cmlId: data.cml_id ? _.toNumber(data.cml_id) : null,
+        ticker: data.ticker || null,
+      });
+      dd = dd.sql_query_result;
+      console.log(333, dd, data.xt);
+      self.$root.loading(false);
+      const x_list = dd[1] ? _.filter(rs.sql_query_result, (x)=>x.ip === dd[1]) : rs.sql_query_result;
+      const list = _.map(x_list, (item)=>{
+        if(item.node_status !== 'active'){
+          item.plantd_at -= 1000000000;
+        }
+
+        if(data.has_app){
+          item.cid = dd[0] || '';
+        }
+        
+        return item;
+      });
+
+      if(data.has_cml && !data.has_app){
+        alert('Click OK to redirect Tappstore for cml '+data.cml_id);
+        location.href = `http://${dd[1]}:8080/ipfs/${meta.cid}`;
+      }
+      
+
+      console.log('queryActiveMetadata list =>', list);
+      return _.reverse(_.sortBy(list, (x)=>x.plantd_at));
+      
+    }catch(e){
+      self.$root.loading(false);
+      console.log('queryActiveMetadata error =>', e);
+    }
+
+    
+  },
+
+  async queryActiveMiners(self, data){
 
     self.$root.loading(true);
     

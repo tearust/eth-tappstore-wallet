@@ -2,7 +2,7 @@
 <section class="t-footer bg_2 js_footer">
   <div class="c-m" style="width:1080px;margin:0 auto; position:releative;">
 
-    <el-row style="position:relative;">
+    <el-row style="position:relative;height:170px;">
       <el-col :span="6">
         <h4 class="t-h">Resources</h4>
         <a class="t-a" target="_blank" href="https://teaproject.org">Website</a>
@@ -21,6 +21,16 @@
           <span>Block Height :</span> 
           <b>{{chain.current_block ? chain.current_block : ''}}</b>
         </b>
+
+        <b class="lg">
+          <span>Client version :</span> 
+          <b>{{client_version}}</b>
+        </b>
+        <b class="lg">
+          <span>Enclave version :</span> 
+          <b>{{enclave_version}}</b>
+        </b>
+
         <b class="lg">
           <span>Epoch version :</span> 
           <b>{{epoch_version}}</b>
@@ -36,7 +46,7 @@
     
     
     <el-divider></el-divider>
-    <p style="margin:0 auto;text-align:center;font-size:16px;">Copyright © 2019-2022 <b>TeaProject.org</b> All Rights Reserved</p>
+    <p style="margin:0 auto;text-align:center;font-size:16px;">Copyright © 2019-2023 <b>TeaProject.org</b> All Rights Reserved</p>
   </div>
 </section>
 
@@ -48,6 +58,7 @@ import Base from '../workflow/Base';
 import _ from 'lodash';
 import utils from '../tea/utils';
 import eth from '../eth';
+import layer2 from '../layer2';
 export default {
   computed: {
     // ...mapGetters(['layer1_account']),
@@ -60,6 +71,8 @@ export default {
       epoch_version: null,
       version: null,
       end_block: null,
+      client_version: null,
+      enclave_version: null,
 
       chain_name: '',
     };
@@ -73,6 +86,10 @@ export default {
     this.layer1 = await eth.get();
     const chain = await this.layer1.getChain();
     this.chain_name = chain.name;
+
+    const r = await layer2.log.querySystemVersion(this);
+    this.client_version = r.client_version;
+    this.enclave_version = r.client_version;
   },
   methods: {
     epochInfo(){
@@ -113,7 +130,7 @@ export default {
 
   .tlg{
     position: absolute;
-    top: -50px;
+    top: -30px;
     right: 0;
     width: 500px;
     text-align: right;

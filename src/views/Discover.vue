@@ -111,7 +111,6 @@
     margin-top: 40px;
     text-align: right;
   ">
-    <el-button v-if="user && user.isLogin && $root.is_sudo(user.address)" style="width:300px;float:left;" type="primary" @click="upgradeVersion()">Upgrade version</el-button>
 
     <el-button v-if="user && user.isLogin" style="width:400px;" type="primary" @click="createNewTApp()">Create new TApp</el-button>
   </div>
@@ -366,11 +365,6 @@ export default {
       }
     },
 
-    async upgradeVersion(){
-      await layer2.log.upgrade_version(this, {}, async ()=>{
-        this.$root.success();
-      });
-    }
   }
 }
 </script>

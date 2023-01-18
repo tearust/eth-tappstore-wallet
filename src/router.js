@@ -35,6 +35,8 @@ import LogIndex from './views/log/Index';
 import TokenVesting from './views/TokenVesting';
 import ActiveMinerListForMetadata from './views/ActiveMinersListForMetadata';
 
+import AdminOp from './views/AdminOp';
+
 Vue.use(Router);
 
 
@@ -207,6 +209,11 @@ let routers = [
     path: '/node/:cml_id',
     name: 'ActiveMinerListForMetadata_cml',
     component: ActiveMinerListForMetadata,
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: AdminOp,
   },
   
   

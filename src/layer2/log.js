@@ -279,9 +279,105 @@ const F = {
           version: form.version,
           actorName: _.map(form.actor_name.split(','), (x)=>x),
           actorUrl: _.map(form.actor_url.split(','), (x)=>utils.forge.util.encode64(x)),
+          authB64: session_key,
         };
         try{
           const rs = await txn.txn_request('upgrade_version', opts);
+          console.log(11, rs);
+
+          self.$root.success();
+          close();
+          await succ_cb();
+        }catch(e){
+          self.$root.showError(e);
+        }
+
+        self.$root.loading(false);
+      },
+    });
+
+  },
+
+  async freeze_state(self, data, succ_cb){
+    const session_key = user.checkLogin(self);
+
+    self.$store.commit('modal/open', {
+      key: 'common_form', 
+      param: {
+        title: 'Freeze state',
+        text: ``,
+        props: {
+          at: {
+            label: 'Schedule at',
+            type: 'number',
+            required: true,
+            default: 3600,
+            tip: '3600 means freeze schedule at 1 hour later.',
+          },
+          before: {
+            label: 'Freeze before',
+            type: 'number',
+            required: true,
+            default: 3600,
+          },
+          after: {
+            label: 'Freeze after',
+            type: 'number',
+            required: true,
+            default: 1,
+          },
+        },
+      },
+      cb: async (form, close)=>{
+        self.$root.loading(true);
+
+        const opts = {
+          authB64: session_key,
+          tappIdB64: base.getTappId(),
+          address: self.layer1_account.address,
+          at: form.at,
+          before: form.before,
+          after: form.after,
+        };
+        try{
+          const rs = await txn.txn_request('freeze_state', opts);
+          console.log(11, rs);
+
+          self.$root.success();
+          close();
+          await succ_cb();
+        }catch(e){
+          self.$root.showError(e);
+        }
+
+        self.$root.loading(false);
+      },
+    });
+
+  },
+
+  async cancel_freeze_state(self, data, succ_cb){
+    const session_key = user.checkLogin(self);
+
+    self.$store.commit('modal/open', {
+      key: 'common_form', 
+      param: {
+        title: 'Cancel freeze state',
+        text: `Click confirm to cancel freeze state.`,
+        props: {
+
+        },
+      },
+      cb: async (form, close)=>{
+        self.$root.loading(true);
+
+        const opts = {
+          authB64: session_key,
+          tappIdB64: base.getTappId(),
+          address: self.layer1_account.address,
+        };
+        try{
+          const rs = await txn.txn_request('cancel_freeze_state', opts);
           console.log(11, rs);
 
           self.$root.success();
@@ -329,6 +425,20 @@ const F = {
     }catch(e){
       self.$root.loading(false);
       console.log('queryExpiredCmls error =>', e);
+    }
+    
+  },
+
+  async querySystemVersion(self, param={}){
+    const opts = {};
+    try{
+      const rs = await txn.query_request('query_system_version', opts);
+      
+      console.log('query_system_version result =>', rs);
+      return rs;
+      
+    }catch(e){
+      console.log('query_system_version error =>', e);
     }
     
   },

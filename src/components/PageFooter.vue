@@ -89,7 +89,7 @@ export default {
 
     const r = await layer2.log.querySystemVersion(this);
     this.client_version = r.client_version;
-    this.enclave_version = r.client_version;
+    this.enclave_version = r.enclave_version;
   },
   methods: {
     epochInfo(){

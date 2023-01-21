@@ -9,7 +9,7 @@ const meta = {
   sudo: utils.get_env('LAYER1_SUDO') || 'NO_SUDO_ACCOUNT',
   tapp_id: _.toLower(ContractMap.ERC20),
   server_url: utils.get_env('LAYER2_URL'),
-  mode: utils.get_env('mode') || 'dev',
+  mode: utils.get_env('mode') || 'app',
   server_actor: 'com.tea.client-actor',  // default is tappstore_in_B actor
 };
 // console.log("layer2 meta", meta);

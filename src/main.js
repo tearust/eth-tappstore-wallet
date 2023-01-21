@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
+import HomeList from './HomeList.vue';
 
 
 import './elementui-style/index.css';
@@ -171,9 +172,8 @@ new Vue({
     },
   },
   render: h => {
-    if(location.hostname === 'wallet.teaproject.org'){
-      const Acp = require('./views/ActiveMinerList').default;
-      return h(Acp);
+    if(utils.get_env('mode') === 'list'){
+      return h(HomeList);
     }
     else{
       return h(App);

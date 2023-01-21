@@ -277,8 +277,8 @@ const F = {
           urlB64: utils.forge.util.encode64(form.url),
           type: form.type,
           version: form.version,
-          actorName: _.map(form.actor_name.split(','), (x)=>x),
-          actorUrl: _.map(form.actor_url.split(','), (x)=>utils.forge.util.encode64(x)),
+          actorName: _.map((form.actor_name||'').split(','), (x)=>x),
+          actorUrl: _.map((form.actor_url||'').split(','), (x)=>utils.forge.util.encode64(x)),
           authB64: session_key,
         };
         try{

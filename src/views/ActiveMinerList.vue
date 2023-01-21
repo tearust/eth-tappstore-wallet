@@ -1,18 +1,4 @@
 <template>
-<div id="app">
-
-<div class="c-pageheader1">
-  <div class="p-header1">
-    <a href="javascript:void(0)" onClick="location.reload()" style="float:left;">
-      <el-image
-        src="https://wallet.teaproject.org/tea_logo/logo.png"
-        fit="fit">
-      </el-image>
-    </a>
-  </div>
-</div>
-
-<section class="tea-section">
 <div class="tea-page">
   <h4>Active miner list</h4>
   
@@ -135,7 +121,6 @@
   </ul>
 
 </div>
-</section></div>
 </template>
 <script>
 import TeaTable from '../components/TeaTable';

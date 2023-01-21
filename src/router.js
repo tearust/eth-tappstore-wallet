@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import utils from './tea/utils';
 
 import Test from './views/Test';
 
@@ -33,6 +34,8 @@ import UserDetail from './views/UserDetail';
 import LogIndex from './views/log/Index';
 
 import TokenVesting from './views/TokenVesting';
+
+import ActiveMinerList from './views/ActiveMinerList';
 import ActiveMinerListForMetadata from './views/ActiveMinersListForMetadata';
 
 import AdminOp from './views/AdminOp';
@@ -195,21 +198,7 @@ let routers = [
       
     }
   },
-  {
-    path: '/app/:ticker',
-    name: 'ActiveMinerListForMetadata_app_ticker',
-    component: ActiveMinerListForMetadata,
-  },
-  {
-    path: '/node/:cml_id/:ticker',
-    name: 'ActiveMinerListForMetadata_cml_ticker',
-    component: ActiveMinerListForMetadata,
-  },
-  {
-    path: '/node/:cml_id',
-    name: 'ActiveMinerListForMetadata_cml',
-    component: ActiveMinerListForMetadata,
-  },
+  
   {
     path: '/admin',
     name: 'admin',
@@ -218,6 +207,38 @@ let routers = [
   
   
 ];
+
+if(utils.get_env('mode') === 'list'){
+  routers = [
+    {
+      path: '/',
+      redirect: '/welcome',
+    },
+    {
+      path: '/welcome',
+      name: 'home',
+      component: ActiveMinerList,
+      meta: {
+        needLogin: true,
+      }
+    },
+    {
+      path: '/app/:ticker',
+      name: 'ActiveMinerListForMetadata_app_ticker',
+      component: ActiveMinerListForMetadata,
+    },
+    {
+      path: '/node/:cml_id/:ticker',
+      name: 'ActiveMinerListForMetadata_cml_ticker',
+      component: ActiveMinerListForMetadata,
+    },
+    {
+      path: '/node/:cml_id',
+      name: 'ActiveMinerListForMetadata_cml',
+      component: ActiveMinerListForMetadata,
+    },
+  ];
+};
 
 
 export default new Router({

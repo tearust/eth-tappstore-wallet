@@ -443,6 +443,78 @@ const F = {
     
   },
 
+  async queryTxnGasFeeList(self, param={}){
+    const opts = {};
+    self.$root.loading(true);
+    try{
+      const rs = await txn.query_request('queryTxnGasFeeList', opts);
+      self.$root.loading(false);
+
+      const list = _.map(rs.sql_query_result, (item)=>{
+        item.fee = utils.layer1.balanceToAmount(item.fee);
+        return item;
+      });
+      
+      console.log('queryTxnGasFeeList result =>', list);
+      return list;
+      
+    }catch(e){
+      self.$root.loading(false);
+      console.log('queryTxnGasFeeList error =>', e);
+    }
+  },
+
+  async update_txn_gas_fee(self, data, succ_cb){
+    const session_key = user.checkLogin(self);
+
+    self.$store.commit('modal/open', {
+      key: 'common_form', 
+      param: {
+        title: 'Add / Update txn gas fee',
+        text: ``,
+        props: {
+          txn_name: {
+            label: 'Txn name',
+            type: 'Input',
+            required: true,
+            default: data.txn_name || '',
+          },
+          fee: {
+            label: 'Gas fee',
+            type: 'number',
+            required: true,
+            default: 1,
+            min: 0.001,
+            max: 10000,
+          },
+        },
+      },
+      cb: async (form, close)=>{
+        self.$root.loading(true);
+
+        const fee = utils.layer1.amountToBalance(form.fee);
+        const opts = {
+          authB64: session_key,
+          tappIdB64: base.getTappId(),
+          address: self.layer1_account.address,
+          txnName: form.txn_name,
+          fee: utils.toBN(fee).toString(),
+        };
+        try{
+          const rs = await txn.txn_request('adminUpdateTxnGasFee', opts);
+
+          close();
+          await succ_cb();
+        }catch(e){
+          self.$root.showError(e);
+        }
+
+        self.$root.loading(false);
+      },
+    });
+
+  },
+
   
 };
 

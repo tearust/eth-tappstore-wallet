@@ -580,7 +580,10 @@ const F = {
 
     try{
       const rs = await txn.query_request('queryEntityList', opts);
-      const list = await Promise.all(_.map(rs.sql_query_result, async (d)=>{
+      let list = await Promise.all(_.map(rs.sql_query_result, async (d)=>{
+        if(d.tapp_id === '0x1000000000000000000000000000000000000004' || d.tapp_id === '0x1000000000000000000000000000000000000005') {
+          return null;
+        }
         const item = {
           id: d.tapp_id,
           name: d.name,
@@ -610,6 +613,7 @@ const F = {
         });
         return item;
       }));
+      list = _.filter(list);
       mem.set(mem_key, list);
       await succ_cb(list);
       

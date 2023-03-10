@@ -581,7 +581,7 @@ const F = {
     try{
       const rs = await txn.query_request('queryEntityList', opts);
       let list = await Promise.all(_.map(rs.sql_query_result, async (d)=>{
-        if(d.tapp_id === '0x1000000000000000000000000000000000000004' || d.tapp_id === '0x1000000000000000000000000000000000000005') {
+        if(d.tapp_id === '0x1000000000000000000000000000000000000005') {
           return null;
         }
         const item = {

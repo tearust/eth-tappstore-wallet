@@ -41,8 +41,8 @@
       tip="Name of TApp"
     >
       <template slot-scope="scope">
-        <span class="one-line" v-if="$root.is_tappstore(scope.row.id)">{{scope.row.name}}</span>
-        <el-button v-if="!$root.is_tappstore(scope.row.id)" size="small" type="text" @click="clickToOpen(scope.row)">{{scope.row.name}}</el-button>
+        <span class="one-line" v-if="$root.is_tappstore(scope.row.id) || (scope.row.tapp_type==='User'&&!scope.row.cid)">{{scope.row.name}}</span>
+        <el-button v-if="!($root.is_tappstore(scope.row.id) || (scope.row.tapp_type==='User'&&!scope.row.cid))" size="small" type="text" @click="clickToOpen(scope.row)">{{scope.row.name}}</el-button>
       </template>
     </TeaTableColumn>
 
@@ -74,6 +74,7 @@
     >
       <template slot-scope="scope">{{scope.row.status}}</template>
     </TeaTableColumn>
+    
 
     <TeaTableColumn
       label="Ipfs cid"

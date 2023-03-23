@@ -172,6 +172,7 @@ const F = {
           is_full: d.hosts.length>=d.max_allowed_hosts,
           active_block: d.start_height,
           status: d.status,
+          tapp_type: d.tapp_type,
           ori: d,
         };
         item.market_cap = utils.layer1.roundAmount(item.sell_price * item.total_supply);

@@ -245,7 +245,7 @@ const F = {
             cmlId: type==='tapp' ? null : type_param.cml_id,
           };
           console.log("create new entity with => "+JSON.stringify(opts));
-          const rs = await txn.txn_request('createNewTApp', opts);
+          const rs = await txn.txn_request('createNewTapp', opts);
 
           console.log('result:', rs);
           
@@ -600,6 +600,7 @@ const F = {
           is_full: d.hosts.length>=d.max_allowed_hosts,
           active_block: d.start_height,
           status: d.status,
+          tapp_type: d.tapp_type,
           ori: d,
           cid: d.cid,
           consume_account_balance: utils.layer1.balanceToAmount(d.consume_account_balance),

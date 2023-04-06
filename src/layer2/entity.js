@@ -584,6 +584,9 @@ const F = {
         if(d.tapp_id === '0x1000000000000000000000000000000000000005') {
           return null;
         }
+        if(d.dev_status !== 'Active'){
+          return null;
+        }
         const item = {
           id: d.tapp_id,
           name: d.name,

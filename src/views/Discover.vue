@@ -361,8 +361,19 @@ export default {
       else if(row.id === '0x1000000000000000000000000000000000000005'){
         window.open(this.tapp_url(row, 'email_url'), '_blank');
       }
-      else if(row.ori.tapp_type === 'user'){
-        window.open(this.tapp_url(row, 'devportal_url'), '_blank');
+      else if(row.id === '0x1000000000000000000000000000000000000006'){
+        if(_.toNumber(row.account_balance.allowance) < 10 && this.user && this.user.isLogin){
+          await this.set_allowance(row, {
+            allowance: 500,
+            url: this.tapp_url(row, 'devportal_url'),
+          });
+        }
+        else{
+          window.open(this.tapp_url(row, 'devportal_url'), '_blank');
+        }
+      }
+      else if(row.ori.tapp_type === 'User'){
+        window.open(this.tapp_url(row, 'seat_url'), '_blank');
       }
       else{
         this.$root.showError("Invalid tapp url");

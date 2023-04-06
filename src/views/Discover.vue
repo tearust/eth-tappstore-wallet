@@ -361,6 +361,9 @@ export default {
       else if(row.id === '0x1000000000000000000000000000000000000005'){
         window.open(this.tapp_url(row, 'email_url'), '_blank');
       }
+      else if(row.ori.tapp_type === 'user'){
+        window.open(this.tapp_url(row, 'devportal_url'), '_blank');
+      }
       else{
         this.$root.showError("Invalid tapp url");
       }

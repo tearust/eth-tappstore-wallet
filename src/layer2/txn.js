@@ -179,6 +179,9 @@ const F = {
         uuid: _uuid,
       });
       console.log('first step result => '+step1_rs);
+      if(step1_rs.cache){
+        return step1_rs.cache;
+      }
     }catch(e){
       throw e;
   

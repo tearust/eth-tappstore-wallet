@@ -127,6 +127,7 @@ export default {
       'layer1_account'
     ]),
   },
+  
   async mounted(){
     const {cml_id, ticker} = this.$route.params;
     const xt = _.startsWith(this.$route.path, '/node') ? 'node' : 'app';
@@ -136,17 +137,19 @@ export default {
       xt, cml_id, ticker: _.toUpper(ticker),
       has_cml: !!cml_id,
       has_app: !!ticker,
+      cid: utils.get_env('TAPPSTORE_CID'),
     };
 
     if(this.xd.has_app){
       this.title = 'Tapp '+this.xd.ticker+' node list';
+      this.xd.cid = this.get_cid(this.xd.ticker);
     }
     else{
       this.title = 'Redirect to Tappstore';
     }
     
 
-    this.cid = utils.get_env('TAPPSTORE_CID');
+    this.cid = this.xd.cid;
     this.version = utils.get_env('VERSION');
     this.epoch = utils.get_env('EPOCH_VERSION');
     this.wf = new Base();
@@ -155,6 +158,15 @@ export default {
     await this.refreshList();
   },
   methods: {
+    get_cid(ticker){
+      let x = ticker;
+      if (ticker === 'LEADERBOARD') x = 'LB';
+      if (ticker === 'HARBERGER') x = 'SEAT';
+      if (ticker === 'MINER') x = 'CML';
+
+      const r = utils.get_env(x+'_URL');
+      return r.replace('/ipfs/', '');
+    },
     async refreshList(){
       const list = await layer2.log.queryActiveMetadata(this, this.xd);
       this.list = list;

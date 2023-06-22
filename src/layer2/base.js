@@ -79,6 +79,15 @@ const F = {
   getAxios(){
     return _axios;
   },
+  ts_to_time(ts){
+    ts = _.toNumber(ts);
+    if (ts < 100) {
+      return ts;
+    }
+
+    const time = moment(ts/1000000);
+    return time.format("YYYY-MM-DD hh:mm:ss");
+  }
 };
 
 export default F;

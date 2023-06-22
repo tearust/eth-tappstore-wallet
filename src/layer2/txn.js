@@ -166,7 +166,7 @@ const F = {
     return rs;
   },
 
-  async query_request(method, param){
+  async query_request(method, param, local=false){
     const _uuid = uuid();
   
     // base.log("Start to first query request...");
@@ -189,7 +189,13 @@ const F = {
       console.log("Continue query...");
     }
     
-    await utils.sleep(5000);
+    if(local){
+      await utils.sleep(500);
+    }
+    else {
+      await utils.sleep(5000);
+    }
+    
 
     // base.log("Start to second query request...");
     console.log("Start to second query request...");

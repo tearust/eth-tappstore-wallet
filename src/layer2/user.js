@@ -421,7 +421,7 @@ const F = {
     }
 
     try {
-      const rs = await txn.query_request('query_balance', opts);
+      const rs = await txn.query_request('query_balance', opts, true);
       if (!rs.balance) {
         rs.balance = 0;
       }
@@ -434,6 +434,40 @@ const F = {
     }
 
   },
+  async query_balance_with_ts(self, target = null, target_tapp = null,) {
+    const session_key = F.checkLogin(self);
+
+    const opts = {
+      address: self.layer1_account.address,
+      tappIdB64: base.getTappId(),
+      authB64: session_key,
+    };
+    if (target) {
+      opts.target = target;
+      opts.targetTappIdB64 = target_tapp;
+    }
+
+    try {
+      const rs = await txn.query_request('query_balance', opts, true);
+      if (!rs.balance) {
+        rs.balance = 0;
+      }
+
+      return {
+        tea: utils.layer1.balanceToAmount(rs.balance),
+        ts: base.ts_to_time(rs.ts),
+      }
+
+    } catch (e) {
+      self.$root.showError(e);
+
+      return {
+        tea: 0,
+        ts: 0,
+      }
+    }
+
+  },
   async query_deposit(self) {
     const session_key = F.checkLogin(self);
     const opts = {
@@ -442,12 +476,30 @@ const F = {
       authB64: session_key,
     };
 
-    const rs = await txn.query_request('query_deposit', opts);
+    const rs = await txn.query_request('query_deposit', opts, true);
     if (!rs.balance) {
       rs.balance = 0;
     }
 
     return rs ? utils.layer1.balanceToAmount(rs.balance) : null;
+  },
+  async query_deposit_with_ts(self) {
+    const session_key = F.checkLogin(self);
+    const opts = {
+      address: self.layer1_account.address,
+      tappIdB64: base.getTappId(),
+      authB64: session_key,
+    };
+
+    const rs = await txn.query_request('query_deposit', opts, true);
+    if (!rs.balance) {
+      rs.balance = 0;
+    }
+
+    return {
+      tea: utils.layer1.balanceToAmount(rs.balance),
+      ts: base.ts_to_time(rs.ts)
+    };
   },
 
   async query_asset(self, target = null) {

@@ -77,7 +77,7 @@
           <span
             style="margin-right: 34px"
             :inner-html.prop="
-              tapp_balance === null ? '...' : tapp_balance | teaIcon
+              tapp_balance === null ? '...' : tapp_balance+' ('+tapp_balance_ts+')' | teaIcon
             "
           ></span>
 
@@ -107,7 +107,7 @@
           <span
             style="margin-right: 34px"
             :inner-html.prop="
-              tapp_deposit === null ? '...' : tapp_deposit | teaIcon
+              tapp_deposit === null ? '...' : tapp_deposit+' ('+tapp_deposit_ts+')' | teaIcon
             "
           ></span>
 
@@ -193,7 +193,9 @@ export default {
     return {
       // tab: 'my_cml',
       tapp_balance: null,
+      tapp_balance_ts: '',
       tapp_deposit: null,
+      tapp_deposit_ts: '',
 
       top_log: null,
     };
@@ -239,12 +241,6 @@ export default {
       layer2.user.topupFromLayer1(this, async () => {
         this.$root.success("Topup success.");
 
-        // await utils.sleep(2000);
-        // this.$root.loading(true, "Refreshing balance ...");
-        // await utils.sleep(8000);
-
-        // await this.refreshAccount();
-        // this.$root.loading(false);
         await this.smartRefreshBalance();
       });
     },
@@ -252,11 +248,7 @@ export default {
     async withdrawHandler() {
       try {
         layer2.user.withdrawFromLayer2(this, 1, async () => {
-          // await utils.sleep(2000);
-          // this.$root.loading(true, "Refreshing balance ...");
-          // await utils.sleep(12000);
-          // await this.refreshAccount();
-          // this.$root.loading(false);
+
           this.$root.success("Withdraw success.");
           await this.smartRefreshBalance();
         });
@@ -299,14 +291,18 @@ export default {
 
     async queryTokenBalance() {
       try {
-        this.tapp_balance = await layer2.user.query_balance(this);
+        const r = await layer2.user.query_balance_with_ts(this);
+        this.tapp_balance = r.tea;
+        this.tapp_balance_ts = r.ts;
       } catch (e) {
         console.error(e);
       }
     },
     async queryDeposit() {
       try {
-        this.tapp_deposit = await layer2.user.query_deposit(this);
+        const r = await layer2.user.query_deposit_with_ts(this);
+        this.tapp_deposit = r.tea;
+        this.tapp_deposit_ts = r.ts;
       } catch (e) {
         console.error(e);
       }

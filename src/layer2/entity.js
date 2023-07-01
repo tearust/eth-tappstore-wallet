@@ -555,16 +555,16 @@ const F = {
 
     self.$root.loading(true);
 
-    const mem_key = 'entity_queryAll_'+utils.crypto.sha256(JSON.stringify(param));
+    // const mem_key = 'entity_queryAll_'+utils.crypto.sha256(JSON.stringify(param));
 
-    const cache_result = mem.get(mem_key);
-    if(cache_result){
-      console.log('[Entity] queryAll cache result => ', cache_result);
-      await succ_cb(cache_result);
+    // const cache_result = mem.get(mem_key);
+    // if(cache_result){
+    //   console.log('[Entity] queryAll cache result => ', cache_result);
+    //   await succ_cb(cache_result);
 
-      self.$root.loading(false);
-      return cache_result;
-    }
+    //   self.$root.loading(false);
+    //   return cache_result;
+    // }
     
 
     const opts = {
@@ -579,7 +579,7 @@ const F = {
     }
 
     try{
-      const rs = await txn.query_request('queryEntityList', opts);
+      const rs = await txn.query_request('queryEntityList', opts, true);
       let list = await Promise.all(_.map(rs.sql_query_result, async (d)=>{
         if(d.tapp_id === '0x1000000000000000000000000000000000000005') {
           return null;
@@ -618,7 +618,25 @@ const F = {
         return item;
       }));
       list = _.filter(list);
-      mem.set(mem_key, list);
+      // mem.set(mem_key, list);
+
+      
+
+      const ids_list = _.map(list, (x)=>x.id);
+
+      const xopts = {
+        address: self.layer1_account.address,
+        tappIdB64Array: ids_list,
+      };
+      const xrs = await txn.query_request('query_multi_tapp_allowance_from_local_state', xopts, true);
+      console.log(222, xrs);
+      if(xrs.balance){
+        _.each(list, (x, i)=>{
+          x.allowance = utils.layer1.balanceToAmount(xrs.balance[i]);
+        });
+      }
+      console.log(11, list);
+
       await succ_cb(list);
       
     }catch(e){

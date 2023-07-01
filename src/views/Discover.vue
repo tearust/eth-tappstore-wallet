@@ -63,7 +63,7 @@
     >
       <template slot-scope="scope">
         <span v-if="$root.is_tappstore(scope.row.id)" :inner-html.prop="'N/A'"></span>
-        <span v-if="!$root.is_tappstore(scope.row.id)" :inner-html.prop="scope.row.account_balance.allowance | teaIcon"></span>
+        <span v-if="!$root.is_tappstore(scope.row.id)" :inner-html.prop="scope.row.allowance | teaIcon"></span>
       </template>
     </TeaTableColumn>
 
@@ -87,12 +87,12 @@
 
     <el-table-column
       label="Actions"
-      width="120"
+      width="140"
       fixed="right"
     >
       <template v-if="user && user.isLogin" slot-scope="scope">
-        <TeaIconButton v-if="scope.row.fav" tip="Remove like" icon="el-icon-star-on" @click="unfav_tapp(scope.row, scope.$index)" style="font-size:24px;position:relative;top:2px;" />
-        <TeaIconButton v-if="!scope.row.fav" tip="Like" icon="el-icon-star-off" @click="fav_tapp(scope.row, scope.$index)" :loading="scope.row.loading" style="font-size:20px;position:relative;top:2px;" />
+        <TeaIconButton v-if="mine && scope.row.fav" tip="Remove like" icon="el-icon-star-on" @click="unfav_tapp(scope.row, scope.$index)" style="font-size:24px;position:relative;top:2px;" />
+        <TeaIconButton v-if="mine && !scope.row.fav" tip="Like" icon="el-icon-star-off" @click="fav_tapp(scope.row, scope.$index)" :loading="scope.row.loading" style="font-size:20px;position:relative;top:2px;" />
       
         <TeaIconButton tip="Set spending limit" 
           v-if="!$root.is_tappstore(scope.row.id)"
@@ -175,10 +175,10 @@ export default {
     },
 
     async refresh(){
-      if(this.mine){
-        this.list = await this.query_my_fav_list();
-        return;
-      }
+      // if(this.mine){
+      //   this.list = await this.query_my_fav_list();
+      //   return;
+      // }
 
       this.$root.loading(true);
 
@@ -192,7 +192,7 @@ export default {
         const not_min_list = [];
 
         let my_fav = [];
-        if(this.user && this.user.isLogin){
+        if(this.user && this.user.isLogin && this.mine){
           my_fav = await this.query_my_fav_list();
         }
         _.each(list, (item)=>{

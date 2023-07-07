@@ -40,10 +40,10 @@
   </div>
   
 
-  <el-menu-item index="/log">{{'Log'}}</el-menu-item>
+  <!-- <el-menu-item index="/log">{{'Log'}}</el-menu-item> -->
   <el-menu-item index="/welcome">{{'Help'}}</el-menu-item>
-  <el-menu-item index="/investment">{{'Investments'}}</el-menu-item>
-  <el-menu-item v-if="layer1_account && $root.inTokenVestingUserList(layer1_account.address)" index="/token_vesting">{{'TEA Vesting'}}</el-menu-item>
+  <!-- <el-menu-item index="/investment">{{'Investments'}}</el-menu-item> -->
+
   <el-menu-item index="/account_profile">{{'Account'}}</el-menu-item>
   <el-menu-item index="/discover">{{'TApps'}}</el-menu-item>
   

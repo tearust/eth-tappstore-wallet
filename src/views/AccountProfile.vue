@@ -33,138 +33,11 @@
             <!-- <span @click="showAddressQrcode(layer1_account.address)" style="margin-left: 5px;" title="qrcode" class="iconfont tea-icon-btn icon-qr_code"></span> -->
           </span>
         </div>
-        <div class="x-item" v-if="layer1_account && !layer1_account.email">
-          <b>
-            {{ "Chain wallet TEA balance" }}
-            <TeaIconButton
-              style="position: relative"
-              place="right"
-              tip="
-            The amount of TEA in your layer1 wallet (e.g. Metamask wallet)
-          "
-              icon="questionmark"
-            />
-          </b>
-          <span
-            style="margin-right: 34px"
-            :inner-html.prop="
-              layer1_account ? layer1_account.balance : '' | teaIcon
-            "
-          ></span>
-          <el-button
-            size="mini"
-            type="primary"
-            plain
-            icon="el-icon-refresh"
-            circle
-            @click="refreshLayer1Balance($event)"
-            style="right: 0; position: absolute"
-          ></el-button>
-        </div>
-
-        <div class="x-item">
-          <b>
-            {{ "TApp Store wallet TEA balance" }}
-            <TeaIconButton
-              style="position: relative"
-              place="right"
-              tip="
-            The amount of TEA ready to be used in your layer2 wallet. These funds can be transferred gas-free to any TApp where you'd like to use the funds
-          "
-              icon="questionmark"
-            />
-          </b>
-          <span
-            style="margin-right: 34px"
-            :inner-html.prop="
-              tapp_balance === null ? '...' : tapp_balance | teaIcon
-            "
-          ></span>
-
-          <el-button
-            size="mini"
-            type="primary"
-            plain
-            icon="el-icon-refresh"
-            circle
-            @click="refreshTappBalanceHandler($event)"
-            style="right: 0; position: absolute"
-          ></el-button>
-        </div>
-
-        <div class="x-item">
-          <b>
-            {{ "TApp Store wallet TEA deposit" }}
-            <!-- <TeaIconButton
-              style="position: relative"
-              place="right"
-              tip="
-            The amount of TEA ready to be used in your layer2 wallet. These funds can be transferred gas-free to any TApp where you'd like to use the funds
-          "
-              icon="questionmark"
-            /> -->
-          </b>
-          <span
-            style="margin-right: 34px"
-            :inner-html.prop="
-              tapp_deposit === null ? '...' : tapp_deposit | teaIcon
-            "
-          ></span>
-
-          <el-button
-            size="mini"
-            type="primary"
-            plain
-            icon="el-icon-refresh"
-            circle
-            @click="refreshTappDepositHandler($event)"
-            style="right: 0; position: absolute"
-          ></el-button>
-        </div>
+       
 
         <div class="x-bottom">
 
-          <el-button
-            type="primary"
-            style="margin-right: 20px"
-            v-if="layer1_account"
-            @click="toUniswap()"
-          >
-            TEA | ETH Exchange
-          </el-button>
           
-          <el-tooltip
-            v-if="layer1_account && !layer1_account.email"
-            effect="light"
-            placement="top"
-            content="Move TEA funds back to your chain wallet(layer1)."
-          >
-            <el-button :disabled="!tapp_balance" @click="withdrawHandler()"
-              >Withdraw</el-button
-            >
-          </el-tooltip>
-
-          <el-tooltip
-            v-if="layer1_account && !layer1_account.email"
-            effect="light"
-            placement="top"
-            content="Move chain wallet (layer1) TEA funds to layer2 TApp Store wallet account."
-          >
-            <el-button
-              style="margin-right: 20px"
-              v-if="layer1_account"
-              @click="rechargeHandler()"
-              >Topup</el-button
-            >
-          </el-tooltip>
-          
-          <el-button
-            type="primary"
-            v-if="user && user.isLogin"
-            @click="transferTea()"
-          >
-            Transfer TEA
-          </el-button>
 
         </div>
       </div>
@@ -218,7 +91,7 @@ export default {
     await utils.sleep(1500);
     this.wf = new SettingAccount();
     await this.wf.init();
-    await this.refreshAccount();
+    // await this.refreshAccount();
 
     this.$root.loading(false);
 

@@ -1,7 +1,7 @@
 <template>
 <div class="tea-page">
   <div>
-    <el-switch
+    <!-- <el-switch
       v-if="user && user.isLogin"
       v-model="mine"
       active-color="#35a696"
@@ -11,7 +11,7 @@
       inactive-text="All"
       @change="changeHandler()"
     >
-    </el-switch>
+    </el-switch> -->
     <span v-if="mine && (!list || list.length<1)" style="font-size: 14px;color: #8c8c8c;position: relative;top: 1px;left: 20px;">
       Please switch to "All" to explore more.
     </span>
@@ -91,8 +91,8 @@
       fixed="right"
     >
       <template v-if="user && user.isLogin" slot-scope="scope">
-        <TeaIconButton v-if="scope.row.fav" tip="Remove like" icon="el-icon-star-on" @click="unfav_tapp(scope.row, scope.$index)" style="font-size:24px;position:relative;top:2px;" />
-        <TeaIconButton v-if="!scope.row.fav" tip="Like" icon="el-icon-star-off" @click="fav_tapp(scope.row, scope.$index)" :loading="scope.row.loading" style="font-size:20px;position:relative;top:2px;" />
+        <!-- <TeaIconButton v-if="scope.row.fav" tip="Remove like" icon="el-icon-star-on" @click="unfav_tapp(scope.row, scope.$index)" style="font-size:24px;position:relative;top:2px;" />
+        <TeaIconButton v-if="!scope.row.fav" tip="Like" icon="el-icon-star-off" @click="fav_tapp(scope.row, scope.$index)" :loading="scope.row.loading" style="font-size:20px;position:relative;top:2px;" /> -->
       
         <TeaIconButton tip="Set spending limit" 
           v-if="!$root.is_tappstore(scope.row.id)"
@@ -108,13 +108,13 @@
 
   </TeaTable>
 
-  <div class="tea-legend" style="
+  <!-- <div class="tea-legend" style="
     margin-top: 40px;
     text-align: right;
   ">
 
     <el-button v-if="user && user.isLogin" style="width:400px;" type="primary" @click="createNewTApp()">Create new TApp</el-button>
-  </div>
+  </div> -->
 
 </div>
 </template>
@@ -147,6 +147,18 @@ export default {
     ...mapState([
       'user'
     ])
+  },
+
+  created(){
+    this.app_cid_map = {
+      '0x1000000000000000000000000000000000000000': utils.get_env('seat_cid'),
+      '0xb000000000000000000000000000000000000001': utils.get_env('hkd_cid'),
+      '0xb000000000000000000000000000000000000002': utils.get_env('sgd_cid'),
+      '0xb000000000000000000000000000000000000003': utils.get_env('inr_cid'),
+      '0x2000000000000000000000000000000000000001': utils.get_env('swap_cid'),
+      '0x2000000000000000000000000000000000000002': utils.get_env('feeder_cid'),
+      '0x1000000000000000000000000000000000000006': utils.get_env('DEVPORTAL_cid'),
+    };
   },
 
   async mounted(){
@@ -192,9 +204,9 @@ export default {
         const not_min_list = [];
 
         let my_fav = [];
-        if(this.user && this.user.isLogin){
-          my_fav = await this.query_my_fav_list();
-        }
+        // if(this.user && this.user.isLogin){
+        //   my_fav = await this.query_my_fav_list();
+        // }
         _.each(list, (item)=>{
           if(_.find(my_fav, (x)=>x.id===item.id)){
             item.fav = true;
@@ -293,91 +305,9 @@ export default {
     },
 
     async clickToOpen(row){
-      if(row.id === '0x1000000000000000000000000000000000000000'){
-        // seat
-        if(_.toNumber(row.account_balance.allowance) < 10 && this.user && this.user.isLogin){
-          await this.set_allowance(row, {
-            allowance: 1200,
-            url: this.tapp_url(row, 'seat_url'),
-          });
-        }
-        else{
-          window.open(this.tapp_url(row, 'seat_url'), '_blank');
-        }
-        
-      }
-      else if(row.id === '0x1000000000000000000000000000000000000001'){
-        // leaderboard
-        if(_.toNumber(row.account_balance.allowance) < 10 && this.user && this.user.isLogin){
-          await this.set_allowance(row, {
-            allowance: 20,
-            url: this.tapp_url(row, 'lb_url'),
-          });
-        }
-        else{
-          window.open(this.tapp_url(row, 'lb_url'), '_blank');
-        }
-        
-      }
-      else if (row.id === '0x1000000000000000000000000000000000000002'){
-        // cml
-        if(_.toNumber(row.account_balance.allowance) < 10 && this.user && this.user.isLogin){
-          await this.set_allowance(row, {
-            allowance: 100,
-            url: this.tapp_url(row, 'cml_url'),
-          });
-        }
-        else{
-          window.open(this.tapp_url(row, 'cml_url'), '_blank');
-        }
-        
-      }
-      else if (row.id === '0x1000000000000000000000000000000000000003'){
-        if(_.toNumber(row.account_balance.allowance) < 10 && this.user && this.user.isLogin){
-          await this.set_allowance(row, {
-            allowance: 200,
-            url: this.tapp_url(row, 'seed_url'),
-          });
-        }
-        else{
-          window.open(this.tapp_url(row, 'seed_url'), '_blank');
-        }
-      }
-      else if (row.id === '0x1000000000000000000000000000000000000004'){
-        // if(_.toNumber(row.account_balance.allowance) < 10){
-        //   await this.set_allowance(row, {
-        //     allowance: 20,
-        //     url: utils.get_env('fluencer_url'),
-        //   });
-        // }
-        // else{
-        //   window.open(utils.get_env('fluencer_url'), '_blank');
-        // }
-        window.open(this.tapp_url(row, 'fluencer_url'), '_blank');
-      }
-      else if(row.ori.tapp_type === 'fluencer'){
-        window.open(this.tapp_url(row, 'fluencer_url')+'?v='+row.id+'&t=fluencer', '_blank');
-      }
-      else if(row.id === '0x1000000000000000000000000000000000000005'){
-        window.open(this.tapp_url(row, 'email_url'), '_blank');
-      }
-      else if(row.id === '0x1000000000000000000000000000000000000006'){
-        if(_.toNumber(row.account_balance.allowance) < 10 && this.user && this.user.isLogin){
-          await this.set_allowance(row, {
-            allowance: 500,
-            url: this.tapp_url(row, 'devportal_url'),
-          });
-        }
-        else{
-          window.open(this.tapp_url(row, 'devportal_url'), '_blank');
-        }
-      }
-      else if(row.ori.tapp_type === 'User'){
-        window.open(this.tapp_url(row, 'seat_url'), '_blank');
-      }
-      else{
-        this.$root.showError("Invalid tapp url");
-      }
+      const url = '/ipfs/'+row.cid;
+      alert(url);
+    
     },
 
   }

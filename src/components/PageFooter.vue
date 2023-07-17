@@ -139,7 +139,7 @@ export default {
   b.lg{
     display: flex;
     justify-content: space-between;
-    width: 240px;
+    width: auto;
     font-size: 19px;
     font-weight: normal;
 

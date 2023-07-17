@@ -5,12 +5,14 @@ export const ChainMap = {
   3: 'Ropsten',
   4: 'Rinkeby',
   5: 'Goerli',
+  11155111: 'Sepolia',
+  421613: 'Arbitrum Goerli'
 };
 
 
 export const ContractMap = {
   'COFFEE': '0x41F2d9b281800b5C1219725C0CEF35912658beEa',
-  'ERC20': '0x44809c2dA3f17C436D6c1f771784C35335f95242',  // tea_erc20
+  'ERC20': '0x0000000000000000000000000000000000000000',  // tea_erc20
   'ERC721': '0x08e27b8CFB26580C301CF5322aEd20a8c12e9856',
   'STORAGE': '0x8A24Fd9977e995592eEbFBC768962E610edCc394',
   'LOCK': '0xFf675712BabA64dA7fF86e12105c9b35Fe7a48F6',

@@ -114,7 +114,10 @@ class Instance {
   async getTeaBalance(){
     const erc20Token = this.tea_contract;
     const me = await this.signer.getAddress();
-    const n = await erc20Token.balanceOf(me);
+    let n = 0;
+    try{
+      n = await erc20Token.balanceOf(me);
+    }catch(e){}
     const balance = U.formatUnits(n, 'ether');
     return balance
   }

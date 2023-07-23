@@ -56,16 +56,17 @@
       </template>
     </TeaTableColumn> -->
 
-    <TeaTableColumn
+    <!-- <TeaTableColumn
       label="Spending limit"
       tip="Current spending limit for TApp"
+      width="180"
       v-if="layer1_account && layer1_account.address"
     >
       <template slot-scope="scope">
         <span v-if="$root.is_tappstore(scope.row.id)" :inner-html.prop="'N/A'"></span>
         <span v-if="!$root.is_tappstore(scope.row.id)" :inner-html.prop="scope.row.account_balance.allowance | teaIcon"></span>
       </template>
-    </TeaTableColumn>
+    </TeaTableColumn> -->
 
     <TeaTableColumn
       label="Status"
@@ -78,7 +79,6 @@
 
     <TeaTableColumn
       label="Ipfs cid"
-      width="200"
     >
       <template slot-scope="scope">
         <span class="one-line">{{scope.row.cid}}</span>
@@ -94,10 +94,10 @@
         <!-- <TeaIconButton v-if="scope.row.fav" tip="Remove like" icon="el-icon-star-on" @click="unfav_tapp(scope.row, scope.$index)" style="font-size:24px;position:relative;top:2px;" />
         <TeaIconButton v-if="!scope.row.fav" tip="Like" icon="el-icon-star-off" @click="fav_tapp(scope.row, scope.$index)" :loading="scope.row.loading" style="font-size:20px;position:relative;top:2px;" /> -->
       
-        <TeaIconButton tip="Set spending limit" 
+        <!-- <TeaIconButton tip="Set spending limit" 
           v-if="!$root.is_tappstore(scope.row.id)"
           icon="el-icon-setting" 
-          @click="set_allowance(scope.row)" style="font-size:20px;position:relative;top:2px;" />
+          @click="set_allowance(scope.row)" style="font-size:20px;position:relative;top:2px;" /> -->
         
         <TeaIconButton tip="Update tapp" 
           v-if="user && user.isLogin && $root.is_sudo(user.address)"
@@ -306,7 +306,7 @@ export default {
 
     async clickToOpen(row){
       const url = '/ipfs/'+row.cid;
-      alert(url);
+      window.open(url, '_blank');
     
     },
 

@@ -618,6 +618,23 @@ const F = {
         return item;
       }));
       list = _.filter(list);
+
+      let region = [];
+      const hn = location.hostname;
+      if(_.includes(hn, 'sg')){
+        region = ['HKDG_demo', 'eINR_demo'];
+      }
+      else if(_.includes(hn, 'hk')){
+        region = ['SGD_demo', 'eINR_demo'];
+      }
+      else if(_.includes(hn, 'india')){
+        region = ['HKDG_demo', 'SGD_demo'];
+      }
+
+      list = _.filter(list, (x)=>{
+        return !_.includes(region, x.name);
+      });
+
       mem.set(mem_key, list);
       await succ_cb(list);
       

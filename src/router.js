@@ -46,7 +46,7 @@ Vue.use(Router);
 let routers = [
   {
     path: '/',
-    redirect: '/welcome',
+    redirect: '/discover',
   },
   {
     path: '/welcome',

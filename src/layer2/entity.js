@@ -622,13 +622,13 @@ const F = {
       let region = [];
       const hn = location.hostname;
       if(_.includes(hn, 'sg')){
-        region = ['HKDG_demo', 'eINR_demo'];
+        region = ['HKDG_demo', 'eINR_demo', 'HKDG_governance', 'eINR_governance'];
       }
       else if(_.includes(hn, 'hk')){
-        region = ['SGD_demo', 'eINR_demo'];
+        region = ['SGD_demo', 'eINR_demo', 'SGD_governance', 'eINR_governance'];
       }
       else if(_.includes(hn, 'india')){
-        region = ['HKDG_demo', 'SGD_demo'];
+        region = ['HKDG_demo', 'SGD_demo', 'HKDG_governance', 'SGD_governance'];
       }
 
       list = _.filter(list, (x)=>{

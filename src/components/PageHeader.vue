@@ -14,53 +14,27 @@
         left: 84px;
         top: 24px;
         font-weight: bold;
-    ">TApp Store</span>
+    ">Techspring2023</span>
   </a>
   
 
+  <el-menu-item><a href="https://www.baidu.com/" target="_blank">{{'White-pager'}}</a></el-menu-item>
 
-  <div style="margin-left: 20px;" class="el-menu-item">
-    <el-tooltip v-if="layer1_account.email || layer1_account.address" effect="light" :content="layer1_account.email || layer1_account.address">
-    <div style="
-      display: inline-block;
-      font-size: 14px;
-      color: #fff;
-      background: #35a696;
-      padding: 0 8px;
-      height: 32px;
-      line-height: 32px;
-      border-radius: 4px;
-      width: 120px;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      position: relative;
-    ">{{layer1_account.email || layer1_account.address}}</div></el-tooltip>
-
-    <el-button style="margin-left: 10px; font-size: 17px;" @click="loginOrLogout()" type="text">{{user ? 'Logout' : 'Login'}}</el-button>
-  </div>
+  <el-menu-item index="/bank/sgd">{{'Singapore'}}</el-menu-item>
+  <el-menu-item index="/bank/hkd">{{'Hongkong'}}</el-menu-item>
+  <el-menu-item index="/bank/inr">{{'India'}}</el-menu-item>
   
 
-  <!-- <el-menu-item index="/log">{{'Log'}}</el-menu-item> -->
-  <el-menu-item index="/welcome">{{'Help'}}</el-menu-item>
-  <!-- <el-menu-item index="/investment">{{'Investments'}}</el-menu-item> -->
 
-  <el-menu-item index="/account_profile">{{'Account'}}</el-menu-item>
-  <el-menu-item index="/discover">{{'TApps'}}</el-menu-item>
+  <!-- <el-menu-item index="/discover">{{'TApps'}}</el-menu-item> -->
+
+  <el-menu-item index="/welcome">{{'Home'}}</el-menu-item>
   
 </el-menu>
 
-<div class="t-state" :class="'x_'+connected"></div>
+<div class="t-state x_2"></div>
 
-<div v-if="top_log" style="height: 36px; width: 1080px; margin: 0 auto;">
-  <el-alert
-    effect="dark"
-    @close="top_log=null"
-    center
-    :closable="true"
-    :title="top_log"
-    :type="top_log_level">
-  </el-alert>
-</div>
+
 
 </div>
   
@@ -68,26 +42,13 @@
 </template>
 <script>
 import {mapGetters, mapState} from 'vuex';
-import Base from '../workflow/Base';
 import _ from 'lodash';
 import utils from '../tea/utils';
 
-import layer2 from '../layer2';
-import helper from '../views/helper';
-
-import eth from '../eth';
 export default {
   data() {
     return {
       activeIndex: null,
-      connected: 0,
-      has_seed_pool: false,
-
-      all_account: [],
-      no_plugin_account: false,
-
-      top_log: null,
-      top_log_level: 'error',
     };
   },
   watch: {
@@ -102,13 +63,7 @@ export default {
 
   },
   computed: {
-    ...mapState([
-      'chain', 'user', 'miner_mode',
-    ]),
-    ...mapGetters(['layer1_account']),
-    // ...mapState([
-    //   'chain'
-    // ]),
+
   },
   methods: {
     handleSelect(key, keyPath) {
@@ -132,112 +87,11 @@ export default {
 
     },
 
-    async loginOrLogout(){
-      if(!this.user){
-        layer2.user.showLoginModal(this);
-      }
-      else{
-        layer2.user.logout(this.layer1_account.address);
-        this.$root.success('Logout success.');
-      }
-    },
 
-    initRoutePage(){
-      const meta = this.$route.meta;
-      const u = this.$store.state.user;
-      if(meta && meta.needLogin){
-        if(!u){
-          this.$router.replace('/login_page');
-        }
-      }
-    },
-
-    checkCurrentVersion(){
-      layer2.tapp.query_meta_data(this).then((rs)=>{
-        console.log(22, rs);
-        if(location.hostname !== '127.0.0.1' && rs.cid && !_.includes(location.pathname, rs.cid)){
-          alert("Your TApp needs to be updated. Click OK to get the latest version.");
-          location.href = location.href.replace(/[a-z0-9]{46}/i, (b)=>{
-            return rs.cid;
-          });
-        }
-      });
-    }
     
   },
   async mounted(){
-    layer2.base.set_global_log(this);
-    const id = layer2.base.getTappId();
-
-    let time = 500;
-    const wf = new Base();
-    await wf.__init__();
-    this.wf = wf;
-
-    let address = await this.wf.layer1.initCurrentAccount();
-    let email = null;
     
-    if(!address){
-      address = 'no_wallet';
-      email = utils.cache.get(layer2.user.getOfflineId());
-    }
-    console.log(11, address, email);
-    
-    this.$store.commit('set_account', {
-      ...this.layer1_account,
-      email,
-      address
-    });
-
-    this.checkCurrentVersion();
-    const loop = async (cb)=>{
-      try{
-        
-        const connected = wf.layer1.isConnected();
-        if(connected !== this.connected){
-          this.connected = connected;
-
-          if(this.connected === 2){
-            
-            cb();
-          }
-          
-        }
-        
-        if(this.connected > 0){
-          time = 1000;
-        }
-
-      }catch(e){
-        this.connected = 0;
-      }
-     
-      _.delay(()=>{
-        loop(cb);
-      }, time);
-    };
-
-    loop(async ()=>{
-      await this.$store.dispatch('init_user');
-
-      helper.checkForLayer1UserChanged(this);
-
-      const tapp = {};
-      this.$store.commit('set_bbs', {
-        id,
-        tapp,
-      });
-
-      utils.mem.set('layer1_ready', true);
-      console.log('----- layer1 ready ------');
-
-      this.initRoutePage();
-    });
-
-    utils.register('top_log', (key, param)=>{
-      this.top_log = param.top_log;
-      this.top_log_level = param.top_log_level;
-    });
 
     
   },

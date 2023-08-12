@@ -12,10 +12,10 @@ Vue.use(Router);
 let routers = [
   {
     path: '/',
-    redirect: '/welcome',
+    redirect: '/',
   },
   {
-    path: '/welcome',
+    path: '/',
     name: 'welcome',
     component: Welcome,
   },

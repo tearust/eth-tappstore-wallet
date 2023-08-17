@@ -60,14 +60,14 @@ const F = {
     if(chain.name === 'Offline'){
       throw('You did not install metamask wallet, please login with your email address.');
     }
-    if(chain.name !== 'Goerli'){
-      throw('Current epoch only accept Goerli network. <br> please visit <a href="https://www.youtube.com/watch?v=nsAuqfAQCag" target="_blank">this link<a> to config.');
-    }
+    // if(chain.name !== 'Goerli'){
+    //   throw('Current epoch only accept Goerli network. <br> please visit <a href="https://www.youtube.com/watch?v=nsAuqfAQCag" target="_blank">this link<a> to config.');
+    // }
 
-    const epoch_closed = utils.mem.get('epoch_closed');
-    if (epoch_closed && !self.$root.is_sudo(address)) {
-      throw 'Current epoch finished, can\'t login.';
-    }
+    // const epoch_closed = utils.mem.get('epoch_closed');
+    // if (epoch_closed && !self.$root.is_sudo(address)) {
+    //   throw 'Current epoch finished, can\'t login.';
+    // }
 
     // thanks for https://github.com/polkadot-js/extension/issues/827
     const data = permission_str;
@@ -88,14 +88,20 @@ const F = {
         pk: utils.uint8array_to_base64(hexToU8a(pk)),
         data: msg,
         signature: sig,
+        a_node: self.a_node || false,
       });
       rs = await txn.query_request('query_session_key', {
         tappIdB64: base.getTappId(),
         address,
+        a_node: self.a_node || false,
       });
-      console.log(333, rs);
 
       if (rs.auth_key) {
+        if(self.a_node){
+          alert(rs.auth_key);
+          return true;
+        }
+
         const user = {
           address,
           isLogin: true,
@@ -109,6 +115,7 @@ const F = {
         base.top_log(null);
 
         self.$root.goPath('/account_profile');
+        
         return true;
       }
 
@@ -447,6 +454,10 @@ const F = {
       opts.targetTappIdB64 = target_tapp;
     }
 
+    if(self.a_node){
+      opts.a_node = true;
+    }
+
     try {
       const rs = await txn.query_request('query_balance', opts, true);
       if (!rs.balance) {
@@ -490,6 +501,10 @@ const F = {
       tappIdB64: base.getTappId(),
       authB64: session_key,
     };
+
+    if(self.a_node){
+      opts.a_node = true;
+    }
 
     const rs = await txn.query_request('query_deposit', opts, true);
     if (!rs.balance) {

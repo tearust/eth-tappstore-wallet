@@ -1,8 +1,16 @@
 <template>
 <div class="tea-page">
-  
 
   <div style="text-align:left;">
+    <h2>HTTP to A_NODE</h2>
+    <el-button type="primary" @click="http_user_login()">User login</el-button>
+    <el-button type="primary" @click="http_query_balance()">Query user balance</el-button>
+    <el-button type="primary" @click="http_query_deposit()">Query user deposit</el-button>
+    <br/><br/>
+    <el-button type="primary" @click="http_query_system_version()">Query system version</el-button>
+    <el-button type="primary" @click="http_query_tapp_metadata()">Query tapp metadata</el-button>
+
+    <el-divider />
     <div v-if="layer1_account && user && user.isLogin">
       <h2>Admin Query</h2>
       
@@ -29,58 +37,6 @@
     <br/><br/>
 
     <el-divider />
-
-    <h2>TAPP</h2>
-    <el-button type="primary" @click="create_new_tapp_action()">Create New TApp</el-button>
-    <el-button type="danger" @click="query_all_tapps()">Query all tapps</el-button>
-
-    <el-divider />
-    <el-button type="primary" @click="consume_action()">Consume 100</el-button>
-    <el-divider />
-
-    <el-button type="primary" @click="fav_tapp()">Fav Tapp</el-button>
-    <el-button type="primary" @click="unfav_tapp()">Unfav Tapp</el-button>
-    <el-button type="danger" @click="query_fav_tapp_list()">Query my fav tapps</el-button>
-    <el-button type="danger" @click="query_active_miners()">Query active miners</el-button>
-    <el-divider />
-    
-    <h2>SEAT</h2>
-    <el-button type="danger" @click="query_seat_list()">Query All seat list</el-button>
-
-    <h2>MINER</h2>
-
-    <h2>LOGS</h2>
-    <el-button type="danger" @click="query_op_logs()">Query OP logs</el-button>
-
-
-    <!-- <el-button type="danger" @click="query_cml_list()">Query CML List</el-button>
-    <el-button type="danger" @click="query_cml_details()">Query CML Details</el-button>
-
-    
-   
-    
-    
-    
-    
-
-
-    
-    <el-button type="primary" @click="host_tapp_action()">Host TApp</el-button>
-    <el-button type="primary" @click="unhost_tapp_action()">Unhost TApp</el-button>
-
-    <el-divider />
-    <el-button type="primary" @click="buy_token_action()">Buy</el-button>
-    <el-button type="primary" @click="sell_token_action()">Sell</el-button>
-    <el-button type="primary" @click="consume_token_action()">Consume</el-button>
-    
-
-    <el-divider />
-    <el-button type="danger" @click="query_balance_action('5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM')">HIDDEN_SYSTEM_ACCOUNT balance</el-button>
-    <el-button type="danger" @click="query_balance_action('5HrN7fHLXWcFiXPwwtq2EkSGns9eMt5P7SpeTPewumZy6ftb')">HIDDEN_CONSUME_ACCOUNT balance</el-button>
-    <el-divider />
-
-    <el-button type="primary" @click="send_sql_action('')">Send SQL Request</el-button> -->
-    <!-- <el-button type="primary" @click="send_consume_dividend_action('')">Test for consume dividend</el-button> -->
 
     
   </div>
@@ -132,11 +88,15 @@ export default {
     ]),
   },
 
+  async created(){
+    
+  },
+
   async mounted(){
     this.$root.loading(true);
 
-    // this.wf = new SettingAccount();
-    // await this.wf.init();
+    this.wf = new SettingAccount();
+    await this.wf.init();
 
     this.layer1 = await eth.get();
 
@@ -213,143 +173,11 @@ export default {
 
     
 
-    // async add_notification_action(){
-    //   this.setLog("start add notification action...");
-    //   try{
-    //     const rs = await bbs.send_notification(this, '', async (rs)=>{
-    //       this.$root.success("Send success");
-    //     });
-    //   }catch(e){
-    //     bbs.log(e);
-    //   }
-    // },
-    // async query_notification_list(){
-    //   this.setLog("start query notification list...");
-
-    //   try{
-    //     const list = await bbs.getNotificationList(this.layer1_account.address);
-    //     console.log(111, list);
-    //     bbs.log(JSON.stringify(list));
-    //   }catch(e){
-    //     bbs.log(e);
-    //   }
-    // },
-
-    // async send_sql_action(){
-    //   this.setLog("start sql test...");
-    //   try{
-    //     const rs = await bbs.sendSqlRequest(this, async (rs)=>{
-    //       this.$root.success("Send sql success");
-    //     });
-    //   }catch(e){
-    //     bbs.log(e);
-    //   }
-    // },
-
-    // async send_consume_dividend_action(){
-    //   this.setLog("start consume dividend action...");
-    //   try{
-    //     const rs = await bbs.send_consume_dividend_action(this, async (rs)=>{
-    //       this.$root.success("consume dividend success");
-    //     });
-    //   }catch(e){
-    //     bbs.log(e);
-    //   }
-    // },
-
-    async create_new_tapp_action(){
-      await layer2.tapp.createNew(this, async (rs)=>{});
-    },
-    // async host_tapp_action(){
-    //   this.setLog("start host tapp...");
-    //   alert("real");
-    // },
-    // async unhost_tapp_action(){
-    //   this.setLog("start unhost tapp...");
-    //   alert("real");
-    // },
-    async query_all_tapps(){
-      await layer2.entity.queryAll(this, async (list)=>{});
-    },
-    // async buy_token_action(){
-    //   this.setLog("Buy token action...");
-    //   alert('real');
-    // },
-    // async sell_token_action(){
-    //   this.setLog("Sell token action...");
-    //   alert('real');
-    // },
-    // async consume_token_action(){
-    //   this.setLog("Conusume action...");
-    //   try{
-    //     await tappstore.consume_token(this, {
-    //       id: 101,
-    //       ticker: 'DDD',
-    //       name: 'ddd',
-    //     }, async ()=>{
-    //       bbs.log('Consume success');
-    //     });
-    //   }catch(e){
-    //     bbs.log(e);
-    //   }
-    // },
-
-    // async query_cml_list(){
-    //   this.setLog('query cml list ...');
-
-    //   await plant.queryCmlList(this, {});
-    // },
-
-    // async query_cml_details(){
-    //   this.setLog('query cml details ...');
-    //   await plant.queryCmlDetails(this, {
-    //     tea_id_b64: '3zjLTxJHkEHI6NI4EJ7yoVCwF/OCIG4k/uky5jfC23s='
-    //   });
-    // },
-
-    async consume_action(){
-      await layer2.entity.consumeToken(this, {id: "AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE="}, async ()=>{
-        
-      })
-    },
-
-    async fav_tapp(){
-      await layer2.tapp.favTapp(this, {tapp_id: "AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE="}, async ()=>{})
-    },
-    async unfav_tapp(){
-      await layer2.tapp.unfavTapp(this, {tapp_id: "AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE="}, async ()=>{})
-    },
-    async query_fav_tapp_list(){
-      const list = await layer2.tapp.queryFavTappList(this);
-      console.log(1, list);
-    },
-
-    async query_seat_list(){
-      const list = await layer2.seat.querySeatList(this, {});
-      console.log(1, list);
-      
-    },
-
-    async query_op_logs(){
-      const list = await layer2.log.queryOpLogs(this, {
-        address: this.layer1_account.address,
-        day: 4,
-      });
-
-    },
+    
 
     
-    // async query_hash_result(){
-    //   const hash = this.latest_hash;
 
-    //   this.setLog("start query hash result...");
-    //   try{
-    //     const rs = await bbs.query_hash_result(hash);
-
-    //   }catch(e){
-    //     bbs.log(e);
-    //   }
-    // },
+    
 
     // -------------- eth ------------------
     async connectToWallet(){
@@ -420,6 +248,36 @@ export default {
       let list = await layer2.log.queryExpiredCmls(this);
       this.$root.alert_success(JSON.stringify(list));
     },
+
+
+    async http_user_login(){
+      this.a_node = true;
+      await layer2.user.showLoginModal(this, async ()=>{
+        this.a_node = false;
+      });
+      
+    },
+    async http_query_balance(){
+      this.a_node = true;
+      const r = await layer2.user.query_balance_with_ts(this);
+      alert(JSON.stringify(r));
+      this.a_node = false;
+
+    },
+    async http_query_deposit(){
+      this.a_node = true;
+      const r = await layer2.user.query_deposit_with_ts(this);
+      alert(JSON.stringify(r));
+      this.a_node = false;
+    },
+    async http_query_system_version(){
+      const r = await layer2.log.querySystemVersion(this, {a_node: true});
+      alert(JSON.stringify(r));
+    },
+    async http_query_tapp_metadata(){
+      const r = await layer2.tapp.query_meta_data(this, {a_node: true});
+      alert(JSON.stringify(r));
+    }
 
 
     

@@ -605,7 +605,7 @@ const F = {
           status: d.status,
           tapp_type: d.tapp_type,
           ori: d,
-          cid: d.cid,
+          cid: d.cid || self.app_cid_map ? self.app_cid_map[d.tapp_id] : '',
           consume_account_balance: utils.layer1.balanceToAmount(d.consume_account_balance),
         };
         item.market_cap = utils.layer1.roundAmount(item.sell_price * item.total_supply);

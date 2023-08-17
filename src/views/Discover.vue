@@ -149,6 +149,17 @@ export default {
     ])
   },
 
+  created(){
+    this.app_cid_map = {
+      '0x1000000000000000000000000000000000000000': utils.get_env('seat_cid'),
+      '0x1000000000000000000000000000000000000002': utils.get_env('cml_cid'),
+      '0x1000000000000000000000000000000000000001': utils.get_env('lb_cid'),
+      '0x1000000000000000000000000000000000000003': utils.get_env('seed_cid'),
+      '0x1000000000000000000000000000000000000004': utils.get_env('fluencer_cid'),
+      '0x1000000000000000000000000000000000000006': utils.get_env('devportal_cid'),
+    };
+  },
+
   async mounted(){
     this.wf = new Base();
     await this.wf.init();

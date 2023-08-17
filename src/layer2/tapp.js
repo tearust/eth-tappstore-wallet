@@ -271,22 +271,15 @@ const F = {
       }
     });
   },
-  async query_meta_data(self){
+  async query_meta_data(self, param={}){
     const opts = {
       tokenId: base.getTappId(),
+      ...param,
     };
-
-    const mem_key = 'tapp_query_metadata';
-    const cache_result = mem.get(mem_key);
-    if(cache_result){
-      console.log('[Tapp] tapp_query_metadata cache result => ', cache_result);
-      return cache_result;
-    }
 
     try{
       const rs = await txn.query_request('query_tapp_metadata', opts);
-      const data = rs.sql_query_result || {};
-      mem.set(mem_key, data);
+      const data = rs.sql_query_result || rs || {};
       return data
     }catch(e){
       self.$root.showError(e);

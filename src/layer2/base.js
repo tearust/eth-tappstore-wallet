@@ -11,6 +11,9 @@ const meta = {
   server_url: utils.get_env('LAYER2_URL'),
   mode: utils.get_env('mode') || 'app',
   server_actor: 'com.tea.client-actor',  // default is tappstore_in_B actor
+
+  a_node_url: utils.get_env('a_node_url'),
+  a_server_actor: 'com.tea.tappstore-actor',
 };
 // console.log("layer2 meta", meta);
 if(_.toLower(process.env.NODE_ENV) === 'production' && meta.mode !== 'list'){
@@ -24,6 +27,12 @@ const _axios = axios.create({
 // set request header 
 _axios.interceptors.request.use((config)=>{
   config.data.actor = meta.server_actor;
+
+  if(config.data && config.data.a_node){
+    config.data.actor = meta.a_server_actor;
+    config.baseURL = meta.a_node_url;
+  }
+
   return config;
 });
 

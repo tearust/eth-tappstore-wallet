@@ -4,10 +4,16 @@ import base from './base';
 import { NOT_LOGIN } from './user';
 import mem from './mem';
 import user from './user';
+import dhttp from './dhttp';
 
 const F = {
 
   async txn_request(method, param){
+    if(param.a_node){
+      return await dhttp.txn_request(method, param);
+    }
+
+
     const _uuid = uuid();
     console.log("prepare for txn: ", method, _uuid);
     
@@ -167,6 +173,10 @@ const F = {
   },
 
   async query_request(method, param, local=false){
+    if(param.a_node){
+      return await dhttp.query_request(method, param);
+    }
+
     const _uuid = uuid();
   
     // base.log("Start to first query request...");

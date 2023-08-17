@@ -430,7 +430,9 @@ const F = {
   },
 
   async querySystemVersion(self, param={}){
-    const opts = {};
+    const opts = {
+      ...param
+    };
     try{
       const rs = await txn.query_request('query_system_version', opts);
       

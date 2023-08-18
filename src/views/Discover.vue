@@ -291,67 +291,67 @@ export default {
     },
 
     tapp_url(row, t){
-      let url = utils.get_env(t);
-      if(row.cid){
-        url = url.replace(/[a-z0-9]{46}/i, (cid)=>{
-          if(row.cid){
-            return row.cid;
-          }
-        });
+      let cid = utils.get_env(t);
+      // if(row.cid){
+      //   url = url.replace(/[a-z0-9]{46}/i, (cid)=>{
+      //     if(row.cid){
+      //       return row.cid;
+      //     }
+      //   });
         
-      }
-      return url;
+      // }
+      return '/ipfs/'+cid;
     },
 
     async clickToOpen(row){
       if(row.id === '0x1000000000000000000000000000000000000000'){
         // seat
-        if(_.toNumber(row.account_balance.allowance) < 10 && this.user && this.user.isLogin){
+        if(_.toNumber(row.allowance) < 10 && this.user && this.user.isLogin){
           await this.set_allowance(row, {
             allowance: 1200,
-            url: this.tapp_url(row, 'seat_url'),
+            url: this.tapp_url(row, 'seat_cid'),
           });
         }
         else{
-          window.open(this.tapp_url(row, 'seat_url'), '_blank');
+          window.open(this.tapp_url(row, 'seat_cid'), '_blank');
         }
         
       }
       else if(row.id === '0x1000000000000000000000000000000000000001'){
         // leaderboard
-        if(_.toNumber(row.account_balance.allowance) < 10 && this.user && this.user.isLogin){
+        if(_.toNumber(row.allowance) < 10 && this.user && this.user.isLogin){
           await this.set_allowance(row, {
             allowance: 20,
-            url: this.tapp_url(row, 'lb_url'),
+            url: this.tapp_url(row, 'lb_cid'),
           });
         }
         else{
-          window.open(this.tapp_url(row, 'lb_url'), '_blank');
+          window.open(this.tapp_url(row, 'lb_cid'), '_blank');
         }
         
       }
       else if (row.id === '0x1000000000000000000000000000000000000002'){
         // cml
-        if(_.toNumber(row.account_balance.allowance) < 10 && this.user && this.user.isLogin){
+        if(_.toNumber(row.allowance) < 10 && this.user && this.user.isLogin){
           await this.set_allowance(row, {
             allowance: 100,
-            url: this.tapp_url(row, 'cml_url'),
+            url: this.tapp_url(row, 'cml_cid'),
           });
         }
         else{
-          window.open(this.tapp_url(row, 'cml_url'), '_blank');
+          window.open(this.tapp_url(row, 'cml_cid'), '_blank');
         }
         
       }
       else if (row.id === '0x1000000000000000000000000000000000000003'){
-        if(_.toNumber(row.account_balance.allowance) < 10 && this.user && this.user.isLogin){
+        if(_.toNumber(row.allowance) < 10 && this.user && this.user.isLogin){
           await this.set_allowance(row, {
             allowance: 200,
-            url: this.tapp_url(row, 'seed_url'),
+            url: this.tapp_url(row, 'seed_cid'),
           });
         }
         else{
-          window.open(this.tapp_url(row, 'seed_url'), '_blank');
+          window.open(this.tapp_url(row, 'seed_cid'), '_blank');
         }
       }
       else if (row.id === '0x1000000000000000000000000000000000000004'){
@@ -364,27 +364,27 @@ export default {
         // else{
         //   window.open(utils.get_env('fluencer_url'), '_blank');
         // }
-        window.open(this.tapp_url(row, 'fluencer_url'), '_blank');
+        window.open(this.tapp_url(row, 'fluencer_cid'), '_blank');
       }
       else if(row.ori.tapp_type === 'fluencer'){
-        window.open(this.tapp_url(row, 'fluencer_url')+'?v='+row.id+'&t=fluencer', '_blank');
+        window.open(this.tapp_url(row, 'fluencer_cid')+'?v='+row.id+'&t=fluencer', '_blank');
       }
       else if(row.id === '0x1000000000000000000000000000000000000005'){
-        window.open(this.tapp_url(row, 'email_url'), '_blank');
+        window.open(this.tapp_url(row, 'email_cid'), '_blank');
       }
       else if(row.id === '0x1000000000000000000000000000000000000006'){
-        if(_.toNumber(row.account_balance.allowance) < 10 && this.user && this.user.isLogin){
+        if(_.toNumber(row.allowance) < 10 && this.user && this.user.isLogin){
           await this.set_allowance(row, {
             allowance: 500,
-            url: this.tapp_url(row, 'devportal_url'),
+            url: this.tapp_url(row, 'devportal_cid'),
           });
         }
         else{
-          window.open(this.tapp_url(row, 'devportal_url'), '_blank');
+          window.open(this.tapp_url(row, 'devportal_cid'), '_blank');
         }
       }
       else if(row.ori.tapp_type === 'User'){
-        window.open(this.tapp_url(row, 'seat_url'), '_blank');
+        window.open(this.tapp_url(row, 'seat_cid'), '_blank');
       }
       else{
         this.$root.showError("Invalid tapp url");

@@ -12,7 +12,7 @@
     <el-button type="primary" @click="http_query_system_version()">Query system version</el-button>
     <el-button type="primary" @click="http_query_tapp_metadata()">Query tapp metadata</el-button>
 
-    <el-divider />
+    <!-- <el-divider />
     <div v-if="layer1_account && user && user.isLogin">
       <h2>Admin Query</h2>
       
@@ -34,11 +34,11 @@
     <el-button type="danger" @click="query_asset_action()">Query Asset</el-button>
     <el-button type="danger" @click="query_balance_action()">Query Balance</el-button>
 
-    <!-- <el-button type="primary" @click="topup_action()">Topup 10</el-button> -->
+    <el-button type="primary" @click="topup_action()">Topup 10</el-button>
     <el-button type="primary" @click="withdraw_action()">Withdraw 10</el-button>
     <br/><br/>
 
-    <el-divider />
+    <el-divider /> -->
 
     
   </div>

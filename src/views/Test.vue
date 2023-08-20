@@ -4,6 +4,8 @@
   <div style="text-align:left;">
     <h2>HTTP to A_NODE</h2>
     <el-button type="primary" @click="http_user_login()">User login</el-button>
+    <br/><br/>
+    <el-button type="primary" @click="http_transfer_tea()">Transfer tea</el-button>
     <el-button type="primary" @click="http_query_balance()">Query user balance</el-button>
     <el-button type="primary" @click="http_query_deposit()">Query user deposit</el-button>
     <br/><br/>
@@ -266,8 +268,13 @@ export default {
     },
     async http_query_deposit(){
       this.a_node = true;
-      const r = await layer2.user.query_deposit_with_ts(this);
-      alert(JSON.stringify(r));
+      try{
+        const r = await layer2.user.query_deposit_with_ts(this);
+        alert(JSON.stringify(r));
+      }catch(e){
+        alert(this.$root.processError(e));
+      }
+      
       this.a_node = false;
     },
     async http_query_system_version(){
@@ -277,6 +284,11 @@ export default {
     async http_query_tapp_metadata(){
       const r = await layer2.tapp.query_meta_data(this, {a_node: true});
       alert(JSON.stringify(r));
+    },
+    async http_transfer_tea(){
+      await layer2.user.transferTea(this, {a_node: true}, async ()=>{
+        
+      });
     }
 
 

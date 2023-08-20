@@ -82,6 +82,9 @@ new Vue({
           layer2.user.logout();
         }, 2000);
       }
+      let err = e.toString();
+      err = err.replace("A string is thrown: ", '');
+      return err;
     },
     showError(e, title = 'Error message') {
       console.log(e);

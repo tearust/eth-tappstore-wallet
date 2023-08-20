@@ -386,25 +386,26 @@ const F = {
           };
         }
 
-        const param = {
+        const opts = {
           address: self.layer1_account.address,
           tappIdB64: tappId,
           authB64: session_key,
           amount: utils.toBN(amount).toString(),
           to: tar,
+          ...param,
         };
 
         self.$root.loading(true);
         try {
-          await txn.txn_request('transferTea', param);
+          await txn.txn_request('transferTea', opts);
 
           if(send_email){
             await F.send_email_for_transfer_tea(send_email.from_address, send_email.email, send_email.amount);
           } 
           self.$root.success();
           succ_cb();
-        } catch (e) {
 
+        } catch (e) {
           self.$root.showError(e);
         }
         close();

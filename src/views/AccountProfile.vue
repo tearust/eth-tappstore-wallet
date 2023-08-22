@@ -245,6 +245,7 @@
           icon="el-icon-share"
           @click="export_details(scope.row)"
           style="font-size:21px;"
+          :disabled="scope.row.status!=='Success'"
         />
         
       </template>
@@ -508,9 +509,12 @@ export default {
         if(!r.status && r.error === 'transaction dropped'){
           this.$root.showError("This transaction cannot be found.");
         }
-        else{
+        else if (r.ts){
           const time = layer2.base.ts_to_time(r.ts);
           this.$root.alert_success("This txn has been processed at "+time+"(local time)");
+        }
+        else if (r.error) {
+          this.$root.showError(r.error);
         }
       })
     },

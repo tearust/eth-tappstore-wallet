@@ -40,6 +40,9 @@ _axios.interceptors.request.use((config)=>{
 _axios.interceptors.response.use((res)=>{
   if(res.data){
     if(res.data.error){
+      if(res.data.status === false){
+        return Promise.resolve(res.data);
+      }
       return Promise.reject(res.data.error);
     }
     if(res.data.data){

@@ -43,6 +43,10 @@ const initState = ()=>{
       visible: false,
       param: {},
     },
+    query_hash: {
+      visible: false,
+      param: {},
+    }
 
   };
 }

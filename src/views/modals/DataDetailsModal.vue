@@ -54,9 +54,9 @@ export default {
 
   methods: {
     toVal(val){
-      if(_.isString(val) && _.startsWith(val, '0x')){
-        return hexToString(val);
-      }
+      // if(_.isString(val) && _.startsWith(val, '0x')){
+      //   return hexToString(val);
+      // }
 
       return val;
     }

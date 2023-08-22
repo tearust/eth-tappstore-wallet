@@ -22,6 +22,7 @@
     <TAppLinkModal />
 
     <TransferBalanceModal />
+    <QueryTxnHashModal />
   </div>
 </template>
 
@@ -40,6 +41,8 @@ import TAppDetailsModal from './views/modals/TAppDetailsModal.vue';
 import TAppLinkModal from './views/modals/TAppLinkModal.vue';
 import TransferBalanceModal from './views/modals/TransferBalanceModal';
 
+import QueryTxnHashModal from './views/modals/QueryTxnHashModal';
+
 export default {
   components: {
     PageHeader,
@@ -56,6 +59,8 @@ export default {
     TAppLinkModal,
 
     TransferBalanceModal,
+    QueryTxnHashModal,
+    
   }
 }
 </script>

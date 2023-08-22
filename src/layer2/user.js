@@ -396,6 +396,8 @@ const F = {
         };
 
         self.$root.loading(true);
+
+        let is_success = false;
         try {
           await txn.txn_request('transferTea', opts);
 
@@ -403,12 +405,13 @@ const F = {
             await F.send_email_for_transfer_tea(send_email.from_address, send_email.email, send_email.amount);
           } 
           self.$root.success();
-          succ_cb();
+          is_success = true;
 
         } catch (e) {
           self.$root.showError(e);
         }
         close();
+        await succ_cb(is_success);
         self.$root.loading(false);
 
       }

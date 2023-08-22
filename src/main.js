@@ -73,34 +73,13 @@ new Vue({
         C._loading = null;
       }
     },
-    processError(e){
-      if(_.includes(e.toString(), '"login" cannot be none')){
-        this.$alert("Login session expired.", 'Session error', {
-          type: 'error'
-        });
-        _.delay(()=>{
-          layer2.user.logout();
-        }, 2000);
-      }
-      let err = e.toString();
-      err = err.replace("A string is thrown: ", '');
-      return err;
-    },
-    showError(e, title = 'Error message') {
-      console.log(e);
+    formatError(e){
       try{
         const json = JSON.parse(e.toString());
-        
-        return this.$alert(json.human, title, {
-          type: 'error',
-          dangerouslyUseHTMLString: true,
-        });
+        return json.human;
       }catch(ee){}
-      
       if(_.includes(e.toString(), 'not_login')){
-        _.delay(()=>{
-          layer2.user.logout();
-        }, 2000);
+        return 'not_login';
       }
 
       let err = e.message || e.toString();
@@ -115,10 +94,33 @@ new Vue({
         default_error = error_str;
       }
       let ex = _.get(layer1_error_tips, err, default_error);
-      this.$alert(ex, title, {
+      return ex;
+    },
+    processError(e){
+      if(_.includes(e.toString(), '"login" cannot be none')){
+        this.$alert("Login session expired.", 'Session error', {
+          type: 'error'
+        });
+        _.delay(()=>{
+          layer2.user.logout();
+        }, 2000);
+      }
+      let err = e.toString();
+      err = err.replace("A string is thrown: ", '');
+      return err;
+    },
+    showError(e, title = 'Error message') {
+      const err = this.$root.formatError(e);
+      if(err === 'not_login'){
+        _.delay(()=>{
+          layer2.user.logout();
+        }, 2000);
+      }
+      this.$alert(err, title, {
         type: 'error',
         dangerouslyUseHTMLString: true,
       });
+
     },
     alert_success(message='Success', title='', cb=null){
       this.$alert(message, title, {

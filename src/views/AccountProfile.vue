@@ -132,6 +132,16 @@
           >
             TEA | ETH Exchange
           </el-button>
+
+          <el-tooltip
+            v-if="layer1_account && !layer1_account.email"
+            effect="light"
+            placement="top"
+            :content="`Query transaction with JSON`"
+            style="margin-right:20px;"
+          >
+            <el-button @click="query_txn_with_hash()">Query transaction</el-button>
+          </el-tooltip>
           
           <el-tooltip
             v-if="layer1_account && !layer1_account.email"
@@ -170,6 +180,82 @@
       </div>
     </div>
 
+
+
+  <TeaTable
+    :data="history_list || []"
+    name="txn_cache_list"
+    style="margin-top: 30px;"
+    :pagination="true"
+  >
+    <TeaTableColumn
+      label="Time"
+      width="140"
+    >
+      <template slot-scope="scope">
+        {{scope.row.time}}
+      </template>
+    </TeaTableColumn>
+
+    <TeaTableColumn
+      label="Type"
+    >
+      <template slot-scope="scope">
+        {{scope.row.txn_name}}
+      </template>
+    </TeaTableColumn>
+
+    <TeaTableColumn
+      label="Hash"
+    >
+      <template slot-scope="scope">
+        {{scope.row.hash_hex}}
+      </template>
+    </TeaTableColumn>
+
+
+    <TeaTableColumn
+      label="Result"
+      width="80"
+    >
+      <template slot-scope="scope">
+        {{scope.row.status}}
+      </template>
+    </TeaTableColumn>
+
+    <TeaTableColumn
+      label="Error"
+    >
+      <template slot-scope="scope">
+        {{scope.row.error}}
+      </template>
+    </TeaTableColumn>
+
+    <el-table-column label="Actions" width="140" fixed="right">
+      <template slot-scope="scope">
+        <TeaIconButton
+          tip="Details"
+          icon="el-icon-notebook-2"
+          @click="show_details(scope.row)"
+          style="font-size:21px;"
+        />
+
+        <TeaIconButton
+          tip="Export to JSON"
+          icon="el-icon-share"
+          @click="export_details(scope.row)"
+          style="font-size:21px;"
+        />
+        
+      </template>
+    </el-table-column>
+  
+
+
+  </TeaTable>
+
+
+
   </div>
 </template>
 <script>
@@ -180,6 +266,8 @@ import { mapGetters, mapState } from "vuex";
 
 import PubSub from "pubsub-js";
 import ClipboardJS from "clipboard";
+import TeaTable from '../components/TeaTable';
+import TeaTableColumn from '../components/TeaTableColumn';
 import TeaIconButton from "../components/TeaIconButton";
 
 import layer2 from "../layer2";
@@ -188,6 +276,8 @@ import request from "../request";
 export default {
   components: {
     TeaIconButton,
+    TeaTable,
+    TeaTableColumn,
   },
   data() {
     return {
@@ -198,6 +288,8 @@ export default {
       tapp_deposit_ts: '',
 
       top_log: null,
+
+      history_list: null,
     };
   },
 
@@ -221,6 +313,8 @@ export default {
     this.wf = new SettingAccount();
     await this.wf.init();
     await this.refreshAccount();
+
+    await this.query_history_list();
 
     this.$root.loading(false);
 
@@ -250,12 +344,15 @@ export default {
         layer2.user.withdrawFromLayer2(this, 1, async () => {
 
           this.$root.success("Withdraw success.");
+          await this.query_history_list();
           await this.smartRefreshBalance();
         });
       } catch (e) {
         this.$root.showError(e);
+        await this.query_history_list();
       }
     },
+
 
     async refreshAccount(flag = false) {
       flag && this.$root.loading(true);
@@ -309,8 +406,13 @@ export default {
     }, 
 
     async transferTea(){
-      await layer2.user.transferTea(this, {}, async ()=>{
-        await this.refreshTappBalanceHandler();
+      await layer2.user.transferTea(this, {}, async (is_success)=>{
+        if(is_success){
+          await this.refreshTappBalanceHandler();
+          this.smartRefreshBalance();
+        }
+        
+        await this.query_history_list();
       });
     },
 
@@ -350,34 +452,68 @@ export default {
     },
 
     async smartRefreshBalance(){
-      const max_time = 8;
-      const last_layer1 = _.clone(this.layer1_account.balance);
-      const last_balance = _.clone(this.tapp_balance);
+      const max_time = 6;
 
       let n = 1;
-
       this.$root.loading(false);
-      this.top_log = "Refreshing balance ...";
       const loop = async ()=>{
         await this.wf.refreshCurrentAccount(); 
         await this.queryTokenBalance();
 
         if(n > max_time){
-          this.top_log = null;
           return false;
         }
 
-        if(last_layer1 === this.layer1_account.balance){
-          await utils.sleep(5000);
-          n++;
-          await loop();
-        }
-
-        this.top_log = null;
+        await utils.sleep(5000);
+        n++;
+        await loop();
       };
 
       await loop();
-    }
+    },
+
+    async query_history_list(){
+      const list = await layer2.log.query_history_list(this, {sender: this.layer1_account.address});
+
+      this.history_list = list;
+    },
+
+    async show_details(row){
+      const mm = {
+        'Type': row.txn_name,
+        'Hash': row.hash_hex,
+
+        'Sender': row.sender,
+        'Nonce': row.nonce,
+        'Status': row.txn_status,
+        'Result': row.status,
+        'Error': row.error,
+        'Executed at': row.exec_time,
+      };
+      this.$store.commit('modal/open', {
+        key: 'data_details',
+        param: {
+          ...mm,
+          title: 'Txn details',
+        },
+      });
+    },
+
+    async export_details(row){
+      await layer2.log.export_details(this, row);
+    },
+
+    async query_txn_with_hash(){
+      await layer2.log.import_txn_details_and_verify(this, {}, async(r)=>{
+        if(!r.status && r.error === 'transaction dropped'){
+          this.$root.showError("This transaction cannot be found.");
+        }
+        else{
+          const time = layer2.base.ts_to_time(r.ts);
+          this.$root.alert_success("This txn has been processed at "+time+"(local time)");
+        }
+      })
+    },
     
 
     

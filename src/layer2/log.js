@@ -517,6 +517,115 @@ const F = {
 
   },
 
+  async query_history_list(self, param={}){
+    const opts = {
+      address: self.layer1_account.address,
+    };
+    if(param.sender){
+      opts.sender = param.sender;
+    }
+
+    try{
+      const rs = await txn.query_request('query_txn_cache_list', opts, false, true);
+      const data = _.map(rs.list, (item)=>{
+        item.time = base.ts_to_time(item.id);
+        item.exec_time = item.ts ? base.ts_to_time(item.ts) : '';
+        if(item.error){
+          item.error = self.$root.formatError(item.error);
+
+          if(_.includes(item.error, 'over_draft')){
+            item.error = 'Not enough balance';
+          }
+        }
+
+        return item;
+      });
+      return _.reverse(data);
+    }catch(e){
+      self.$root.showError(e);
+      return null;
+    }
+  },
+
+  async export_details(self, row){
+    if(!row.nonce){
+      self.$root.showError("Not executed.");
+      return;
+    }
+    const json = {
+      txn_name: row.txn_name,
+      ...row.txn_args,
+      nonce: row.nonce,
+    };
+    
+    delete json.uuid;
+    delete json.actor;
+    if(!json){
+      self.$root.showError("Invalid Txn type");
+      return;
+    }
+
+    self.$store.commit('modal/open', {
+      key: 'query_hash',
+      param: {
+        query: false,
+        json,
+      }
+    });
+  },
+
+  async import_txn_details_and_verify(self, param, succ_cb){
+    self.$store.commit('modal/open', {
+      key: 'query_hash',
+      param: {
+        query: true,
+        json: null,
+      },
+      async cb(hash, close){
+        self.$root.loading(true);
+        
+        const opts = {
+          address: self.layer1_account.address,
+          ts: "1",
+          hash: hash,
+        };
+        try{
+          const r = await txn.query_request('queryHashResult', opts);
+          await succ_cb(r);
+        }catch(e){
+
+          self.$root.showError(e);
+        }
+        close();
+        self.$root.loading(false);
+      }
+    });
+  },
+
+  async check_hash(self, row, succ_cb){
+    if(!row.nonce){
+      self.$root.showError("Not executed.");
+      return;
+    }
+    if(!row.txn_name){
+      self.$root.showError("Invalid txn name.");
+      return;
+    }
+
+    let opts = row;
+    let request_key = 'check_hash_'+row.txn_name;
+    delete opts.txn_name;
+
+    self.$root.loading(true);
+    try{
+      const rs = await txn.query_request(request_key, opts, false, true);
+      await succ_cb(rs.hash);
+    }catch(e){
+      self.$root.showError(e);
+    }
+    self.$root.loading(false);
+  },
+
   
 };
 

@@ -94,15 +94,29 @@
 
         <div class="x-item">
           <b>
+            {{ "TApp Store wallet TEA credit" }}
+          </b>
+          <span
+            style="margin-right: 34px"
+            :inner-html.prop="
+              tapp_credit === null ? '...' : tapp_credit+' ('+tapp_credit_ts+')' | teaIcon
+            "
+          ></span>
+
+          <el-button
+            size="mini"
+            type="primary"
+            plain
+            icon="el-icon-refresh"
+            circle
+            @click="refreshTappCreditHandler($event)"
+            style="right: 0; position: absolute"
+          ></el-button>
+        </div>
+
+        <div class="x-item">
+          <b>
             {{ "TApp Store wallet TEA deposit" }}
-            <!-- <TeaIconButton
-              style="position: relative"
-              place="right"
-              tip="
-            The amount of TEA ready to be used in your layer2 wallet. These funds can be transferred gas-free to any TApp where you'd like to use the funds
-          "
-              icon="questionmark"
-            /> -->
           </b>
           <span
             style="margin-right: 34px"
@@ -287,6 +301,8 @@ export default {
       tapp_balance_ts: '',
       tapp_deposit: null,
       tapp_deposit_ts: '',
+      tapp_credit: null,
+      tapp_credit_ts: '',
 
       top_log: null,
 
@@ -362,6 +378,8 @@ export default {
       if(this.user && this.user.isLogin){
         await this.queryTokenBalance();
         await this.queryDeposit();
+
+        await this.queryCredit();
       }
       
       
@@ -377,6 +395,12 @@ export default {
     async refreshTappDepositHandler(e) {
       this.$root.loading(true, "Refreshing TApp deposit ...");
       await this.queryDeposit();
+      this.$root.loading(false);
+      e && e.target && e.target.blur();
+    },
+    async refreshTappCreditHandler(e) {
+      this.$root.loading(true, "Refreshing TApp credit ...");
+      await this.queryCredit();
       this.$root.loading(false);
       e && e.target && e.target.blur();
     },
@@ -405,6 +429,11 @@ export default {
         console.error(e);
       }
     }, 
+    async queryCredit() {
+        const r = await layer2.user.query_credit_with_ts(this);
+        this.tapp_credit = r.tea;
+        this.tapp_credit_ts = r.ts;
+    },
 
     async transferTea(){
       await layer2.user.transferTea(this, {}, async (is_success)=>{

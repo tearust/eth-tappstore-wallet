@@ -521,6 +521,29 @@ const F = {
     };
   },
 
+  async query_credit_with_ts(self) {
+    const session_key = F.checkLogin(self);
+    const opts = {
+      address: self.layer1_account.address,
+      tappIdB64: base.getTappId(),
+      authB64: session_key,
+    };
+
+    if(self.a_node){
+      opts.a_node = true;
+    }
+
+    const rs = await txn.query_request('query_credit', opts, true);
+    if (!rs.balance) {
+      rs.balance = 0;
+    }
+
+    return {
+      tea: utils.layer1.balanceToAmount(rs.balance),
+      ts: base.ts_to_time(rs.ts)
+    };
+  },
+
   async query_asset(self, target = null) {
     const session_key = F.checkLogin(self);
 

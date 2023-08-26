@@ -1,6 +1,46 @@
 <template>
 <div class="tea-page">
   <h4>Only available for admin user</h4>
+  <el-divider />
+  <div>
+    <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="start_credit_system()">Start credit system</el-button>
+  </div>
+  <TeaTable
+    style="margin-top: 5px;"
+    :data="credit_info_list || []"
+    name="txn_credit_system_list_table"
+    v-if="credit_info_list"
+  >
+    <el-table-column
+      label="Total credit"
+    >
+      <template slot-scope="scope">
+        <span :inner-html.prop="scope.row.total | teaIcon"></span>
+      </template>
+    </el-table-column>
+
+    <el-table-column
+      label="Current credit"
+    >
+      <template slot-scope="scope">
+        <span :inner-html.prop="scope.row.current | teaIcon"></span>
+      </template>
+    </el-table-column>
+
+    <el-table-column
+      label="End time"
+    >
+      <template slot-scope="scope">
+        <span :inner-html.prop="scope.row.end_time"></span>
+      </template>
+    </el-table-column>
+    
+
+  </TeaTable>
+  <br/><br/>
+  <el-divider />
+  
+  
   <div>
     <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="freeze_state()">Freeze state</el-button>
     <el-button :disabled="not_admin" style="width:300px;" type="primary" @click="upgradeVersion()">Upgrade version</el-button>
@@ -8,8 +48,7 @@
   </div>
 
   <br/><br/>
-  <h4>Tools</h4>
-  <br/><br/>
+
   <h4>Txn Gas Fee</h4>
   <div style="display:flex;justify-content: space-between;">
     <el-button style="width:200px;" type="primary" @click="query_txn_gas_fee()">Query txn gas fee</el-button>
@@ -66,6 +105,7 @@ export default {
     return {
       not_admin: true,
       gas_fee_list: null,
+      credit_info_list: null,
     };
   },
   computed: {
@@ -89,7 +129,7 @@ export default {
     this.wf = new Base();
     await this.wf.init();
 
-
+    await this.query_credit_system_info();
   },
   methods: {
     
@@ -116,6 +156,24 @@ export default {
       await layer2.log.update_txn_gas_fee(this, {}, async ()=>{
         await this.query_txn_gas_fee();
         this.$root.success();
+      });
+    },
+
+    async query_credit_system_info(){
+      const item = await layer2.admin.query_credit_system_info(this, {});
+      if(!item.info){
+        return;
+      }
+
+      this.credit_info_list = [{
+        ...item.info,
+        current: item.current,
+      }];
+    },
+
+    async start_credit_system(){
+      await layer2.admin.start_credit_system(this, {}, async (r)=>{
+        await this.query_credit_system_info();
       });
     }
   }

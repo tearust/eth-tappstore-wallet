@@ -7,10 +7,12 @@ import miner from './miner';
 import txn from './txn';
 import seat from './seat';
 import log from './log';
+import admin from './admin';
 
 
 export default {
   base,
+  admin,
   user,
   entity,
   tapp,

@@ -40,6 +40,8 @@
   </div>
   
 
+  <el-menu-item v-if="user && user.isLogin && $root.is_sudo(user.address)" index="/admin">{{'Admin'}}</el-menu-item>
+
   <el-menu-item index="/log">{{'Log'}}</el-menu-item>
   <el-menu-item index="/welcome">{{'Help'}}</el-menu-item>
   <el-menu-item index="/investment">{{'Investments'}}</el-menu-item>

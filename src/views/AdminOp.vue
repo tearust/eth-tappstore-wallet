@@ -4,6 +4,8 @@
   <el-divider />
   <div>
     <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="start_credit_system()">Start credit system</el-button>
+
+    <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="test_trigger_close_cronjob()">Test trigger close cronjob</el-button>
   </div>
   <TeaTable
     style="margin-top: 5px;"
@@ -88,6 +90,7 @@
 <script>
 import Base from '../workflow/Base';
 import utils from '../tea/utils';
+import {_, moment} from 'tearust_utils';
 import { mapGetters, mapState } from 'vuex';
 
 import TeaTable from '../components/TeaTable';
@@ -167,13 +170,20 @@ export default {
 
       this.credit_info_list = [{
         ...item.info,
-        current: item.current,
+        total: utils.layer1.balanceToAmount(item.info.total),
+        end_time: moment(_.toNumber(item.info.end_time)).format('YYYY-MM-DD kk:mm:ss'),
+        current: utils.layer1.balanceToAmount(item.current),
       }];
     },
 
     async start_credit_system(){
       await layer2.admin.start_credit_system(this, {}, async (r)=>{
         await this.query_credit_system_info();
+      });
+    },
+    async test_trigger_close_cronjob(){
+      await layer2.admin.test_trigger_close_credit_system_cronjob(this, {}, async (r)=>{
+        
       });
     }
   }

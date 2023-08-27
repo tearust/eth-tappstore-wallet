@@ -560,6 +560,7 @@ const F = {
     
     delete json.uuid;
     delete json.actor;
+    delete json.authB64;
     if(!json){
       self.$root.showError("Invalid Txn type");
       return;
@@ -615,6 +616,8 @@ const F = {
     let opts = row;
     let request_key = 'check_hash_'+row.txn_name;
     delete opts.txn_name;
+
+    opts.authB64 = '__';
 
     self.$root.loading(true);
     try{

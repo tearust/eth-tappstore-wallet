@@ -68,7 +68,8 @@
         <el-switch v-if="types[item.name]==='switch'" v-model="form[item.name]" v-bind="{...props[item.name].el_props||{}}">
         </el-switch>
 
-
+        <el-date-picker v-if="types[item.name]==='date'" type="date" v-model="form[item.name]" v-bind="{...props[item.name].el_props||{}}"></el-date-picker>
+        <el-time-select v-if="types[item.name]==='time'" v-model="form[item.name]" v-bind="{...props[item.name].el_props||{}}"></el-time-select>
 
         <div class="t-action" v-if="props[item.name].after">
           <span class="s1" :inner-html.prop="props[item.name].after"></span>

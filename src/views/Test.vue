@@ -11,6 +11,10 @@
     <br/><br/>
     <el-button type="primary" @click="http_query_system_version()">Query system version</el-button>
     <el-button type="primary" @click="http_query_tapp_metadata()">Query tapp metadata</el-button>
+    <br/><br/>
+    <el-button type="primary" @click="http_query_txn_hash()">Query transcation hash</el-button>
+
+
 
     <!-- <el-divider />
     <div v-if="layer1_account && user && user.isLogin">
@@ -288,6 +292,11 @@ export default {
     async http_transfer_tea(){
       await layer2.user.transferTea(this, {a_node: true}, async ()=>{
         
+      });
+    },
+    async http_query_txn_hash(){
+      await layer2.log.http_query_txn_hash(this, {a_node: true}, async (ts)=>{
+        alert(ts);
       });
     }
 

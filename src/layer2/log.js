@@ -629,6 +629,43 @@ const F = {
     self.$root.loading(false);
   },
 
+  async http_query_txn_hash(self, param, succ_cb){
+    self.$store.commit('modal/open', {
+      key: 'common_form',
+      param: {
+        title: 'Query txn hash',
+        text: ``,
+        props: {
+          hash: {
+            type: 'Input',
+            required: true,
+            default: '',
+          }
+        }
+      },
+      async cb(form, close){
+        self.$root.loading(true);
+        
+        const opts = {
+          address: self.layer1_account.address,
+          ts: "1",
+          hash: form.hash,
+          ...param,
+        };
+        try{
+          const r = await txn.query_request('queryHashResult', opts);
+          const ts = base.ts_to_time(r.ts);
+          await succ_cb(ts);
+        }catch(e){
+
+          self.$root.showError(e);
+        }
+        close();
+        self.$root.loading(false);
+      }
+    });
+  }
+
   
 };
 

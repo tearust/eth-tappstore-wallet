@@ -298,7 +298,7 @@ export default {
       await layer2.log.http_query_txn_hash(this, {a_node: true}, async (ts)=>{
         alert(ts);
       });
-    }
+    },
 
 
     

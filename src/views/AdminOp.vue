@@ -5,6 +5,8 @@
   <div>
     <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="start_credit_system()">Start credit system</el-button>
 
+    <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="add_global_credit()">Topup global credit</el-button>
+
     <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="test_trigger_close_cronjob()">Test trigger close cronjob</el-button>
   </div>
   <TeaTable
@@ -183,7 +185,12 @@ export default {
     },
     async test_trigger_close_cronjob(){
       await layer2.admin.test_trigger_close_credit_system_cronjob(this, {}, async (r)=>{
-        
+
+      });
+    },
+    async add_global_credit(){
+      await layer2.admin.add_global_credit(this, {}, async (r)=>{
+        await this.query_credit_system_info();
       });
     }
   }

@@ -246,7 +246,6 @@ export default {
       }
     },
     is_system_actor(row){
-      console.log(111, row);
       const reg = /0x100000000000000000000000000000000000000[0-9]{1}/gi;
       return reg.test(row.id);
     }

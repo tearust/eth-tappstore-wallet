@@ -120,7 +120,6 @@ export default {
     async refresh(){
       
       await layer2.entity.queryAll(this, async (list)=>{
-        console.log(111, list);
 
         if(!list[0]){
           alert("Invalid token id.");

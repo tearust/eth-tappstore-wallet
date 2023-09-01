@@ -292,14 +292,9 @@ export default {
 
     tapp_url(row, t){
       let cid = utils.get_env(t);
-      // if(row.cid){
-      //   url = url.replace(/[a-z0-9]{46}/i, (cid)=>{
-      //     if(row.cid){
-      //       return row.cid;
-      //     }
-      //   });
-        
-      // }
+      if(row.cid){
+        cid = row.cid;
+      }
       return '/ipfs/'+cid;
     },
 

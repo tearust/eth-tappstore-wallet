@@ -161,7 +161,6 @@ export default {
         });
 
         this.list = x_list;
-        console.log(111, this.list);
         helper.tableLoading(this, false);
       });
 

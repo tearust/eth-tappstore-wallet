@@ -228,7 +228,6 @@ export default {
     async refreshList(){
       this.$root.loading(true);
       await layer2.entity.queryAll(this, async (list)=>{
-        console.log(111, list);
         this.list = list;
       });
       

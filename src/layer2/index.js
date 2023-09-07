@@ -8,6 +8,7 @@ import txn from './txn';
 import seat from './seat';
 import log from './log';
 import admin from './admin';
+import channel from './channel';
 
 
 export default {
@@ -21,4 +22,5 @@ export default {
   txn,
   seat,
   log,
+  channel,
 };

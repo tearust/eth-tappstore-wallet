@@ -76,7 +76,7 @@ new Vue({
     formatError(e){
       try{
         const json = JSON.parse(e.toString());
-        return json.human;
+        return json.summary || json.human;
       }catch(ee){}
       if(_.includes(e.toString(), 'not_login')){
         return 'not_login';

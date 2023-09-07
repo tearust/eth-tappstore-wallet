@@ -41,8 +41,8 @@
       tip="Name of TApp"
     >
       <template slot-scope="scope">
-        <span class="one-line" v-if="$root.is_tappstore(scope.row.id) || (scope.row.tapp_type==='User'&&!scope.row.cid)">{{scope.row.name}}</span>
-        <el-button v-if="!($root.is_tappstore(scope.row.id) || (scope.row.tapp_type==='User'&&!scope.row.cid))" size="small" type="text" @click="clickToOpen(scope.row)">{{scope.row.name}}</el-button>
+        <span class="one-line" v-if="$root.is_tappstore(scope.row.id) || scope.row.is_service">{{scope.row.name}}</span>
+        <el-button v-if="!($root.is_tappstore(scope.row.id) || scope.row.is_service)" size="small" type="text" @click="clickToOpen(scope.row)">{{scope.row.name}}</el-button>
       </template>
     </TeaTableColumn>
 
@@ -95,12 +95,12 @@
         <TeaIconButton v-if="mine && !scope.row.fav" tip="Like" icon="el-icon-star-off" @click="fav_tapp(scope.row, scope.$index)" :loading="scope.row.loading" style="font-size:20px;position:relative;top:2px;" />
       
         <TeaIconButton tip="Set spending limit" 
-          v-if="!$root.is_tappstore(scope.row.id)"
+          v-if="!$root.is_tappstore(scope.row.id) && !scope.row.is_service"
           icon="el-icon-setting" 
           @click="set_allowance(scope.row)" style="font-size:20px;position:relative;top:2px;" />
         
         <TeaIconButton tip="Update tapp" 
-          v-if="user && user.isLogin && $root.is_sudo(user.address)"
+          v-if="user && user.isLogin && $root.is_sudo(user.address) && !scope.row.is_service"
           icon="el-icon-s-tools" 
           @click="updateTapp(scope.row)" style="font-size:20px;position:relative;top:2px;" />
       </template>

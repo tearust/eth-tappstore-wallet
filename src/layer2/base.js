@@ -40,9 +40,9 @@ _axios.interceptors.request.use((config)=>{
 _axios.interceptors.response.use((res)=>{
   if(res.data){
     if(res.data.error){
-      if(res.data.status === false){
-        return Promise.resolve(res.data);
-      }
+      // if(res.data.status === false){
+      //   return Promise.resolve(res.data);
+      // }
       return Promise.reject(res.data.error);
     }
     if(res.data.data){
@@ -99,6 +99,16 @@ const F = {
 
     const time = moment(ts/1000000);
     return time.format("YYYY-MM-DD hh:mm:ss");
+  },
+
+  format_ts(ts){
+    ts = _.toNumber(ts);
+    if (ts < 100) {
+      return null;
+    }
+
+    const time = moment(ts/1000000);
+    return [time.format("YYYY-MM-DD hh:mm:ss"), time];
   }
 };
 

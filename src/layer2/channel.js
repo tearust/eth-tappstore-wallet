@@ -192,6 +192,172 @@ const F = {
       },
     });
   },
+
+  async early_terminate(self, row, succ_cb){
+    const session_key = user.checkLogin(self);
+    try{
+      await self.$confirm('Are you sure to early terminate the channel.', {
+        title: 'Early terminate',
+        dangerouslyUseHTMLString: true,
+      });
+    }catch(e){
+      return;
+    }
+
+    self.$root.loading(true);
+    const opts = {
+      address: self.layer1_account.address,
+      tappIdB64: base.getTappId(),
+      authB64: session_key,
+      channelId: row.channel_id,
+    };
+
+    try{
+      const rs = await txn.txn_request('payer_early_terminate', opts);
+      self.$root.success();
+      await succ_cb(rs);
+    }catch(e){
+      self.$root.showError(e);
+    }
+    self.$root.loading(false);
+  },
+
+  async terminate(self, row, succ_cb){
+    const session_key = user.checkLogin(self);
+    try{
+      await self.$confirm('Are you sure to terminate the channel.', {
+        title: 'Terminate',
+        dangerouslyUseHTMLString: true,
+      });
+    }catch(e){
+      return;
+    }
+
+    self.$root.loading(true);
+    const opts = {
+      address: self.layer1_account.address,
+      tappIdB64: base.getTappId(),
+      authB64: session_key,
+      channelId: row.channel_id,
+    };
+
+    try{
+      const rs = await txn.txn_request('terminate', opts);
+      self.$root.success();
+      await succ_cb(rs);
+    }catch(e){
+      self.$root.showError(e);
+    }
+    self.$root.loading(false);
+  },
+
+  sign_remaining_fund(self, row, succ_cb){
+    // const session_key = user.checkLogin(self);
+
+    self.$store.commit('modal/open', {
+      key: 'common_form', 
+      param: {
+        title: 'Sign remaining fund',
+        text: ``,
+        props: {
+          channel_id: {
+            label: 'Payee address',
+            type: 'Input',
+            default: row.channel_id,
+            disabled: true,
+          },
+          amount: {
+            label: 'Remaining fund',
+            type: 'number',
+            min: 1,
+            default: 100,
+            required: true,
+          },
+        },
+      },
+      cb: async (form, close)=>{
+        const amount = utils.layer1.amountToBalance(form.amount);
+        const amount_str = utils.toBN(amount).toString();
+        const pri = utils.cache.get(row.channel_id);
+        const {wallet} = eth.help.createNewWallet(pri);
+        const sig = await eth.help.signWithWallet(wallet, amount_str);
+        console.log(1, sig);
+        const verify = eth.help.verifyWithWallet(wallet, amount_str, sig);
+        console.log(2, verify);
+        
+        const html = 'Remaining fund: '+form.amount + '<br/>'+'Signature: '+sig;
+        self.$root.alert_success(html);
+
+        close();
+        await succ_cb();
+      },
+    });
+  },
+
+  async payee_update_payment(self, row, succ_cb){
+    const session_key = user.checkLogin(self);
+
+    self.$store.commit('modal/open', {
+      key: 'common_form', 
+      param: {
+        title: 'Refill amount',
+        text: ``,
+        props: {
+          channel_id: {
+            label: 'Payee address',
+            type: 'Input',
+            default: row.channel_id,
+            disabled: true,
+          },
+          amount: {
+            label: 'Remaining fund',
+            type: 'number',
+            min: 1,
+            default: 100,
+            required: true,
+          },
+          sig: {
+            label: 'Signature',
+            type: 'Input',
+            default: '',
+            required: true,
+          },
+          close: {
+            label: 'Close channel',
+            type: 'switch',
+            default: false,
+          }
+        },
+      },
+      cb: async (form, close)=>{
+        self.$root.loading(true);
+
+        const amount = utils.layer1.amountToBalance(form.amount);
+
+        const opts = {
+          address: self.layer1_account.address,
+          tappIdB64: base.getTappId(),
+          authB64: session_key,
+          channelId: row.channel_id,
+          sig: form.sig,
+          closeChannel: !!form.close,
+          newFundRemaining: utils.toBN(amount).toString(),
+        };
+
+        try{
+          const rs = await txn.txn_request('payee_update_payment', opts);
+
+          self.$root.success();
+          close();
+          await succ_cb(rs);
+        }catch(e){
+          self.$root.showError(e);
+        }
+
+        self.$root.loading(false);
+      },
+    });
+  }
 };
 
 export default F;

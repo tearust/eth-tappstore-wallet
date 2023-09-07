@@ -10,7 +10,6 @@
     style="margin-top: 15px;"
     :data="payer_list || []"
     name="payment_channel_test_list_payer"
-    header="AAAA"
   >
     <el-table-column
       label="Channel ID"
@@ -73,13 +72,19 @@
         <TeaIconButton
           title="Early-terminate"
           icon="NA"
-          @click="payer_early_terminate(scope.row)"
+          @click="early_terminate(scope.row)"
         />
 
         <TeaIconButton
           title="Terminate"
           icon="NA"
-          @click="payer_terminate(scope.row)"
+          @click="terminate(scope.row)"
+        />
+
+        <TeaIconButton
+          title="Sign-amount"
+          icon="NA"
+          @click="sign_remaining_fund(scope.row)"
         />
         
       </template>
@@ -151,7 +156,7 @@
         <TeaIconButton
           title="Terminate"
           icon="NA"
-          @click="payee_terminate(scope.row)"
+          @click="terminate(scope.row)"
         />
 
         <TeaIconButton
@@ -221,6 +226,26 @@ export default {
     },
     async refill_amount(row){
       await layer2.channel.refill_fund(this, row, async ()=>{
+        await this.refreshList();
+      });
+    },
+    async early_terminate(row){
+      await layer2.channel.early_terminate(this, row, async ()=>{
+        await this.refreshList();
+      });
+    },
+    async terminate(row){
+      await layer2.channel.terminate(this, row, async ()=>{
+        await this.refreshList();
+      });
+    },
+    async sign_remaining_fund(row){
+      await layer2.channel.sign_remaining_fund(this, row, async ()=>{
+
+      });
+    },
+    async payee_update_payment(row){
+      await layer2.channel.payee_update_payment(this, row, async ()=>{
         await this.refreshList();
       });
     }

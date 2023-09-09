@@ -5,7 +5,7 @@
   <el-button type="primary" size="small" style="position:absolute; top:0; right: 50px;" @click="open_channel()">Open payment-channel</el-button>
   <el-button size="small" style="top: 0px;" class="tea-refresh-btn" type="primary" plain icon="el-icon-refresh" circle @click="refreshList()"></el-button>
 
-  <h4>Payer channel list</h4>
+  <h4>Payer channel list ({{ts || '...'}})</h4>
   <TeaTable
     style="margin-top: 15px;"
     :data="payer_list || []"
@@ -60,14 +60,22 @@
       </template>
     </el-table-column>
 
+    <el-table-column
+      label="Status"
+    >
+      <template slot-scope="scope">
+        {{scope.row.status}}
+      </template>
+    </el-table-column>
+
 
     <el-table-column label="Actions" width="200" fixed="right">
       <template slot-scope="scope">
-        <TeaIconButton
+        <!-- <TeaIconButton
           title="Refill"
           icon="NA"
           @click="refill_amount(scope.row)"
-        />
+        /> -->
 
         <TeaIconButton
           title="Early-terminate"
@@ -95,7 +103,7 @@
   </TeaTable>
 
 
-  <h4 style="margin-top: 30px;">Payee channel list</h4>
+  <h4 style="margin-top: 30px;">Payee channel list ({{ts || '...'}})</h4>
   <TeaTable
     style="margin-top: 15px;"
     :data="payee_list || []"
@@ -150,6 +158,14 @@
       </template>
     </el-table-column>
 
+    <el-table-column
+      label="Status"
+    >
+      <template slot-scope="scope">
+        {{scope.row.status}}
+      </template>
+    </el-table-column>
+
     
     <el-table-column label="Actions" fixed="right">
       <template slot-scope="scope">
@@ -194,6 +210,7 @@ export default {
     return {
       payer_list: null,
       payee_list: null,
+      ts: null,
       
     };
   },
@@ -215,6 +232,7 @@ export default {
     console.log(333, xl);
       this.payer_list = xl.payer_list;
       this.payee_list = xl.payee_list;
+      this.ts = xl.ts;
       this.$root.loading(false);
     },
 

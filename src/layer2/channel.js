@@ -35,7 +35,7 @@ const F = {
           grace_period: {
             label: 'Grace period (second)',
             type: 'number',
-            min: 1800,
+            min: 60,
             default: 3600,
             required: true,
           },
@@ -110,12 +110,14 @@ const F = {
 
   format_channel_item(item){
     const [update_str, update_time_obj] = base.format_ts(item.latest_update_at);
+    const status = _.has(item.item.status, 'EarlyTerminate') ? 'EarlyTerminate('+base.format_ts(item.item.status.EarlyTerminate)[0]+')' :  item.item.status;
     return {
       ...item.item,
       latest_update_at: update_str,
       latest_update_at_obj: update_time_obj,
       fund_remaining: utils.layer1.balanceToAmount(utils.toBN(item.item.fund_remaining)),
       expire_time: base.ts_to_time(item.item.expire_time),
+      status,
     };
   },
   async query_all_channel_list(self, param={}){
@@ -126,14 +128,20 @@ const F = {
       authB64: session_key,
     };
     try{
-      const rs = await txn.query_request('query_channel_list_with_account', opts);
+      const rs = await txn.query_request('query_channel_list_with_account', opts, true);
       
       // console.log('query_channel_list_with_account result =>', rs);
 
-      return {
+      const res = {
         payer_list: _.map(rs.payer_list, (item)=>F.format_channel_item(item)),
         payee_list: _.map(rs.payee_list, (item)=>F.format_channel_item(item)),
-      }
+        ts: base.ts_to_time(rs.ts),
+      };
+
+      // TODO fire event
+      // utils.publish('payment-channel')
+
+      return res;
       
     }catch(e){
       console.log('query_channel_list_with_account error =>', e);

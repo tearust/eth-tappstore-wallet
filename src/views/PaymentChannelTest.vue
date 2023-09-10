@@ -13,15 +13,33 @@
   >
     <el-table-column
       label="Channel ID"
-      width="200"
+      width="100"
     >
       <template slot-scope="scope">
-        {{scope.row.channel_id}}
+        {{scope.row.channel_id | short_address}}
       </template>
     </el-table-column>
 
     <el-table-column
-      label="Fund remaining"
+      label="Payee account"
+      width="100"
+    >
+      <template slot-scope="scope">
+        {{scope.row.payee_address | short_address}}
+      </template>
+    </el-table-column>
+
+    <el-table-column
+      label="Status"
+      width="120"
+    >
+      <template slot-scope="scope">
+        {{scope.row.status}}
+      </template>
+    </el-table-column>
+
+    <el-table-column
+      label="Channel remaining"
     >
       <template slot-scope="scope">
         <span :inner-html.prop="scope.row.fund_remaining | teaIcon"></span>
@@ -29,20 +47,21 @@
     </el-table-column>
 
     <el-table-column
-      label="Payee account"
+      label="Updated payment"
     >
       <template slot-scope="scope">
-        {{scope.row.payee_address}}
+        <span :inner-html.prop="scope.row.sign_amt | teaIcon"></span>
       </template>
     </el-table-column>
 
-    <el-table-column
+
+    <!-- <el-table-column
       label="Grace period(second)"
     >
       <template slot-scope="scope">
         {{scope.row.grace_period}}
       </template>
-    </el-table-column>
+    </el-table-column> -->
 
     <el-table-column
       label="Expire time"
@@ -60,13 +79,7 @@
       </template>
     </el-table-column>
 
-    <el-table-column
-      label="Status"
-    >
-      <template slot-scope="scope">
-        {{scope.row.status}}
-      </template>
-    </el-table-column>
+    
 
 
     <el-table-column label="Actions" width="200" fixed="right">
@@ -78,12 +91,14 @@
         /> -->
 
         <TeaIconButton
+          v-if="!scope.row.is_expired"
           title="Early-terminate"
           icon="NA"
           @click="early_terminate(scope.row)"
         />
 
         <TeaIconButton
+          v-if="scope.row.is_expired"
           title="Terminate"
           icon="NA"
           @click="terminate(scope.row)"
@@ -111,15 +126,23 @@
   >
     <el-table-column
       label="Channel ID"
-      width="200"
+      width="100"
     >
       <template slot-scope="scope">
-        {{scope.row.channel_id}}
+        {{scope.row.channel_id | short_address}}
+      </template>
+    </el-table-column>
+    <el-table-column
+      label="Payer account"
+      width="100"
+    >
+      <template slot-scope="scope">
+        {{scope.row.payer_address | short_address}}
       </template>
     </el-table-column>
 
     <el-table-column
-      label="Fund remaining"
+      label="Channel remaining"
     >
       <template slot-scope="scope">
         <span :inner-html.prop="scope.row.fund_remaining | teaIcon"></span>
@@ -127,18 +150,19 @@
     </el-table-column>
 
     <el-table-column
-      label="Payer account"
+      label="Cashed out"
     >
       <template slot-scope="scope">
-        {{scope.row.payer_address}}
+        <span :inner-html.prop="scope.row.out_amt | teaIcon"></span>
       </template>
     </el-table-column>
 
     <el-table-column
-      label="Grace period(second)"
+      label="Status"
     >
       <template slot-scope="scope">
-        {{scope.row.grace_period}}
+        <span v-if="scope.row.status_type!==2">{{scope.row.status}}</span>
+        <span v-if="scope.row.status_type===2" style="color:#f00;font-weight:bold;">{{scope.row.status}}</span>
       </template>
     </el-table-column>
 
@@ -146,7 +170,8 @@
       label="Expire time"
     >
       <template slot-scope="scope">
-        {{scope.row.expire_time}}
+        <span v-if="scope.row.status_type!==2">{{scope.row.expire_time}}</span>
+        <span v-if="scope.row.status_type===2" style="color:#f00;font-weight:bold;">{{scope.row.expire_time}}</span>
       </template>
     </el-table-column>
 
@@ -158,25 +183,19 @@
       </template>
     </el-table-column>
 
-    <el-table-column
-      label="Status"
-    >
-      <template slot-scope="scope">
-        {{scope.row.status}}
-      </template>
-    </el-table-column>
+    
 
     
     <el-table-column label="Actions" fixed="right">
       <template slot-scope="scope">
-        <TeaIconButton
+        <!-- <TeaIconButton
           title="Terminate"
           icon="NA"
           @click="terminate(scope.row)"
-        />
+        /> -->
 
         <TeaIconButton
-          title="Withdraw"
+          title="Cash-out"
           icon="NA"
           @click="payee_update_payment(scope.row)"
         />
@@ -229,7 +248,7 @@ export default {
     async refreshList(){
       this.$root.loading(true);
       const xl = await layer2.channel.query_all_channel_list(this, {});
-    console.log(333, xl);
+console.log(11, xl);
       this.payer_list = xl.payer_list;
       this.payee_list = xl.payee_list;
       this.ts = xl.ts;
@@ -259,7 +278,7 @@ export default {
     },
     async sign_remaining_fund(row){
       await layer2.channel.sign_remaining_fund(this, row, async ()=>{
-
+        await this.refreshList();
       });
     },
     async payee_update_payment(row){

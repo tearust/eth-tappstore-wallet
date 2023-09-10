@@ -17,6 +17,12 @@ const F = {
   getUtils(){
     return U;
   },
+  shortAddress(address){
+    if(!U.isAddress(address)){
+      return address;
+    }
+    return address.substr(0, 6)+'...'+address.substr(38, 42);
+  },
   createNewWallet(pri=null){
     let privateKey = pri;
     if(!privateKey){

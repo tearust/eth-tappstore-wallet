@@ -2,6 +2,7 @@ import Vue from 'vue';
 import utils from './tea/utils';
 import { _ } from 'tearust_utils';
 import strings from './assets/string';
+import eth_help from './eth/help';
 
 
 Vue.filter('formatBalance', (value) => {
@@ -58,6 +59,10 @@ Vue.filter('percent', (value)=>{
 
 Vue.filter('minerHexToB64', (hex)=>{
   return utils.minerHexToB64(hex);
+});
+
+Vue.filter('short_address', (address)=>{
+  return eth_help.shortAddress(address);
 });
 
 Vue.filter('erc20', (hex)=>{

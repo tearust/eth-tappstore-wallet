@@ -10,6 +10,99 @@ import user from './user';
 import mem from './mem';
 import eth from '../eth';
 
+window.moment = moment;
+
+const ChannelItem = class {
+  static format_status(item_status){
+    // status_type 1:noraml, 2:early-terminate
+    let status_type = null;
+    let status = null;
+    if(_.has(item_status, 'EarlyTerminate')){
+      status_type = 2;
+      status = 'Early-terminating';
+    }
+    else{
+      status_type = 1;
+      status = item_status;
+    }
+    status = status.replace('Normal', 'Live');
+    return {status, status_type};
+  }
+
+  static format_channel_item(item){
+    const [update_str, update_time_obj] = base.format_ts(item.latest_update_at);
+    const {status, status_type} = ChannelItem.format_status(item.item.status);
+    const [expire_str, expire_time_obj] = base.format_ts(item.item.expire_time);
+
+    const channel_id = item.item.channel_id;
+    let c = ChannelItem.get(channel_id);
+    if(!c){
+      const item_data = {
+        ...item.item,
+        latest_update_at: update_str,
+        latest_update_at_obj: update_time_obj,
+        fund_remaining: utils.layer1.balanceToAmount(utils.toBN(item.item.fund_remaining)),
+        expire_time: expire_str,
+        status,
+        status_type,
+        is_expired: moment().isAfter(expire_time_obj),
+        sign_amt: 0,
+        out_amt: 0,
+        latest_sign_amt_sig: null,
+      };
+      c = new ChannelItem(item_data);
+    }
+    else{
+      const item_data = {
+        ...c.to_data(),
+        latest_update_at: update_str,
+        latest_update_at_obj: update_time_obj,
+        fund_remaining: utils.layer1.balanceToAmount(utils.toBN(item.item.fund_remaining)),
+        expire_time: expire_str,
+        status,
+        status_type,
+        is_expired: moment().isAfter(expire_time_obj),
+      };
+      c = new ChannelItem(item_data);
+    }
+    c.save();
+    return c;
+  }
+
+  static get(channlel_id){
+    const data = utils.cache.get(channlel_id);
+    if(!data){
+      return null;
+    }
+    return new ChannelItem(data);
+  }
+
+  constructor(item){
+    this.item = item;
+  }
+  save(){
+    utils.cache.put(this.item.channel_id, this.item);
+  }
+
+  to_data(){
+    return {
+      ...this.item
+    };
+  }
+
+  add_sign_amt(amt, sig){
+    this.item.sign_amt = this.item.sign_amt + _.toNumber(amt);
+    this.item.latest_sign_amt_sig = sig;
+    this.save();
+  }
+
+  add_out_amt(amt){
+    this.item.out_amt = this.item.out_amt + _.toNumber(amt);
+    this.save();
+  }
+  
+};
+
 const F = {
   open_channel(self, param, succ_cb){
     const session_key = user.checkLogin(self);
@@ -80,7 +173,7 @@ const F = {
 
         const {address, privateKey} = eth.help.createNewWallet();
         const channel_id = address;
-        utils.cache.put(address, privateKey);
+        utils.cache.put(address+'_pri', privateKey);
 
         const opts = {
           address: self.layer1_account.address,
@@ -108,18 +201,6 @@ const F = {
     });
   },
 
-  format_channel_item(item){
-    const [update_str, update_time_obj] = base.format_ts(item.latest_update_at);
-    const status = _.has(item.item.status, 'EarlyTerminate') ? 'EarlyTerminate('+base.format_ts(item.item.status.EarlyTerminate)[0]+')' :  item.item.status;
-    return {
-      ...item.item,
-      latest_update_at: update_str,
-      latest_update_at_obj: update_time_obj,
-      fund_remaining: utils.layer1.balanceToAmount(utils.toBN(item.item.fund_remaining)),
-      expire_time: base.ts_to_time(item.item.expire_time),
-      status,
-    };
-  },
   async query_all_channel_list(self, param={}){
     const session_key = user.checkLogin(self);
     const opts = {
@@ -133,8 +214,14 @@ const F = {
       // console.log('query_channel_list_with_account result =>', rs);
 
       const res = {
-        payer_list: _.map(rs.payer_list, (item)=>F.format_channel_item(item)),
-        payee_list: _.map(rs.payee_list, (item)=>F.format_channel_item(item)),
+        payer_list: _.map(rs.payer_list, (item)=>{
+          const c = ChannelItem.format_channel_item(item);
+          return c.to_data();
+        }),
+        payee_list: _.map(rs.payee_list, (item)=>{
+          const c = ChannelItem.format_channel_item(item);
+          return c.to_data();
+        }),
         ts: base.ts_to_time(rs.ts),
       };
 
@@ -284,17 +371,26 @@ const F = {
         },
       },
       cb: async (form, close)=>{
-        const amount = utils.layer1.amountToBalance(form.amount);
+        const ori_amt = form.amount;
+        const amount = utils.layer1.amountToBalance(ori_amt);
         const amount_str = utils.toBN(amount).toString();
-        const pri = utils.cache.get(row.channel_id);
+        const pri = utils.cache.get(row.channel_id+'_pri');
+        if(!pri){
+          self.$root.showError("Lost the channel private key, you can open a new channel to continue.")
+          close();
+          return false;
+        }
         const {wallet} = eth.help.createNewWallet(pri);
         const sig = await eth.help.signWithWallet(wallet, amount_str);
-        console.log(1, sig);
+
         const verify = eth.help.verifyWithWallet(wallet, amount_str, sig);
-        console.log(2, verify);
+        // console.log(2, verify);
         
         const html = 'Remaining fund: '+form.amount + '<br/>'+'Signature: '+sig;
         self.$root.alert_success(html);
+
+        const c = ChannelItem.get(row.channel_id);
+        c.add_sign_amt(row.fund_remaining - ori_amt, sig);
 
         close();
         await succ_cb();
@@ -340,7 +436,8 @@ const F = {
       cb: async (form, close)=>{
         self.$root.loading(true);
 
-        const amount = utils.layer1.amountToBalance(form.amount);
+        const ori_amt = form.amount;
+        const amount = utils.layer1.amountToBalance(ori_amt);
 
         const opts = {
           address: self.layer1_account.address,
@@ -356,6 +453,10 @@ const F = {
           const rs = await txn.txn_request('payee_update_payment', opts);
 
           self.$root.success();
+
+          const c = ChannelItem.get(row.channel_id);
+          c.add_out_amt(row.fund_remaining - ori_amt);
+
           close();
           await succ_cb(rs);
         }catch(e){

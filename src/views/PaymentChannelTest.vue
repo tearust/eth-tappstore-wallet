@@ -242,9 +242,33 @@ export default {
     this.wf = new Base();
     await this.wf.init();
 
-    await this.refreshList();
+    // await this.refreshList();
+
+    await this.initEvent();
+  },
+  beforeDestroy(){
+    layer2.channel.loop_pause();
   },
   methods: {
+    async initEvent(){
+      utils.register(layer2.channel.loop_event(), (msg, xl)=>{
+        const key = layer2.channel.get_loop_key(msg);
+        // console.log(111, key);
+        switch(key){
+          case 'loop':
+            this.payer_list = xl.payer_list;
+            this.payee_list = xl.payee_list;
+            this.ts = xl.ts;
+            break;
+          default:
+            break;
+        }
+        
+      });
+
+      await layer2.channel.loop_start(this);
+      layer2.channel.loop_restart();
+    },
     async refreshList(){
       this.$root.loading(true);
       const xl = await layer2.channel.query_all_channel_list(this, {});

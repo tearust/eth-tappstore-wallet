@@ -12,6 +12,28 @@ import eth from '../eth';
 
 window.moment = moment;
 
+const BASE_LOOP_KEY = 'tea-payment-channel';
+const L = {
+  init: false,
+  stop: false,
+  cache_self: null,
+  callback: async ()=>{
+    const res = await F.query_all_channel_list(L.cache_self);
+    utils.publish(F.loop_event('loop'), res);
+  }
+};
+const loop = async ()=>{
+  // console.log('---------');
+  if(!L.stop){
+    console.log('payment channel loop trigger callback....');
+    await L.callback();
+  }
+
+  await utils.sleep(10000);
+  await loop();
+};
+
+
 const ChannelItem = class {
   static format_status(item_status){
     // status_type 1:noraml, 2:early-terminate
@@ -50,6 +72,7 @@ const ChannelItem = class {
         out_amt: 0,
         latest_sign_amt_sig: null,
       };
+      item_data.now_fund = item_data.fund_remaining;
       c = new ChannelItem(item_data);
     }
     else{
@@ -93,6 +116,7 @@ const ChannelItem = class {
   add_sign_amt(amt, sig){
     this.item.sign_amt = this.item.sign_amt + _.toNumber(amt);
     this.item.latest_sign_amt_sig = sig;
+    this.item.now_fund = this.item.now_fund - _.toNumber(amt);
     this.save();
   }
 
@@ -104,6 +128,43 @@ const ChannelItem = class {
 };
 
 const F = {
+  loop_event(key=null){
+    const base_key = BASE_LOOP_KEY;
+    if(!key){
+      return base_key;
+    }
+    return base_key+'.'+key;
+  },
+  get_loop_key(msg){
+    return msg.replace(BASE_LOOP_KEY+'.', '') || '';
+  },
+  async loop_start(self){
+    if(L.init){
+      console.log('payment channel loop already start. only trigger callback.');
+      await L.callback();
+      return false;
+    }
+
+    L.init = true;
+    console.log('payment channel loop start....');
+    L.stop = false;
+    L.cache_self = self;
+    await loop();
+  },
+  loop_pause(){
+    if(!L.init){
+      throw 'payment loop not start...';
+    }
+    L.stop = true;
+  },  
+  loop_restart(){
+    if(!L.init){
+      throw 'payment loop not start...';
+    }
+    L.stop = false;
+  },
+
+
   open_channel(self, param, succ_cb){
     const session_key = user.checkLogin(self);
 
@@ -201,7 +262,7 @@ const F = {
     });
   },
 
-  async query_all_channel_list(self, param={}){
+  async query_all_channel_list(self){
     const session_key = user.checkLogin(self);
     const opts = {
       address: self.layer1_account.address,
@@ -224,9 +285,6 @@ const F = {
         }),
         ts: base.ts_to_time(rs.ts),
       };
-
-      // TODO fire event
-      // utils.publish('payment-channel')
 
       return res;
       
@@ -362,7 +420,7 @@ const F = {
             disabled: true,
           },
           amount: {
-            label: 'Remaining fund',
+            label: 'Invoice amount',
             type: 'number',
             min: 1,
             default: 100,
@@ -371,7 +429,8 @@ const F = {
         },
       },
       cb: async (form, close)=>{
-        const ori_amt = form.amount;
+        const invoice_amt = form.amount;
+        const ori_amt = row.now_fund - invoice_amt;
         const amount = utils.layer1.amountToBalance(ori_amt);
         const amount_str = utils.toBN(amount).toString();
         const pri = utils.cache.get(row.channel_id+'_pri');
@@ -386,11 +445,11 @@ const F = {
         const verify = eth.help.verifyWithWallet(wallet, amount_str, sig);
         // console.log(2, verify);
         
-        const html = 'Remaining fund: '+form.amount + '<br/>'+'Signature: '+sig;
+        const html = 'Remaining fund: '+ori_amt + '<br/>'+'Signature: '+sig;
         self.$root.alert_success(html);
 
         const c = ChannelItem.get(row.channel_id);
-        c.add_sign_amt(row.fund_remaining - ori_amt, sig);
+        c.add_sign_amt(invoice_amt, sig);
 
         close();
         await succ_cb();

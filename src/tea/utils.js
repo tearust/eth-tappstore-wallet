@@ -23,7 +23,10 @@ const { _, uuid, forge } = tearust_utils;
 const consts = {
   CurveType: {Linear: 'Linear', SquareRoot: 'SquareRoot'},
 
-  gas_tip: (n=1)=>{
+  gas_tip: (n=null)=>{
+    if(!n){
+      return '';
+    }
     return `This transaction has a ${n} TEA gas fee.`;
   }
 };

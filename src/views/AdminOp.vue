@@ -154,8 +154,14 @@ export default {
       });
     },
     async query_txn_gas_fee(){
-      const list = await layer2.log.queryTxnGasFeeList(this, {});
-      this.gas_fee_list = list;
+      this.$root.loading(true);
+      try{
+        const list = await layer2.log.queryTxnGasFeeList(this, {});
+        this.gas_fee_list = list;
+      }catch(e){
+        this.$root.showError(e);
+      }
+      this.$root.loading(false);
     },
     async update_txn_gas_fee(){
       await layer2.log.update_txn_gas_fee(this, {}, async ()=>{

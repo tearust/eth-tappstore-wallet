@@ -7,6 +7,7 @@ import base from './base';
 import txn from './txn';
 import eth from '../eth';
 import common from './common';
+import log from './log';
 
 export const NOT_LOGIN = 'not_login';
 
@@ -277,11 +278,17 @@ const F = {
     const session_key = F.checkLogin(self);
 
     const tappId = base.getTappId();
+
+    const text = (fee)=>{
+      const tip = fee ? 'The Etherenum gas fee is '+fee+' TEA<br/>' : '';
+      return `Move TEA funds back to chain wallet (layer1)<br/>${tip}please click 'Confirm' to process this withdrawal transaction.`;
+    };
     self.$store.commit('modal/open', {
       key: 'common_form',
       param: {
         title: 'Withdraw',
-        text: `Move TEA funds back to chain wallet (layer1)<br/>${utils.consts.gas_tip()}`,
+        text: '',
+        loading_tip: 'Please wait a few second while we confirm the gas fee on Ethereum network.',
         props: {
           amount: {
             type: 'number',
@@ -312,6 +319,15 @@ const F = {
         close();
         self.$root.loading(false);
 
+      },
+      async open_cb(param){
+        const list = await log.queryTxnGasFeeList();
+        let default_fee = _.find(list, (x)=>x.txn_name==='default').fee;
+        const tmp = _.find(list, (x)=>x.txn_name==='withdraw');
+        if(tmp){
+          default_fee = tmp.fee;
+        }
+        param.text = text(default_fee);
       }
     });
   },

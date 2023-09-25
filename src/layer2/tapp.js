@@ -235,10 +235,6 @@ const F = {
           form.amount = 0;
         }
 
-        if(current_balance < 1){
-          self.$root.showError("You'll need to Topup funds to your TApp Store wallet account before you can set spending limits.");
-          return false;
-        }
 
         const id = data.id;
         const amount = utils.layer1.amountToBalance(form.amount);
@@ -258,6 +254,7 @@ const F = {
           console.log('setAllowance result:', rs);
 
           close();
+          mem.set('allowance_'+id, form.amount);
           self.$root.success();
           await succ_cb();
         }catch(e){
@@ -266,8 +263,8 @@ const F = {
         self.$root.loading(false);
       },
       async open_cb(param){
-        const r = await user.query_balance(self);
-        current_balance = r;
+        // const r = await user.query_balance(self);
+        // current_balance = r;
       }
     });
   },

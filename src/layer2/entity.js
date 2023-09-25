@@ -630,10 +630,13 @@ const F = {
         tappIdB64Array: ids_list,
       };
       const xrs = await txn.query_request('query_multi_tapp_allowance_from_local_state', xopts, true);
-      console.log(222, xrs);
       if(xrs.balance){
         _.each(list, (x, i)=>{
           x.allowance = utils.layer1.balanceToAmount(xrs.balance[i]);
+          const v = mem.get('allowance_'+x.id);
+          if(v && xrs.balance[i] === '0'){
+            x.allowance = v;
+          }
         });
       }
       console.log(11, list);

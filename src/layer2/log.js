@@ -29,7 +29,6 @@ const F = {
 
     try{
       const rs = await txn.query_request('queryOpLogs', opts);
-      console.log(1111, rs);
       self.$root.loading(false);
 
       rs.logs = _.map(rs.logs, (item)=>{
@@ -445,12 +444,10 @@ const F = {
     
   },
 
-  async queryTxnGasFeeList(self, param={}){
+  async queryTxnGasFeeList(param={}){
     const opts = {};
-    self.$root.loading(true);
     try{
       const rs = await txn.query_request('queryTxnGasFeeList', opts);
-      self.$root.loading(false);
 
       const list = _.map(rs.sql_query_result, (item)=>{
         item.fee = utils.layer1.balanceToAmount(item.fee);
@@ -461,7 +458,6 @@ const F = {
       return list;
       
     }catch(e){
-      self.$root.loading(false);
       console.log('queryTxnGasFeeList error =>', e);
     }
   },

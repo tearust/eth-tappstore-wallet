@@ -12,7 +12,10 @@
   >
     <!-- <div slot="title" class="el-dialog__title" v-html="title"></div> -->
 
-    <i v-if="!param || loading" class="el-icon-loading" style="display: block; width: 40px; height: 40px;font-size: 40px; margin: 0 auto;"></i>
+    <div v-if="loading" style="text-align:center;">
+      <i class="el-icon-loading" style="display: block; width: 40px; height: 40px;font-size: 40px; margin: 0 auto;"></i>
+      <div style="margin:5px auto;">{{param.loading_tip || ''}}</div>
+    </div>
 
     <p v-if="!loading && param.text" class="c-info" :inner-html.prop="param.text"></p>
     

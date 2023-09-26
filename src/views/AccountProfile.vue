@@ -436,6 +436,7 @@ export default {
     },
 
     async transferTea(){
+      if(!this.check_balance_for_new_user()) return;
       await layer2.user.transferTea(this, {}, async (is_success)=>{
         if(is_success){
           await this.refreshTappBalanceHandler();
@@ -534,6 +535,7 @@ export default {
     },
 
     async query_txn_with_hash(){
+      if(!this.check_balance_for_new_user()) return;
       await layer2.log.import_txn_details_and_verify(this, {}, async(r)=>{
         if(!r.status && r.error === 'transaction dropped'){
           this.$root.showError("This transaction cannot be found.");
@@ -548,7 +550,26 @@ export default {
       })
     },
     
+    check_balance_for_new_user(){
+      const b1 = this.layer1_account.balance;
+      const b2 = this.tapp_balance;
+      const b3 = this.tapp_credit;
 
+      if(b1===0 && b2===0 && b3===0){
+        const html = "If you're a first-time user of TEA Project or don't have any TEA tokens, we have created a credit faucet to assist you in getting TEA credits to start your journey here. <br/>Please navigate to 'TApps' on the navigation bar and click on the 'TEAfluence' app to visit the TEAfluencer page.";
+        this.$root.alert_success(html, 'Welcome to TEA');
+
+        return false;
+      }
+      if(b2===0 && b3===0){
+        const html = "You have zero TEA balance. <br/>Please top up your TEA token from Ethereum chain to TEA Project and continue";
+        this.$root.alert_success(html, 'Topup first.');
+
+        return false;
+      }
+
+      return true;
+    },
     
   },
 };

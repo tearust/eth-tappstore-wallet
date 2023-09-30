@@ -535,7 +535,7 @@ export default {
     },
 
     async query_txn_with_hash(){
-      if(!this.check_balance_for_new_user()) return;
+      // if(!this.check_balance_for_new_user()) return;
       await layer2.log.import_txn_details_and_verify(this, {}, async(r)=>{
         if(!r.status && r.error === 'transaction dropped'){
           this.$root.showError("This transaction cannot be found.");
@@ -543,6 +543,9 @@ export default {
         else if (r.ts){
           const time = layer2.base.ts_to_time(r.ts);
           this.$root.alert_success("This txn has been processed at "+time+"(local time)");
+        }
+        else if(r.str){
+          this.$root.alert_success("This txn "+r.str);
         }
         else if (r.error) {
           this.$root.showError(r.error);

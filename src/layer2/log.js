@@ -552,6 +552,7 @@ const F = {
       txn_name: row.txn_name,
       ...row.txn_args,
       nonce: row.nonce,
+      exec_ts: row.ts,
     };
     
     delete json.uuid;
@@ -578,16 +579,25 @@ const F = {
         query: true,
         json: null,
       },
-      async cb(hash, close){
+      async cb(t, hash, ts, close){
         self.$root.loading(true);
         
-        const opts = {
+        let opts = {
           address: self.layer1_account.address,
-          ts: "1",
+          ts: ts || "1",
           hash: hash,
         };
+        let rk = 'queryHashResult';
+        if(t===2){
+          const session_key = user.checkLogin(self);
+          opts.tappIdB64 = base.getTappId();
+          opts.authB64 = session_key;
+
+          rk = 'queryHashResultFromAll';
+        }
+
         try{
-          const r = await txn.query_request('queryHashResult', opts);
+          const r = await txn.query_request(rk, opts);
           await succ_cb(r);
         }catch(e){
 
@@ -608,6 +618,8 @@ const F = {
       self.$root.showError("Invalid txn name.");
       return;
     }
+    const exec_ts = row.exec_ts;
+    delete row.exec_ts;
 
     let opts = row;
     let request_key = 'check_hash_'+row.txn_name;
@@ -618,7 +630,10 @@ const F = {
     self.$root.loading(true);
     try{
       const rs = await txn.query_request(request_key, opts, false, true);
-      await succ_cb(rs.hash);
+      await succ_cb({
+        hash: rs.hash,
+        ts: exec_ts || '',
+      });
     }catch(e){
       self.$root.showError(e);
     }

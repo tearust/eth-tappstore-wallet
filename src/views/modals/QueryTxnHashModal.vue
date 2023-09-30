@@ -44,7 +44,9 @@
       
       <el-button v-if="step===1 && param.query" :disabled="!json || json_error" type="primary" size="small" @click="click_check_hash()">Next</el-button>
 
-      <el-button v-if="step===2 && param.query" type="primary" size="small" @click="click_confirm()">Confirm</el-button>
+      <el-button v-if="step===2 && param.query" type="primary" size="small" @click="click_confirm(1)">Search from memory</el-button>
+
+      <el-button v-if="step===2 && param.query" type="primary" size="small" @click="click_confirm(2)">Search from file</el-button>
       
     </span>
 
@@ -77,6 +79,7 @@ export default {
       step: 1,
 
       json_hash: null,
+      json_ts: null,
     };
   },
   computed: {
@@ -105,6 +108,7 @@ export default {
       this.json = null;
       this.json_error = null;
       this.json_hash = null;
+      this.json_ts = null;
       this.step = 1;
       this.$store.commit('modal/close', 'query_hash');
     },
@@ -119,14 +123,15 @@ export default {
 
     async click_check_hash(){
       const row = this.json;
-      await layer2.log.check_hash(this, row, async (hash)=>{
-        this.json_hash = hash;
+      await layer2.log.check_hash(this, row, async (r)=>{
+        this.json_hash = r.hash;
+        this.json_ts = r.ts;
         this.step = 2;
       });
     },
-    async click_confirm(){
+    async click_confirm(t){
       const cb = utils.mem.get('query_hash');
-      await cb(this.json_hash, this.close);
+      await cb(t, this.json_hash, this.json_ts, this.close);
     }
     
   }

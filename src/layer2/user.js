@@ -32,7 +32,7 @@ const F = {
       address,
       isLogin: true,
       session_key: session_key,
-      expird_time: Date.now() + 1800 * 1000,
+      expird_time: Date.now() + 20*3600*1000,
     };
 
     utils.cache.put(F.getUserId(address), user);
@@ -107,7 +107,7 @@ const F = {
           address,
           isLogin: true,
           session_key: rs.auth_key,
-          expird_time: Date.now() + 1800 * 1000,
+          expird_time: Date.now() + 20*3600*1000,
         };
 
         utils.cache.put(F.getUserId(address), user);
@@ -155,7 +155,7 @@ const F = {
           isLogin: true,
           email: data.email,
           session_key: rs.auth_key,
-          expird_time: Date.now() + 1800 * 1000,
+          expird_time: Date.now() + 20*3600*1000,
         };
 
         utils.cache.put(F.getOfflineId(), data.email);

@@ -87,6 +87,17 @@
 
   </TeaTable>
 
+  <el-divider />
+  <h4>Reference reward</h4>
+  <div style="display:block;">
+    <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="query_reward_account()">Query reward account</el-button>
+
+    <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="add_reward_account()">Insert reward account</el-button>
+    <br/>
+    <el-button :disabled="not_admin" style="width:320px;margin-top:20px;" type="primary" @click="query_global_reward_account()">Query global reference reward account balance</el-button>
+    <el-button :disabled="not_admin" style="width:320px;margin-top:20px;" type="primary" @click="topup_to_global_reward_account()">Topup global reference reward account balance</el-button>
+  </div>
+
 </div>
 </template>
 <script>
@@ -198,6 +209,100 @@ export default {
       await layer2.admin.add_global_credit(this, {}, async (r)=>{
         await this.query_credit_system_info();
       });
+    },
+    async query_reward_account(){
+      this.$store.commit('modal/open', {
+        key: 'common_form',
+        param: {
+          title: 'Query reward account',
+          text: '',
+          props: {
+            address: {
+              type: 'Input',
+              default: '',
+              label: 'Address'
+            }
+          },
+        },
+        cb: async (form, close) => {
+          this.$root.loading(true);
+          const reward_acct = await layer2.user.query_reference_reward_acct(this, {address: form.address});
+          close();
+          this.$root.loading(false);
+          this.$root.alert_success(reward_acct);
+        },
+        
+      });
+    },
+    async add_reward_account(){
+      this.$store.commit('modal/open', {
+        key: 'common_form',
+        param: {
+          title: 'Query reward account',
+          text: '',
+          props: {
+            address: {
+              type: 'Input',
+              default: this.layer1_account.address,
+              label: 'Address'
+            },
+            reward_address: {
+              type: 'Input',
+              default: '',
+              label: 'Reward address'
+            }
+          },
+        },
+        cb: async (form, close) => {
+          this.$root.loading(true);
+          await layer2.user.add_reference_reward_acct(this, {address: form.address, reward_address: form.reward_address}, async ()=>{
+            this.$root.success();
+          });
+
+          close();
+          this.$root.loading(false);
+        },
+        
+      });
+    },
+    async query_global_reward_account(){
+      const target = '0x0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b';
+      const r = await layer2.user.query_balance_with_ts(this, target, layer2.base.getTappId());
+      this.$root.alert_success(JSON.stringify(r));
+    },
+    async topup_to_global_reward_account(){
+      this.$store.commit('modal/open', {
+        key: 'common_form',
+        param: {
+          title: 'Topup for reference reward account',
+          text: '',
+          props: {
+            amount: {
+              type: 'number',
+              default: 100,
+              label: 'Topup amount',
+              min: 1
+            }
+          },
+        },
+        cb: async (form, close) => {
+          const session_key = layer2.user.checkLogin(this);
+          const target = '0x0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b';
+          await layer2.admin.admin_global_transfer(this, {
+            session_key,
+            from: '0xfefefefefefefefefefefefefefefefefefefefe',
+            to: target,
+            amount: form.amount,
+          }, async ()=>{
+            this.$root.success();
+          });
+
+          close();
+          this.$root.loading(false);
+        },
+        
+      });
+
     }
   }
 }

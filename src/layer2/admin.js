@@ -165,6 +165,30 @@ const F = {
     });
 
   },
+
+  async admin_global_transfer(self, data, succ_cb){
+    self.$root.loading(true);
+
+    const amount = utils.layer1.amountToBalance(data.amount);
+    const opts = {
+      address: self.layer1_account.address,
+      tappIdB64: base.getTappId(),
+      authB64: data.session_key,
+      amt: utils.toBN(amount).toString(),
+      from: data.from,
+      to: data.to,
+    };
+    try{
+      const rs = await txn.txn_request('adminTransferBalance', opts);
+      self.$root.success();
+      await succ_cb(rs);
+    }catch(e){
+      self.$root.showError(e);
+    }
+
+    self.$root.loading(false);
+
+  },
 };
 
 export default F;

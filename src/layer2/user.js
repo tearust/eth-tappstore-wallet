@@ -583,7 +583,37 @@ const F = {
     return json;
   },
 
+  async query_reference_reward_acct(self, param){
+    const opts = {
+      address: param.address,
+    };
+    const rs = await txn.query_request('query_reference_reward_account', opts);
+    console.log('query_reference_reward_acct => ', rs);
+    if(_.isString(rs)){
+      return rs;
+    }
+    return rs.data;
+  },
+  async add_reference_reward_acct(self, param, succ_cb){
+    // const session_key = F.checkLogin(self);
+    const opts = {
+      address: _.toLower(param.address),
+      tappIdB64: base.getTappId(),
+      authB64: '',
+      rewardAddress: _.toLower(param.reward_address),
+    };
+    try {
+      if(opts.address === opts.rewardAddress){
+        throw 'Invalid reward address.';
+      }
+      await txn.txn_request('add_reference_reward_account', opts);
 
+      await succ_cb();
+    } catch (e) {
+      self.$root.showError(e);
+    }
+
+  }
 
 
 

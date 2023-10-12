@@ -381,6 +381,9 @@ export default {
       else if(row.ori.tapp_type === 'User'){
         window.open(this.tapp_url(row, 'seat_cid'), '_blank');
       }
+      else if(row.tapp_url){
+        window.open(row.tapp_url, '_blank');
+      }
       else{
         this.$root.showError("Invalid tapp url");
       }

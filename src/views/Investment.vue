@@ -156,6 +156,7 @@ import TeaTable from '../components/TeaTable';
 import TeaIconButton from '../components/TeaIconButton';
 
 import layer2 from '../layer2';
+import helper from './helper';
 export default {
   components: {
     TeaTable,
@@ -246,8 +247,7 @@ export default {
       }
     },
     is_system_actor(row){
-      const reg = /0x100000000000000000000000000000000000000[0-9]{1}/gi;
-      return reg.test(row.id);
+      return helper.is_system_actor(row);
     }
   }
 }

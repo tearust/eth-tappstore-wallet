@@ -612,6 +612,12 @@ const F = {
         item.market_cap = utils.layer1.roundAmount(item.sell_price * item.total_supply);
         item.theta = (d.buy_curve_k-d.sell_curve_k)+'%';
 
+        // for temp chat app
+        if(item.name === 'Payment channel'){
+          item.tapp_url = utils.get_env('chat_url');
+          item.is_service = false;
+        }
+
         item.account_balance = {};
         _.each(d.account_balance, (v, k)=>{
           item.account_balance[k] = utils.layer1.balanceToAmount(v);

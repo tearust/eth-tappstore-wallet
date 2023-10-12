@@ -4,7 +4,7 @@
 <el-menu active-text-color="#35a696" :default-active="activeIndex" class="p-header" @select="handleSelect" mode="horizontal">
   <a href="javascript:void(0)" onClick="location.reload()" style="float:left;">
     <el-image
-      src="/tea_logo/logo.png"
+      src="https://alpha.teaproject.org/tea_logo/logo.png"
       fit="fit">
     </el-image>
     <span style="

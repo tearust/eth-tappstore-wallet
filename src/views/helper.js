@@ -151,6 +151,11 @@ const F = {
         data: row,
       },
     });
+  },
+  is_system_actor(row){
+    if(row && row.id && row.id === '0xb8aaaaaaaa230340b78fa252ce4d47dd23e8a904') return true;
+    const reg = /0x100000000000000000000000000000000000000[0-9]{1}/gi;
+    return row && row.id && reg.test(row.id);
   }
   
 

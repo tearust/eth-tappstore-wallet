@@ -36,7 +36,7 @@
 
     </el-table>
     
-    <div v-if="token_id && !$root.is_tappstore(token_id)" style="margin-top: 12px;">
+    <div v-if="token_id && !$root.is_tappstore(token_id) && !is_system_actor()" style="margin-top: 12px;">
       
       <TeaIconButton 
         type="primary"
@@ -197,6 +197,9 @@ export default {
     async update_entity(){
       alert('TODO');
     },
+    is_system_actor(){
+      return helper.is_system_actor(this.entity);
+    }
     
     
   }

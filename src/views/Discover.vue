@@ -42,7 +42,7 @@
     >
       <template slot-scope="scope">
         <span class="one-line" v-if="$root.is_tappstore(scope.row.id) || scope.row.is_service">{{scope.row.name}}</span>
-        <el-button v-if="!($root.is_tappstore(scope.row.id) || scope.row.is_service)" size="small" type="text" @click="clickToOpen(scope.row)">{{scope.row.name}}</el-button>
+        <el-button v-if="!($root.is_tappstore(scope.row.id) || scope.row.is_service)" size="small" type="text" @click="clickToOpen(scope.row)">{{tapp_name(scope.row.name)}}</el-button>
       </template>
     </TeaTableColumn>
 
@@ -296,6 +296,13 @@ export default {
         cid = row.cid;
       }
       return '/ipfs/'+cid;
+    },
+
+    tapp_name(name){
+      if(name === 'Payment channel'){
+        return 'Tea-party';
+      }
+      return name;
     },
 
     async clickToOpen(row){

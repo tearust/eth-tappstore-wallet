@@ -214,7 +214,15 @@ export default {
         });
 
         const all_list = _.concat(mine_list, not_min_list);
-        this.list = this.mine ? mine_list : all_list;
+        const x_list = this.mine ? mine_list : all_list;
+
+        if(this.user && this.user.isLogin && this.$root.is_sudo(this.user.address)){
+          this.list = x_list;
+        }
+        else{
+          this.list = _.filter(x_list, (x)=>!this.is_system_actor(x));
+        }
+        
 
         this.$root.loading(false);
       }, param);

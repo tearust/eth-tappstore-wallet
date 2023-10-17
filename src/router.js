@@ -39,6 +39,7 @@ import ActiveMinerList from './views/ActiveMinerList';
 import ActiveMinerListForMetadata from './views/ActiveMinersListForMetadata';
 
 import AdminOp from './views/AdminOp';
+import AdminOp1 from './views/AdminOp1';
 import PaymentChannelTest from './views/PaymentChannelTest';
 
 Vue.use(Router);
@@ -204,6 +205,14 @@ let routers = [
     path: '/admin',
     name: 'admin',
     component: AdminOp,
+  },
+  {
+    path: '/admin_test',
+    name: 'admin_test',
+    component: AdminOp1,
+    meta: {
+      needLogin: true,
+    },
   },
 
   {

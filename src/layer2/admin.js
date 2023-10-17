@@ -189,6 +189,65 @@ const F = {
     self.$root.loading(false);
 
   },
+
+  async admin_topup(self, data, succ_cb){
+    const session_key = user.checkLogin(self);
+
+    self.$store.commit('modal/open', {
+      key: 'common_form', 
+      param: {
+        title: 'Topup global credit',
+        text: ``,
+        props: {
+          token_id: {
+            label: 'Token',
+            type: 'Input',
+            default: '',
+            required: true,
+          },
+          address: {
+            label: 'Target',
+            type: 'Input',
+            default: self.layer1_account.address,
+            required: true,
+          },
+          amt: {
+            label: 'Amount',
+            type: 'number',
+            min: 1,
+            default: 100,
+            required: true,
+          },
+        },
+      },
+      cb: async (form, close)=>{
+        self.$root.loading(true);
+
+        const amount = utils.layer1.amountToBalance(form.amt);
+
+        const opts = {
+          address: self.layer1_account.address,
+          tappIdB64: base.getTappId(),
+          authB64: session_key,
+          amount: utils.toBN(amount).toString(),
+          tokenId: form.token_id,
+          targetAddress: form.address,
+        };
+        try{
+          const rs = await txn.txn_request('admin_topup', opts);
+
+          self.$root.success();
+          close();
+          await succ_cb(rs);
+        }catch(e){
+          self.$root.showError(e);
+        }
+
+        self.$root.loading(false);
+      },
+    });
+
+  },
 };
 
 export default F;

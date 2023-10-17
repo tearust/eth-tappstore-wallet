@@ -203,13 +203,14 @@ export default class {
   async getAllBalance(address) {
     // const eth = await this.layer1.getEthBalance();
     const tea = await this.layer1.getTeaBalance();
+    const usdt = await this.layer1.getUsdtBalance();
     // const coffee = await this.layer1.getCoffeeBalance();
     return {
       eth: 0,  //Math.floor(eth * 10000) / 10000,
       free: Math.floor(tea * 10000) / 10000,
       lock: 0,
       reward: 0,
-      usd: 0, //coffee,
+      usd: usdt,
       usd_debt: 0,
     };
   }

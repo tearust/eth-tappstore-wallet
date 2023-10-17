@@ -62,6 +62,35 @@
           ></el-button>
         </div>
 
+        <div class="x-item" v-if="layer1_account && !layer1_account.email && layer1_account.usd">
+          <b>
+            {{ "Chain wallet USDT balance" }}
+            <TeaIconButton
+              style="position: relative"
+              place="right"
+              tip="
+            The amount of USDT in your layer1 wallet (e.g. Metamask wallet)
+          "
+              icon="questionmark"
+            />
+          </b>
+          <span
+            style="margin-right: 34px"
+            :inner-html.prop="
+              layer1_account ? layer1_account.usd : ''
+            "
+          ></span>
+          <el-button
+            size="mini"
+            type="primary"
+            plain
+            icon="el-icon-refresh"
+            circle
+            @click="refreshLayer1Balance($event)"
+            style="right: 0; position: absolute"
+          ></el-button>
+        </div>
+
         <div class="x-item">
           <b>
             {{ "TApp Store wallet TEA balance" }}
@@ -78,6 +107,36 @@
             style="margin-right: 34px"
             :inner-html.prop="
               tapp_balance === null ? '...' : tapp_balance+' ('+tapp_balance_ts+')' | teaIcon
+            "
+          ></span>
+
+          <el-button
+            size="mini"
+            type="primary"
+            plain
+            icon="el-icon-refresh"
+            circle
+            @click="refreshTappBalanceHandler($event)"
+            style="right: 0; position: absolute"
+          ></el-button>
+        </div>
+
+        <div class="x-item" v-if="usdt_balance">
+          <b>
+            {{ "TApp Store wallet USDT balance" }}
+            <TeaIconButton
+              style="position: relative"
+              place="right"
+              tip="
+            The amount of USDT ready to be used in your layer2 wallet. These funds can be transferred gas-free to any TApp where you'd like to use the funds
+          "
+              icon="questionmark"
+            />
+          </b>
+          <span
+            style="margin-right: 34px"
+            :inner-html.prop="
+              usdt_balance === null ? '...' : usdt_balance+' ('+usdt_balance_ts+')'
             "
           ></span>
 
@@ -136,6 +195,28 @@
           ></el-button>
         </div>
 
+        <div class="x-item" v-if="usdt_deposit">
+          <b>
+            {{ "TApp Store wallet USDT deposit" }}
+          </b>
+          <span
+            style="margin-right: 34px"
+            :inner-html.prop="
+              usdt_deposit === null ? '...' : usdt_deposit+' ('+usdt_deposit_ts+')'
+            "
+          ></span>
+
+          <el-button
+            size="mini"
+            type="primary"
+            plain
+            icon="el-icon-refresh"
+            circle
+            @click="refreshTappDepositHandler($event)"
+            style="right: 0; position: absolute"
+          ></el-button>
+        </div>
+
         <div class="x-bottom">
 
           <el-button
@@ -172,15 +253,17 @@
             v-if="layer1_account && !layer1_account.email"
             effect="light"
             placement="top"
+            style="margin-right:20px;"
             content="Move chain wallet (layer1) TEA funds to layer2 TApp Store wallet account."
           >
             <el-button
-              style="margin-right: 20px"
               v-if="layer1_account"
               @click="rechargeHandler()"
               >Topup</el-button
             >
           </el-tooltip>
+
+
           
           <el-button
             type="primary"
@@ -303,6 +386,10 @@ export default {
       tapp_deposit_ts: '',
       tapp_credit: null,
       tapp_credit_ts: '',
+      usdt_balance: null,
+      usdt_balance_ts: '',
+      usdt_deposit: null,
+      usdt_deposit_ts: '',
 
       top_log: null,
 
@@ -354,6 +441,7 @@ export default {
 
         await this.smartRefreshBalance();
       });
+      
     },
 
     async withdrawHandler() {
@@ -416,6 +504,9 @@ export default {
         const r = await layer2.user.query_balance_with_ts(this);
         this.tapp_balance = r.tea;
         this.tapp_balance_ts = r.ts;
+        const r1 = await layer2.user.query_usdt_with_ts(this);
+        this.usdt_balance = r1.tea;
+        this.usdt_balance_ts = r1.ts;
       } catch (e) {
         console.error(e);
       }
@@ -425,6 +516,9 @@ export default {
         const r = await layer2.user.query_deposit_with_ts(this);
         this.tapp_deposit = r.tea;
         this.tapp_deposit_ts = r.ts;
+        const r1 = await layer2.user.query_usdt_deposit_with_ts(this);
+        this.usdt_deposit = r1.tea;
+        this.usdt_deposit_ts = r1.ts;
       } catch (e) {
         console.error(e);
       }

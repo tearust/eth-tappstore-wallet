@@ -212,6 +212,10 @@ const F = {
           item.plantd_at -= 1000000000;
         }
         item.cid = meta.cid;
+
+        if(item.ip === '43.201.33.230'){
+          item.ip = '3.38.139.106';
+        }
         return item;
       });
       

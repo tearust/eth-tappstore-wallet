@@ -232,32 +232,48 @@ const F = {
       key: 'common_form',
       param: {
         title: 'Topup',
-        text: 'Move chain wallet (layer1) TEA funds to layer2 TApp Store wallet account',
+        text: 'Move chain wallet (layer1) funds to layer2 TApp Store wallet account',
         props: {
-
+          token: {
+            type: 'select',
+            default: 'tea',
+            options: [{id: 'tea'}, {id: 'usdt'}],
+          },
           amount: {
             type: "number",
             default: 10,
             max: 9999999999,
-            label: "Amount (TEA)"
+            label: "Amount"
           }
         },
       },
       cb: async (form, close) => {
 
         const amt = _.toNumber(form.amount);
-        if(self.layer1_account.balance < amt){
-          self.$root.showError("Not enough balance to topup.");
+        const token = form.token;
+        if(token==='tea' && self.layer1_account.balance < amt){
+          self.$root.showError("Not enough TEA balance to topup.");
           return false;
         }
+        if(token==='usdt' && self.layer1_account.usd < amt){
+          self.$root.showError("Not enough USDT balance to topup.");
+          return false;
+        }
+
         if(amt < 1) {
-          self.$root.showError('Minimum topup amount is 1T.');
+          self.$root.showError('Minimum topup amount is 1.');
           return false;
         }
 
         self.$root.loading(true);
         try {
-          await layer1_instance.topup(amt);
+          if(token === 'tea'){
+            await layer1_instance.topup(amt);
+          }
+          else if(token === 'usdt'){
+            await layer1_instance.topup_usdt(amt);
+          }
+          
         } catch (e) {
           self.$root.showError(e);
           close();
@@ -274,6 +290,8 @@ const F = {
     });
   },
 
+  
+
   async withdrawFromLayer2(self, amt, succ_cb) {
     const session_key = F.checkLogin(self);
 
@@ -281,7 +299,7 @@ const F = {
 
     const text = (fee)=>{
       const tip = fee ? 'The Etherenum gas fee is '+fee+' TEA<br/>' : '';
-      return `Move TEA funds back to chain wallet (layer1)<br/>${tip}please click 'Confirm' to process this withdrawal transaction.`;
+      return `Move funds back to chain wallet (layer1)<br/>${tip}please click 'Confirm' to process this withdrawal transaction.`;
     };
     self.$store.commit('modal/open', {
       key: 'common_form',
@@ -290,10 +308,15 @@ const F = {
         text: '',
         loading_tip: 'Please wait a few second while we confirm the gas fee on Ethereum network.',
         props: {
+          token: {
+            type: 'select',
+            default: 'tea',
+            options: [{id: 'tea'}, {id: 'usdt'}],
+          },
           amount: {
             type: 'number',
             default: amt,
-            label: 'Amount (TEA)'
+            label: 'Amount'
           }
         },
       },
@@ -301,11 +324,17 @@ const F = {
         self.$root.loading(true);
         const amount = utils.layer1.amountToBalance(form.amount);
 
+        const tappId = base.getTappId();
+        let target_tapp_id = tappId;
+        if(form.token === 'usdt'){
+          target_tapp_id = base.getUsdtId();
+        }
         const param = {
           address: self.layer1_account.address,
           tappIdB64: tappId,
           authB64: session_key,
           amount: utils.toBN(amount).toString(),
+          targetTappIdB64: target_tapp_id,
         };
 
         try {
@@ -499,6 +528,38 @@ const F = {
     }
 
   },
+  async query_usdt_with_ts(self) {
+    const session_key = F.checkLogin(self);
+
+    const opts = {
+      address: self.layer1_account.address,
+      tappIdB64: base.getTappId(),
+      authB64: session_key,
+      target: self.layer1_account.address,
+      targetTappIdB64: base.getUsdtId(),
+    };
+
+    try {
+      const rs = await txn.query_request('query_balance', opts, true);
+      if (!rs.balance) {
+        rs.balance = 0;
+      }
+
+      return {
+        tea: utils.layer1.balanceToAmount(rs.balance),
+        ts: base.ts_to_time(rs.ts),
+      }
+
+    } catch (e) {
+      self.$root.showError(e);
+
+      return {
+        tea: 0,
+        ts: 0,
+      }
+    }
+
+  },
   async query_deposit(self) {
     const session_key = F.checkLogin(self);
     const opts = {
@@ -525,6 +586,28 @@ const F = {
     if(self.a_node){
       opts.a_node = true;
     }
+
+    const rs = await txn.query_request('query_deposit', opts, true);
+    if (!rs.balance) {
+      rs.balance = 0;
+    }
+
+    return {
+      tea: utils.layer1.balanceToAmount(rs.balance),
+      ts: base.ts_to_time(rs.ts)
+    };
+  },
+
+  async query_usdt_deposit_with_ts(self) {
+    const session_key = F.checkLogin(self);
+    const opts = {
+      address: self.layer1_account.address,
+      tappIdB64: base.getTappId(),
+      authB64: session_key,
+      target: self.layer1_account.address,
+      targetTappIdB64: base.getUsdtId(),
+    };
+
 
     const rs = await txn.query_request('query_deposit', opts, true);
     if (!rs.balance) {

@@ -34,6 +34,11 @@ class Instance {
       require('./abi/ERC20.sol/ERC20Token.json').abi,
       this.provider.getSigner(),
     );
+    this.usdt_contract = new ethers.Contract(
+      ContractMap.USDT,
+      require('./abi/ERC20.sol/ERC20Token.json').abi,
+      this.provider.getSigner(),
+    );
     this.cml_contract = new ethers.Contract(
       ContractMap.ERC721,
       require('./abi/ERC721.sol/ERC721.json').abi,
@@ -118,6 +123,14 @@ class Instance {
     const balance = U.formatUnits(n, 'ether');
     return balance
   }
+  async getUsdtBalance(){
+    const erc20Token = this.usdt_contract;
+    const me = await this.signer.getAddress();
+    const n = await erc20Token.balanceOf(me);
+    const balance = U.formatUnits(n, 6);
+    if(balance === '0.0') return 0;
+    return balance
+  }
   async getCoffeeBalance(){
     // const n = await this.coffee_contract.balanceOf(this.signer.getAddress());
     // const balance = U.formatUnits(n, 'ether');
@@ -162,6 +175,60 @@ class Instance {
     };
     const deadline = parseInt(new Date().getTime() / 1000) + 10000;
     const amount = help.unit(amt);
+    const value = {
+      owner: current_address,
+      spender: lock.address,
+      value: amount,
+      nonce: await erc20Token.nonces(current_address),
+      deadline,
+    };
+
+    const signature = await signer._signTypedData(domain, types, value);
+    const r = '0x' + signature.substring(2).substring(0, 64);
+    const s = '0x' + signature.substring(2).substring(64, 128);
+    const v = '0x' + signature.substring(2).substring(128, 130);
+    const res = await lock.TopupWithPermit(
+      erc20Token.address,
+      amount,
+      deadline,
+      v,
+      r,
+      s,
+      false
+    );
+    console.log('result:', res);
+    
+    return true;
+  }
+
+  async topup_usdt(amt){
+
+    const erc20Token = this.usdt_contract;
+    const lock = this.lock_contract;
+    const signer = this.signer;
+
+    const current_address = await signer.getAddress();
+    // await erc20Token.approve(lock.address, help.unit(100));
+       
+    // lock
+    const types = {
+      Permit: [
+        { name: "owner", type: "address" },
+        { name: "spender", type: "address" },
+        { name: "value", type: "uint256" },
+        { name: "nonce", type: "uint256" },
+        { name: "deadline", type: "uint256" },
+      ],
+    };
+    const chainId = (await this.getChain()).id;
+    const domain = {
+      name: "USDT",
+      version: "1",
+      chainId: chainId,
+      verifyingContract: erc20Token.address,
+    };
+    const deadline = parseInt(new Date().getTime() / 1000) + 10000;
+    const amount = help.usdt_unit(amt);
     const value = {
       owner: current_address,
       spender: lock.address,
@@ -315,7 +382,7 @@ const Empty_Instance = class {
 };
 
 let instance = null;
-export default {
+const F = {
   help,
   async get(){
     if(instance) return instance;
@@ -331,3 +398,6 @@ export default {
   },
   
 };
+
+window.FF =F;
+export default F;

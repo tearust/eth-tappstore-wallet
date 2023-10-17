@@ -8,6 +8,7 @@ const meta = {
   type: utils.get_env('TAPP_TYPE') || 'tapp',  // tappstore, miner, tapp
   sudo: utils.get_env('LAYER1_SUDO') || 'NO_SUDO_ACCOUNT',
   tapp_id: _.toLower(ContractMap.ERC20),
+  usdt_id: _.toLower(ContractMap.USDT),
   server_url: utils.get_env('LAYER2_URL'),
   mode: utils.get_env('mode') || 'app',
   server_actor: 'com.tea.client-actor',  // default is tappstore_in_B actor
@@ -87,6 +88,9 @@ const F = {
   },
   getTappId(){
     return meta.tapp_id;
+  },
+  getUsdtId(){
+    return meta.usdt_id;
   },
   getAxios(){
     return _axios;

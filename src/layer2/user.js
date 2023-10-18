@@ -237,7 +237,7 @@ const F = {
           token: {
             type: 'select',
             default: 'tea',
-            options: [{id: 'tea'}, {id: 'usdt'}],
+            options: [{id: 'TEA'}, {id: 'USDT'}],
           },
           amount: {
             type: "number",
@@ -250,7 +250,7 @@ const F = {
       cb: async (form, close) => {
 
         const amt = _.toNumber(form.amount);
-        const token = form.token;
+        const token = _.toLower(form.token);
         if(token==='tea' && self.layer1_account.balance < amt){
           self.$root.showError("Not enough TEA balance to topup.");
           return false;
@@ -311,7 +311,7 @@ const F = {
           token: {
             type: 'select',
             default: 'tea',
-            options: [{id: 'tea'}, {id: 'usdt'}],
+            options: [{id: 'TEA'}, {id: 'USDT'}],
           },
           amount: {
             type: 'number',
@@ -326,7 +326,8 @@ const F = {
 
         const tappId = base.getTappId();
         let target_tapp_id = tappId;
-        if(form.token === 'usdt'){
+        const token = _.toLower(form.token);
+        if(token === 'usdt'){
           target_tapp_id = base.getUsdtId();
         }
         const param = {

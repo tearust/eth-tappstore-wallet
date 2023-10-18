@@ -236,7 +236,7 @@ const F = {
         props: {
           token: {
             type: 'select',
-            default: 'tea',
+            default: 'TEA',
             options: [{id: 'TEA'}, {id: 'USDT'}],
           },
           amount: {
@@ -310,7 +310,7 @@ const F = {
         props: {
           token: {
             type: 'select',
-            default: 'tea',
+            default: 'TEA',
             options: [{id: 'TEA'}, {id: 'USDT'}],
           },
           amount: {

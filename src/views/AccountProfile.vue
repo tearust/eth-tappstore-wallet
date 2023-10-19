@@ -428,6 +428,10 @@ export default {
         await this.refreshAccount();
       }
     );
+
+    _.delay(()=>{
+      this.check_balance_for_new_user();
+    }, 6000);
   },
 
   methods: {
@@ -530,7 +534,7 @@ export default {
     },
 
     async transferTea(){
-      if(!this.check_balance_for_new_user()) return;
+      // if(!this.check_balance_for_new_user()) return;
       await layer2.user.transferTea(this, {}, async (is_success)=>{
         if(is_success){
           await this.refreshTappBalanceHandler();
@@ -652,16 +656,24 @@ export default {
       const b2 = this.tapp_balance;
       const b3 = this.tapp_credit;
 
-      if(b1===0 && b2===0 && b3===0){
+      const key_id = (k)=>{
+        return this.layer1_account.address+'__tip__'+k;
+      };
+
+      const t1 = !!utils.cache.get(key_id('t1'));
+      if(!t1 && b1===0 && b2===0 && b3===0){
         const html = "If you're a first-time user of TEA Project or don't have any TEA tokens, we have created a credit faucet to assist you in getting TEA credits to start your journey here. <br/>Please navigate to 'TApps' on the navigation bar and click on the 'TEAfluence' app to visit the TEAfluencer page.";
         this.$root.alert_success(html, 'Welcome to TEA');
 
+        utils.cache.put(key_id('t1'), true);
         return false;
       }
-      if(b2===0 && b3===0){
+      const t2 = !!utils.cache.get(key_id('t2'));
+      if(t2 && b2===0 && b3===0 && b1>0){
         const html = "You have zero TEA balance. <br/>Please top up your TEA token from Ethereum chain to TEA Project and continue";
         this.$root.alert_success(html, 'Topup first.');
 
+        utils.cache.put(key_id('t2'), true);
         return false;
       }
 

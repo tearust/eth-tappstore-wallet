@@ -12,7 +12,7 @@
       </el-col>
 
       <div style="position:absolute;right:0;bottom:0;">
-        <div class="tlg" v-if="end_block && chain.current_block" :inner-html.prop="epochInfo()"></div>
+        <!-- <div class="tlg" v-if="end_block && chain.current_block" :inner-html.prop="epochInfo()"></div> -->
         <b class="lg">
           <span>Chain name :</span> 
           <b>{{chain_name}}</b>

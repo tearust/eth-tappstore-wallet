@@ -223,6 +223,110 @@ const F = {
 
     self.$root.loading(false);
     
+  },
+
+  async admin_add_seat(self, param, succ_cb){
+    const session_key = user.checkLogin(self);
+    self.$store.commit('modal/open', {
+      key: 'common_form', 
+      param: {
+        title: 'Admin add new seat',
+        confirm_text: 'Confirm',
+        props: {
+          seat_id: {
+            label: 'Seat ID',
+            type: 'Input',
+            default: '',
+          },
+          maintainer: {
+            label: 'Maintainer',
+            type: 'Input',
+            default: self.layer1_account.address,
+            
+          },
+          tea_id: {
+            label: 'Tea id',
+            type: 'Input',
+            default: '',
+            el_props: {
+              'show-word-limit': true,
+              'maxlength': 66,
+              'minlength': 66,
+            }
+          }
+        },
+      },
+      cb: async (form, close)=>{
+        
+        self.$root.loading(true);
+        const seatId = _.toNumber(form.seat_id);
+        const maintainer = form.maintainer;
+        const tea_id = form.tea_id.replace(/^0x/, '');
+        
+        try{
+          const opts = {
+            tappIdB64: base.getTappId(),
+            address: self.layer1_account.address,
+            authB64: session_key,
+            seatId,
+            maintainer,
+            teaId: tea_id,
+          };
+
+          const rs = await txn.txn_request('admin_add_seat', opts);
+          console.log('admin_add_seat result:', rs);
+
+          close();
+          self.$root.success();
+          await succ_cb();
+        }catch(e){
+          self.$root.showError(e);
+        }
+        self.$root.loading(false);
+      },
+    });
+  },
+
+  async admin_delete_seat(self, param, succ_cb){
+    const session_key = user.checkLogin(self);
+    self.$store.commit('modal/open', {
+      key: 'common_form', 
+      param: {
+        title: 'Admin delete seat',
+        confirm_text: 'Confirm',
+        props: {
+          seat_id: {
+            label: 'Seat ID',
+            type: 'Input',
+            default: '',
+          },
+        },
+      },
+      cb: async (form, close)=>{
+        
+        self.$root.loading(true);
+        const seatId = _.toNumber(form.seat_id);
+        
+        try{
+          const opts = {
+            tappIdB64: base.getTappId(),
+            address: self.layer1_account.address,
+            authB64: session_key,
+            seatId,
+          };
+
+          const rs = await txn.txn_request('admin_delete_seat', opts);
+          console.log('admin_delete_seat result:', rs);
+
+          close();
+          self.$root.success();
+          await succ_cb();
+        }catch(e){
+          self.$root.showError(e);
+        }
+        self.$root.loading(false);
+      },
+    });
   }
 };
 

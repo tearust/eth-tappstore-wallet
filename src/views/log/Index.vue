@@ -88,6 +88,7 @@ import { mapState, mapGetters } from 'vuex';
 import TeaTable from '../../components/TeaTable';
 import TeaTableColumn from '../../components/TeaTableColumn';
 import layer2 from '../../layer2';
+import Base from '../../workflow/Base';
 export default {
   components: {
     TeaTable,
@@ -111,6 +112,9 @@ export default {
     ]),
   },
   async mounted(){
+    this.wf = new Base();
+    await this.wf.init();
+    
     const xl = [];
     const today = moment.utc();
     xl.push(today.clone());

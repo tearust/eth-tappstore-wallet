@@ -28,7 +28,7 @@ const _axios = axios.create({
 // set request header 
 _axios.interceptors.request.use((config)=>{
   config.data.actor = meta.server_actor;
-
+  
   if(config.data && config.data.a_node){
     config.data.actor = meta.a_server_actor;
     config.baseURL = meta.a_node_url;

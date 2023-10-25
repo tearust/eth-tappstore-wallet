@@ -127,42 +127,7 @@ export default {
       }
       this.$root.loading(false);
     },
-    async query_special_balance_action(token_id=null, acct=null){
-      this.$store.commit('modal/open', {
-        key: 'common_form',
-        param: {
-          title: 'Acct balance',
-          text: ``,
-          props: {
-            tid: {
-              type: 'Input',
-              label: 'TokenId',
-              default: token_id || layer2.base.getTappId(),
-            },
-            acct: {
-              type: 'Input',
-              label: 'Acct',
-              default: acct || '',
-              required: true,
-            }
-          },
-        },
-        cb: async (form, close)=>{
-          this.$root.loading(true);
-
-          try{
-            const rs = await layer2.user.query_balance(this, form.acct, form.tid);
-            this.$root.alert_success(rs);
-          }catch(e){
-            layer2.base.top_log(e, 'error');
-          }
-
-          close();
-          this.$root.loading(false);
-          
-        }
-      });
-    },
+    
     async query_asset_action(){
       this.$root.loading(true);
       try{

@@ -2,6 +2,15 @@
 <div class="tea-page">
   <h4>Only available for admin user</h4>
   <el-divider />
+
+  <h4>Admin utility</h4>
+  <div>
+    <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="query_special_balance_action()">Query account balance</el-button>
+  </div>
+
+  <el-divider />
+  <h4>Credit system</h4>
+  
   <div>
     <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="start_credit_system()">Start credit system</el-button>
 
@@ -97,6 +106,13 @@
     <el-button :disabled="not_admin" style="width:320px;margin-top:20px;" type="primary" @click="query_global_reward_account()">Query global reference reward account balance</el-button>
     <el-button :disabled="not_admin" style="width:320px;margin-top:20px;" type="primary" @click="topup_to_global_reward_account()">Topup global reference reward account balance</el-button>
   </div>
+
+  <el-divider />
+  <h4>Seat</h4>
+  <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="admin_add_seat()">Admin add seat</el-button>
+  <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="admin_delete_seat()">Admin delete seat</el-button>
+
+  
 
 </div>
 </template>
@@ -303,7 +319,54 @@ export default {
         
       });
 
-    }
+    },
+
+    async admin_add_seat(){
+      await layer2.seat.admin_add_seat(this, {}, async ()=>{
+
+      });
+    },
+    async admin_delete_seat(){
+      await layer2.seat.admin_delete_seat(this, {}, async ()=>{
+
+      });
+    },
+    async query_special_balance_action(token_id=null, acct=null){
+      this.$store.commit('modal/open', {
+        key: 'common_form',
+        param: {
+          title: 'Acct balance',
+          text: ``,
+          props: {
+            tid: {
+              type: 'Input',
+              label: 'TokenId',
+              default: token_id || layer2.base.getTappId(),
+            },
+            acct: {
+              type: 'Input',
+              label: 'Acct',
+              default: acct || '',
+              required: true,
+            }
+          },
+        },
+        cb: async (form, close)=>{
+          this.$root.loading(true);
+
+          try{
+            const rs = await layer2.user.query_balance(this, form.acct, form.tid);
+            this.$root.alert_success(rs);
+          }catch(e){
+            layer2.base.top_log(e, 'error');
+          }
+
+          close();
+          this.$root.loading(false);
+          
+        }
+      });
+    },
   }
 }
 </script>

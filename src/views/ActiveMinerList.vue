@@ -25,66 +25,68 @@
       </template>
     </el-table-column> -->
 
-    <el-table-column
+    <TeaTableColumn
       label="Cml Id"
       width="60"
+      xs
     >
       <template slot-scope="scope">
         
         <span>{{scope.row.cml_id}}</span>
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
-    <el-table-column
+    <TeaTableColumn
       label="Token Id"
     >
       <template slot-scope="scope">
         <span>{{scope.row.token_id}}</span>
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
-    <el-table-column
+    <TeaTableColumn
       label="Owner"
     >
       <template slot-scope="scope">
         <span>{{scope.row.owner}}</span>
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
-    <el-table-column
+    <TeaTableColumn
       label="Machine Id"
     >
       <template slot-scope="scope">
         <span>{{scope.row.tea_id}}</span>
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
-    <el-table-column
+    <TeaTableColumn
       label="Ipfs cid"
     >
       <template slot-scope="scope">
         <span>{{scope.row.cid || cid}}</span>
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
-    <el-table-column
+    <TeaTableColumn
       label="Epoch"
     >
       <template slot-scope="scope">
         <span>{{epoch}}</span>
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
-    <el-table-column
+    <TeaTableColumn
       label="Version"
     >
       <template slot-scope="scope">
         <span>{{version}}</span>
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
-    <el-table-column
+    <TeaTableColumn
       label="Status"
+      xs
     >
       <template slot-scope="scope">
         <span v-if="scope.row.node_status!=='pending'">{{scope.row.node_status}}</span>
@@ -93,24 +95,26 @@
           <a style="margin-left: 5px;font-weight:bold;" href="https://github.com/tearust/teaproject/wiki/Mining:-Required-Open-Ports" target="_blank">(why?)</a>
         </span>
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
-    <el-table-column
+    <TeaTableColumn
       label="IP"
     >
       <template slot-scope="scope">
         <span>{{scope.row.ip}}</span>
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
-    <el-table-column
+    <TeaTableColumn
       label="Link"
       width="80"
+      fixed="right"
+      xs
     >
       <template slot-scope="scope">
         <el-button :disabled="scope.row.node_status!=='active'" size="small" type="text" @click="openTo(scope.row)">Visit</el-button>
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
     
 
@@ -161,7 +165,26 @@ export default {
   methods: {
     async refreshList(){
       const list = await layer2.log.queryActiveMiners(this);
-      this.list = list;
+
+      if(this.$root.mobile().phone){
+        this.list = _.map(list, (item)=>{
+          item.mobile_data = {
+            "CML ID": item.cml_id,
+            "Cid": item.cid || this.cid,
+            'IP': item.ip,
+            'Machine ID': item.tea_id,
+            'Owner': item.owner,
+            "Epoch": this.epoch,
+            "Version": this.version,
+            'Token id': item.token_id,
+          };
+          return item;
+        });
+      }
+      else{
+        this.list = list;
+      }
+      
     },
 
     openTo(row){

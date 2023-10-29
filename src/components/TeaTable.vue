@@ -1,7 +1,22 @@
 <template>
 <div class="tea-table-box">
 <el-table 
+  v-if="!is_mobile"
   v-bind="{...$props, ...$attrs}" 
+  v-on="$listeners" 
+  size="small"
+  :ref="name"
+  :data="list||[]"
+  stripe
+  border
+  @sort-change="sortChangeHandler"
+  class="tea-table">
+  <slot></slot>
+</el-table>
+<el-table 
+  v-if="is_mobile"
+  v-bind="{...$props, ...$attrs}" 
+  @row-click="click_row_for_mobile"
   v-on="$listeners" 
   size="small"
   :ref="name"
@@ -38,6 +53,8 @@ export default {
       list: null,
       current: 1,
       total: 0,
+
+      is_mobile: false,
     };
   },
   props: {
@@ -54,7 +71,8 @@ export default {
       default: false,
     }
   },
-  mounted(){    
+  mounted(){
+    this.is_mobile = this.$root.mobile().phone;
     const key = this.sort_key();
     const default_sort = utils.mem.get(key);
     const ref = this.$refs[this.name];
@@ -95,6 +113,18 @@ export default {
       const from = (this.current-1)*this.size;
       const to = this.current*this.size;
       this.list = _.slice(this.all_list, from, to);
+    },
+    click_row_for_mobile(row, column, e){
+      if(!column.fixed){
+        const mm = row.mobile_data || {};
+        this.$store.commit('modal/open', {
+          key: 'data_details',
+          param: {
+            ...mm,
+            title: 'Column details',
+          },
+        });
+      }
     }
   }
 }

@@ -32,6 +32,27 @@
   }
 
 
+  .tea-modal{
+    width: 100vw !important;
+    height: 100vh !important;
+    margin: 0 !important;
+
+    .tea-modal-card{
+      padding: 0 !important;
+
+      .x-item{
+        &>b{
+          width: 150px !important;
+        }
+      }
+    }
+  
+    
+  
+    
+  }
+
+
 
 
 }

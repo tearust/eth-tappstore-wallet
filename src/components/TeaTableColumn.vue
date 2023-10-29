@@ -1,5 +1,6 @@
 <template>
 <el-table-column
+  v-if="!is_mobile || xs"
   v-bind="{...$props, ...$attrs}" 
   v-on="$listeners"
   :render-header="renderHeader"
@@ -21,15 +22,20 @@ export default {
     link: {
       type: String,
       default: '',
+    },
+    xs: {
+      type: Boolean,
+      default: false,
     }
   },
   data(){
     return {
       ext_props: {},
+      is_mobile: false,
     };
   },
   mounted(){
-    
+    this.is_mobile = this.$root.mobile().phone;
   },
   methods: {
     renderHeader(h, {column}){

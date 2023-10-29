@@ -297,7 +297,7 @@ export default {
               type: 'number',
               default: 100,
               label: 'Topup amount',
-              min: 1
+              min: 0.00001
             }
           },
         },
@@ -336,7 +336,10 @@ export default {
         key: 'common_form',
         param: {
           title: 'Acct balance',
-          text: ``,
+          text: `
+          0xfefefefefefefefefefefefefefefefefefefefe (Dao_reserved_account) <br/>
+          0xfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfd (Seat_collection_pool) <br/>
+          `,
           props: {
             tid: {
               type: 'Input',

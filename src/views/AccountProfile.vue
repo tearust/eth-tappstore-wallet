@@ -12,19 +12,23 @@
     </el-alert>
 
     <div class="tea-card">
-      <i class="x-icon">
+      <i v-if="!is_mobile" class="x-icon">
         <img src="fav.png" />
       </i>
 
       <div class="x-list" style="width: 100%">
         
         <div class="x-item">
-          <b>{{ "Address" | cardTitle }}</b>
+          <b v-if="!is_mobile">{{ "Address" | cardTitle }}</b>
           <span>
-            <font class="js_need_copy">{{
+            <font v-if="!is_mobile" class="js_need_copy">{{
               layer1_account ? layer1_account.address : ""
             }}</font>
+            <font v-if="is_mobile && layer1_account" data-clipboard-target=".js_need_copy" class="js_need_copy js_copy">{{
+              layer1_account.address
+            }}</font>
             <span
+              v-if="!is_mobile"
               title="copy"
               data-clipboard-target=".js_need_copy"
               style="margin-left: 5px"
@@ -35,12 +39,14 @@
         </div>
         <div class="x-item" v-if="layer1_account && !layer1_account.email">
           <b>
-            {{ "Chain wallet TEA balance" }}
+            {{ is_mobile ? 'TEA balance (Chain)' : "Chain wallet TEA balance" }}
             <TeaIconButton
+              v-if="!is_mobile"
               style="position: relative"
               place="right"
               tip="
-            The amount of TEA in your layer1 wallet (e.g. Metamask wallet)
+            The amount of TEA in your layer1 wallet (e.g. Metamask wallet) <br/>
+            Contract address: (0x89F9B8a7e73F09bee5890A703F4ee86f5Cda053C)
           "
               icon="questionmark"
             />
@@ -64,12 +70,14 @@
 
         <div class="x-item" v-if="layer1_account && !layer1_account.email && layer1_account.usd">
           <b>
-            {{ "Chain wallet USDT balance" }}
+            {{ is_mobile ? 'USDT balance (Chain)' : "Chain wallet USDT balance" }}
             <TeaIconButton
+              v-if="!is_mobile"
               style="position: relative"
               place="right"
               tip="
-            The amount of USDT in your layer1 wallet (e.g. Metamask wallet)
+            The amount of USDT in your layer1 wallet (e.g. Metamask wallet) <br/>
+            Contract address: (0xC2C527C0CACF457746Bd31B2a698Fe89de2b6d49)
           "
               icon="questionmark"
             />
@@ -93,8 +101,9 @@
 
         <div class="x-item">
           <b>
-            {{ "TApp Store wallet TEA balance" }}
+            {{ is_mobile ? 'TEA balance' : "TApp Store wallet TEA balance" }}
             <TeaIconButton
+              v-if="!is_mobile"
               style="position: relative"
               place="right"
               tip="
@@ -104,9 +113,17 @@
             />
           </b>
           <span
+            v-if="!is_mobile"
             style="margin-right: 34px"
             :inner-html.prop="
               tapp_balance === null ? '...' : tapp_balance+' ('+tapp_balance_ts+')' | teaIcon
+            "
+          ></span>
+          <span
+            v-if="is_mobile"
+            style="margin-right: 32px"
+            :inner-html.prop="
+              tapp_balance === null ? '...' : tapp_balance | teaIcon
             "
           ></span>
 
@@ -123,8 +140,9 @@
 
         <div class="x-item" v-if="usdt_balance">
           <b>
-            {{ "TApp Store wallet USDT balance" }}
+            {{ is_mobile ? 'USDT balance' : "TApp Store wallet USDT balance" }}
             <TeaIconButton
+              v-if="!is_mobile"
               style="position: relative"
               place="right"
               tip="
@@ -134,9 +152,17 @@
             />
           </b>
           <span
+            v-if="!is_mobile"
             style="margin-right: 34px"
             :inner-html.prop="
               usdt_balance === null ? '...' : usdt_balance+' ('+usdt_balance_ts+')'
+            "
+          ></span>
+          <span
+            v-if="is_mobile"
+            style="margin-right: 32px"
+            :inner-html.prop="
+              usdt_balance === null ? '...' : usdt_balance
             "
           ></span>
 
@@ -153,12 +179,20 @@
 
         <div class="x-item">
           <b>
-            {{ "TApp Store wallet TEA credit" }}
+            {{ is_mobile ? 'TEA credit' : "TApp Store wallet TEA credit" }}
           </b>
           <span
+            v-if="!is_mobile"
             style="margin-right: 34px"
             :inner-html.prop="
               tapp_credit === null ? '...' : tapp_credit+' ('+tapp_credit_ts+')' | teaIcon
+            "
+          ></span>
+          <span
+            v-if="is_mobile"
+            style="margin-right: 32px"
+            :inner-html.prop="
+              tapp_credit === null ? '...' : tapp_credit | teaIcon
             "
           ></span>
 
@@ -175,12 +209,20 @@
 
         <div class="x-item">
           <b>
-            {{ "TApp Store wallet TEA deposit" }}
+            {{ is_mobile ? 'TEA deposit' : "TApp Store wallet TEA deposit" }}
           </b>
           <span
+            v-if="!is_mobile"
             style="margin-right: 34px"
             :inner-html.prop="
               tapp_deposit === null ? '...' : tapp_deposit+' ('+tapp_deposit_ts+')' | teaIcon
+            "
+          ></span>
+          <span
+            v-if="is_mobile"
+            style="margin-right: 32px"
+            :inner-html.prop="
+              tapp_deposit === null ? '...' : tapp_deposit | teaIcon
             "
           ></span>
 
@@ -197,12 +239,20 @@
 
         <div class="x-item" v-if="usdt_deposit">
           <b>
-            {{ "TApp Store wallet USDT deposit" }}
+            {{ is_mobile ? 'USDT deposit' : "TApp Store wallet USDT deposit" }}
           </b>
           <span
+            v-if="!is_mobile"
             style="margin-right: 34px"
             :inner-html.prop="
               usdt_deposit === null ? '...' : usdt_deposit+' ('+usdt_deposit_ts+')'
+            "
+          ></span>
+          <span
+            v-if="is_mobile"
+            style="margin-right: 32px"
+            :inner-html.prop="
+              usdt_deposit === null ? '...' : usdt_deposit
             "
           ></span>
 
@@ -217,31 +267,31 @@
           ></el-button>
         </div>
 
-        <div class="x-bottom">
+        <div class="x-bottom" :style="is_mobile?'flex-direction:column;':''">
 
-          <el-button
+          <!-- <div><el-button
             type="primary"
-            style="margin-right: 20px"
             v-if="layer1_account"
             @click="toUniswap()"
           >
             TEA | ETH Exchange
-          </el-button>
+          </el-button></div> -->
 
           <el-tooltip
-            v-if="layer1_account && !layer1_account.email"
+            v-if="!is_mobile && layer1_account && !layer1_account.email"
             effect="light"
             placement="top"
             :content="`Query transaction with JSON`"
-            style="margin-right:20px;"
+            style="margin-left:20px;"
           >
             <el-button @click="query_txn_with_hash()">Query transaction</el-button>
           </el-tooltip>
           
-          <el-tooltip
+          <div><el-tooltip
             v-if="layer1_account && !layer1_account.email"
             effect="light"
             placement="top"
+            style="margin-left:20px;"
             content="Move TEA funds back to your chain wallet(layer1)."
           >
             <el-button :disabled="!tapp_balance" @click="withdrawHandler()"
@@ -253,7 +303,6 @@
             v-if="layer1_account && !layer1_account.email"
             effect="light"
             placement="top"
-            style="margin-right:20px;"
             content="Move chain wallet (layer1) TEA funds to layer2 TApp Store wallet account."
           >
             <el-button
@@ -261,12 +310,13 @@
               @click="rechargeHandler()"
               >Topup</el-button
             >
-          </el-tooltip>
+          </el-tooltip></div>
 
 
           
           <el-button
             type="primary"
+            style="margin-left:20px;"
             v-if="user && user.isLogin"
             @click="transferTea()"
           >
@@ -296,6 +346,7 @@
 
     <TeaTableColumn
       label="Type"
+      xs
     >
       <template slot-scope="scope">
         {{scope.row.txn_name}}
@@ -314,6 +365,7 @@
     <TeaTableColumn
       label="Result"
       width="80"
+      xs
     >
       <template slot-scope="scope">
         {{scope.row.status}}
@@ -322,13 +374,14 @@
 
     <TeaTableColumn
       label="Error"
+      xs
     >
       <template slot-scope="scope">
         {{scope.row.error}}
       </template>
     </TeaTableColumn>
 
-    <el-table-column label="Actions" width="140" fixed="right">
+    <TeaTableColumn label="Actions" width="140">
       <template slot-scope="scope">
         <TeaIconButton
           tip="Details"
@@ -346,7 +399,7 @@
         />
         
       </template>
-    </el-table-column>
+    </TeaTableColumn>
   
 
 
@@ -394,6 +447,8 @@ export default {
       top_log: null,
 
       history_list: null,
+
+      is_mobile: false,
     };
   },
 
@@ -410,6 +465,7 @@ export default {
   },
 
   async mounted() {
+    this.is_mobile = this.$root.mobile();
     layer2.base.set_global_log(this);
 
     this.$root.loading(true);
@@ -604,7 +660,26 @@ export default {
     async query_history_list(){
       const list = await layer2.log.query_history_list(this, {sender: this.layer1_account.address});
 
-      this.history_list = list;
+      if(this.is_mobile){
+        this.history_list = _.map(list, (item)=>{
+          item.mobile_data = {
+            'Type': item.txn_name,
+            'Hash': item.hash_hex,
+
+            'Sender': item.sender,
+            'Nonce': item.nonce,
+            'Status': item.txn_status,
+            'Result': item.status,
+            'Error': item.error,
+            'Executed at': item.exec_time,
+          };
+          return item;
+        });
+      }
+      else{
+        this.history_list = list;
+      }
+      
     },
 
     async show_details(row){

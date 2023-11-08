@@ -245,6 +245,8 @@ const F = {
           fundRemaining: utils.toBN(fund).toString(),
           expireTime: end_time.toString()+'000000',
           channelId: channel_id,
+          tappKey: "aaa",
+          roomKey: "bbb",
         };
 
         try{

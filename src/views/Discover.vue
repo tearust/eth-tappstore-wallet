@@ -1,6 +1,6 @@
 <template>
 <div class="tea-page">
-  <div>
+  <div style="height: 24px;">
     <el-switch
       v-if="user && user.isLogin"
       v-model="mine"
@@ -22,43 +22,37 @@
   <TeaTable
     :data="list || []"
     name="tapps_list_table"
-    style="margin-top: 15px;"
+    style="margin-top: 25px;"
   >
     <TeaTableColumn
-      label="ID"
+      label="Token ID"
       tip="ID of the TApp"
-      width="300"
+      width="120"
     >
       <template slot-scope="scope">
-        <span class="one-line">{{scope.row.id}}</span>
+        <span class="one-line">{{scope.row.id | short_address}}</span>
       </template>
     </TeaTableColumn>
 
     <TeaTableColumn
       prop="name"
       label="Name"
-      width="150"
       tip="Name of TApp"
+      :fixed="$root.mobile()?'left':'left'"
+      xs
     >
       <template slot-scope="scope">
-        <span class="one-line" v-if="$root.is_tappstore(scope.row.id) || scope.row.is_service">{{scope.row.name}}</span>
+        <span class="one-line" v-if="$root.is_tappstore(scope.row.id) || scope.row.is_service">{{tapp_name(scope.row.name)}}</span>
         <el-button v-if="!($root.is_tappstore(scope.row.id) || scope.row.is_service)" size="small" type="text" @click="clickToOpen(scope.row)">{{tapp_name(scope.row.name)}}</el-button>
       </template>
     </TeaTableColumn>
 
-    
-
-    <!-- <TeaTableColumn
-      label="Accrued balance"
-    >
-      <template slot-scope="scope">
-        <span :inner-html.prop="scope.row.consume_account_balance | teaIcon"></span>
-      </template>
-    </TeaTableColumn> -->
 
     <TeaTableColumn
       label="Spending limit"
       tip="Current spending limit for TApp"
+      width="120"
+      xs
       v-if="layer1_account && layer1_account.address"
     >
       <template slot-scope="scope">
@@ -78,17 +72,17 @@
 
     <TeaTableColumn
       label="Ipfs cid"
-      width="200"
     >
       <template slot-scope="scope">
         <span class="one-line">{{scope.row.cid}}</span>
       </template>
     </TeaTableColumn>
 
-    <el-table-column
+    <TeaTableColumn
       label="Actions"
-      width="140"
+      width="120"
       fixed="right"
+      xs
     >
       <template v-if="user && user.isLogin" slot-scope="scope">
         <TeaIconButton v-if="mine && scope.row.fav" tip="Remove like" icon="el-icon-star-on" @click="unfav_tapp(scope.row, scope.$index)" style="font-size:24px;position:relative;top:2px;" />
@@ -104,7 +98,7 @@
           icon="el-icon-s-tools" 
           @click="updateTapp(scope.row)" style="font-size:20px;position:relative;top:2px;" />
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
   </TeaTable>
 
@@ -113,7 +107,7 @@
     text-align: right;
   ">
 
-    <el-button v-if="user && user.isLogin" style="width:400px;" type="primary" @click="createNewTApp()">Create new TApp</el-button>
+    <el-button v-if="!$root.mobile() && user && user.isLogin" style="width:400px;" type="primary" @click="createNewTApp()">Create new TApp</el-button>
   </div>
 
 </div>
@@ -197,11 +191,9 @@ export default {
         only_tapp: true,
         from: this.layer1_account.address,
       };
-
       await layer2.entity.queryAll(this, async (list)=>{
         const mine_list = [];
         const not_min_list = [];
-
         let my_fav = [];
         if(this.user && this.user.isLogin && this.mine){
           my_fav = await this.query_my_fav_list();
@@ -218,7 +210,20 @@ export default {
         });
 
         const all_list = _.concat(mine_list, not_min_list);
-        this.list = all_list;
+        if(this.$root.mobile()){
+          this.list = _.map(all_list, (item)=>{
+            item.mobile_data = {
+              'Name': item.name,
+              'Token Id': item.id,
+              'Status': item.status,
+              'Ipfs cid': item.cid,
+            };
+            return item;
+          });
+        }
+        else{
+          this.list = all_list;
+        }
         console.log('tapp list =>', this.list);
         this.$root.loading(false);
       }, param);
@@ -306,6 +311,8 @@ export default {
     },
 
     async clickToOpen(row){
+      const mobile_text = 'This app only available for PC web.'
+
       if(row.id === '0x1000000000000000000000000000000000000000'){
         // seat
         if(_.toNumber(row.allowance) < 10 && this.user && this.user.isLogin){
@@ -334,6 +341,10 @@ export default {
       }
       else if (row.id === '0x1000000000000000000000000000000000000002'){
         // cml
+        if(this.$root.mobile()){
+          this.$root.alert_success(mobile_text);
+          return false;
+        }
         if(_.toNumber(row.allowance) < 10 && this.user && this.user.isLogin){
           await this.set_allowance(row, {
             allowance: 100,
@@ -375,6 +386,10 @@ export default {
         window.open(this.tapp_url(row, 'email_cid'), '_blank');
       }
       else if(row.id === '0x1000000000000000000000000000000000000006'){
+        if(this.$root.mobile()){
+          this.$root.alert_success(mobile_text);
+          return false;
+        }
         if(_.toNumber(row.allowance) < 10 && this.user && this.user.isLogin){
           await this.set_allowance(row, {
             allowance: 500,

@@ -58,6 +58,9 @@
     <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="freeze_state()">Freeze state</el-button>
     <el-button :disabled="not_admin" style="width:300px;" type="primary" @click="upgradeVersion()">Upgrade version</el-button>
     <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="cancel_freeze_state()">Cancel freeze state</el-button>
+    <br/><br/>
+    <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="query_actor_version()">Query actor version</el-button>
+    <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="query_remote_actor_version()">Query remote actor version</el-button>
   </div>
 
   <br/><br/>
@@ -339,6 +342,7 @@ export default {
           text: `
           0xfefefefefefefefefefefefefefefefefefefefe (Dao_reserved_account) <br/>
           0xfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfd (Seat_collection_pool) <br/>
+          0x0000000000000000000000000000000000000000 (Total_supply_account) <br/>
           `,
           props: {
             tid: {
@@ -369,6 +373,15 @@ export default {
           
         }
       });
+    },
+
+    async query_actor_version(){
+      const r = await layer2.admin.admin_query_actor_version(this, {});
+      this.$root.alert_success(JSON.stringify(r));
+    },
+    async query_remote_actor_version(){
+      const r = await layer2.admin.admin_query_remote_actor_version(this, {});
+      this.$root.alert_success(JSON.stringify(r));
     },
   }
 }

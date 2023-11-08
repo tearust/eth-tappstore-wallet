@@ -1,7 +1,7 @@
 <template>
 <div class="c-pageheader">
 
-<el-menu active-text-color="#35a696" :default-active="activeIndex" class="p-header" @select="handleSelect" mode="horizontal">
+<el-menu v-if="!is_mobile" active-text-color="#35a696" :default-active="activeIndex" class="p-header" @select="handleSelect" mode="horizontal">
   <a href="javascript:void(0)" onClick="location.reload()" style="float:left;">
     <el-image
       src="https://alpha.teaproject.org/tea_logo/logo.png"
@@ -51,6 +51,53 @@
   
 </el-menu>
 
+<div v-if="is_mobile" style="width:auto;height:60px;display:flex;justify-content:space-between;">
+  <div style="
+    color: #35a696;
+    font-size: 24px;
+    font-weight: bold;
+    line-height:70px;
+  ">
+  <img style="width:50px;height:50px;position:relative;top:8px;left:-8px;" src="https://alpha.teaproject.org/tea_logo/logo.png" />
+  <span style="position:relative;left:-10px;top:-6px;">TApp Store</span>
+  </div>
+
+  <i style="display:block;width:60px;height:70px;font-size:40px;text-align:right;line-height:70px;color:#35a696;" class="el-icon-s-operation" @click="openDrawer()"></i>
+</div>
+
+<el-drawer
+  title=""
+  size="60%"
+  :append-to-body="true"
+  :modal="true"
+  :show-close="false"
+  :visible.sync="drawer"
+  direction="rtl"
+  :before-close="handleCloseDrawer">
+  <div slot="title" style="display:flex;justify-content:space-between;">
+    <div style="
+      display: inline-block;
+      font-size: 20px;
+      color: #35a696;
+    ">{{layer1_account.address | short_address}}</div></el-tooltip>
+
+    <el-button style="margin-left:10px;font-size:15px;position:relative;top:-6px;" size="small" @click="loginOrLogout()" type="primary">{{user ? 'Logout' : 'Login'}}</el-button>
+  </div>
+
+  <el-menu active-text-color="#35a696" :default-active="activeIndex" @select="handleSelect" mode="vertical">
+
+  <el-menu-item index="/discover">{{'TApps'}}</el-menu-item>
+  <el-menu-item index="/account_profile">{{'Account'}}</el-menu-item>
+  <el-menu-item v-if="layer1_account && $root.inTokenVestingUserList(layer1_account.address)" index="/token_vesting">{{'TEA Vesting'}}</el-menu-item>
+  <el-menu-item index="/investment">{{'Investments'}}</el-menu-item>
+  <el-menu-item index="/welcome">{{'Help'}}</el-menu-item>
+  <el-menu-item index="/log">{{'Log'}}</el-menu-item>
+  <el-menu-item v-if="user && user.isLogin && $root.is_sudo(user.address)" index="/admin">{{'Admin'}}</el-menu-item>
+
+  </el-menu>
+
+</el-drawer>
+
 <div class="t-state" :class="'x_'+connected"></div>
 
 <div v-if="top_log" style="height: 36px; width: 1080px; margin: 0 auto;">
@@ -90,6 +137,9 @@ export default {
 
       top_log: null,
       top_log_level: 'error',
+
+      is_mobile: false,
+      drawer: false,
     };
   },
   watch: {
@@ -122,6 +172,7 @@ export default {
       if(this.$route.path !== key){
         this.$router.push(key);
       }
+      this.closeDrawer();
       
     },
     changeLang(){
@@ -164,10 +215,23 @@ export default {
           });
         }
       });
+    },
+
+    openDrawer(){
+      this.drawer = true;
+    },
+    closeDrawer(){
+      if(this.is_mobile){
+        this.drawer = false;
+      }
+    },
+    handleCloseDrawer(done){
+      done();
     }
     
   },
   async mounted(){
+    this.is_mobile = this.$root.mobile();
     layer2.base.set_global_log(this);
     const id = layer2.base.getTappId();
 

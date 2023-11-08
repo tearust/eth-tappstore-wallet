@@ -283,6 +283,7 @@ const F = {
           actorName: _.map((form.actor_name||'').split(','), (x)=>x),
           actorUrl: _.map((form.actor_url||'').split(','), (x)=>utils.forge.util.encode64(x)),
           authB64: session_key,
+          expireTime: 1800,
         };
         try{
           const rs = await txn.txn_request('upgrade_version', opts);

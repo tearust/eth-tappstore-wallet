@@ -33,30 +33,54 @@
     name="logs_table"
   >
 
-    <el-table-column
-      prop="time"
+    <TeaTableColumn
       label="UTC"
-    />
-    <el-table-column
+      xs
+    >
+      <template slot-scope="scope">
+        <span>{{scope.row.time}}</span>
+      </template>
+    </TeaTableColumn>
+
+    <TeaTableColumn
       prop="account"
       label="Account"
-    />
-    <el-table-column
+      width="110"
+    >
+      <template slot-scope="scope">
+        <span>{{scope.row.account | short_address}}</span>
+      </template>
+    </TeaTableColumn>
+    <TeaTableColumn
       prop="token_id"
       label="Token ID"
-    />
-    <el-table-column
-      prop="state_type"
+      width="110"
+      xs
+    >
+      <template slot-scope="scope">
+        <span>{{scope.row.token_id | short_address}}</span>
+      </template>
+    </TeaTableColumn>
+    <TeaTableColumn
       label="Token type"
-    />
-    <el-table-column
-      prop="statement_type"
+    >
+      <template slot-scope="scope">
+        <span>{{scope.row.state_type}}</span>
+      </template>
+    </TeaTableColumn>
+    
+    <TeaTableColumn
       label="Transcation type"
-    />
+    >
+      <template slot-scope="scope">
+        <span>{{scope.row.statement_type}}</span>
+      </template>
+    </TeaTableColumn>
 
     <TeaTableColumn
       label="Token quantity"
       width="120"
+      xs
       tip="Units are either Tea token or corresponding entity token."
     >
       <template slot-scope="scope">
@@ -65,10 +89,14 @@
       </template>
     </TeaTableColumn>
 
-    <el-table-column
-      prop="memo"
+    <TeaTableColumn
       label="Memo"
-    />
+    >
+      <template slot-scope="scope">
+        <span>{{scope.row.memo}}</span>
+      </template>
+    </TeaTableColumn>
+    
 
     
   </TeaTable>
@@ -118,7 +146,8 @@ export default {
     const xl = [];
     const today = moment.utc();
     xl.push(today.clone());
-    for(let i=0; i<9; i++){
+    const len = this.$root.mobile()?3:9;
+    for(let i=0; i<len; i++){
       const tmp = today.subtract(1, 'days');
       xl.push(tmp.clone());
     }
@@ -150,7 +179,24 @@ export default {
       }
       const list = await layer2.log.queryOpLogs(this, param);
 
-      this.list = list;
+      if(this.$root.mobile()){
+        this.list = _.map(list, (item)=>{
+          item.mobile_data = {
+            'UTC': item.time,
+            'Account': item.account,
+            'Token ID': item.token_id,
+            'Token type': item.state_type,
+            'Transcation type': item.statement_type,
+            'Token quantity': utils.layer1.balanceToAmount(item.gross_amount),
+            'Memo': item.memo,
+          };
+          return item;
+        });
+      }
+      else{
+        this.list = list;
+      }
+      
       this.$root.loading(false);
     },
 

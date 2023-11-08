@@ -35,12 +35,15 @@ export default {
     };
   },
   mounted(){
-    this.is_mobile = this.$root.mobile().phone;
+    this.is_mobile = this.$root.mobile();
   },
   methods: {
     renderHeader(h, {column}){
       // return column.label;
       if(!this.tip && !this.link){
+        return column.label;
+      }
+      if(this.is_mobile){
         return column.label;
       }
 

@@ -1,5 +1,5 @@
 <template>
-<section class="t-footer bg_2 js_footer">
+<section class="t-footer bg_2 js_footer" v-if="!$root.mobile()">
   <div class="c-m" style="width:1080px;margin:0 auto; position:releative;">
 
     <el-row style="position:relative;height:170px;">

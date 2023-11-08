@@ -56,7 +56,7 @@ new Vue({
       return true;
     },
     mobile() {
-      return is_mobile;
+      return is_mobile.phone;
     },
     loading(f, text = 'Loading...') {
       if (f) {

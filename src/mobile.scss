@@ -7,7 +7,7 @@
   .tea-section {
     width: auto !important;
   }
-  .p-header1{
+  .p-header{
     width: auto !important;
   }
   .c-fullscreen-loading .el-loading-spinner{
@@ -21,14 +21,18 @@
       font-size: 3.5rem !important;
     }
   }
+
   
   .tea-page{
+    overflow: hidden !important;
     h4{
       font-size: 1.8rem !important;
+      word-break: break-all !important;
     }
     &>* {
       font-size: 1.2rem;
     }
+
   }
 
 
@@ -36,6 +40,7 @@
     width: 100vw !important;
     height: 100vh !important;
     margin: 0 !important;
+
 
     .tea-modal-card{
       padding: 0 !important;
@@ -46,14 +51,68 @@
         }
       }
     }
+
+    .el-form-item__content > .el-input{
+      width: 100% !important;
+    }
   
-    
-  
-    
+  }
+
+  .el-drawer__header{
+    padding: 20px 20px 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .el-menu-item{
+    border-bottom: 1px dashed #ddd !important;
+  }
+  .el-menu-item, .el-submenu__title{
+    font-size: 20px !important;
+  }
+
+  .dialog-footer{
+    button{
+      font-size: 16px !important;
+    }
   }
 
 
+  .tea-card{
+    width: auto !important;
+    border: none !important;
+    padding: 0 !important;
 
+    .x-list{
+      margin: 0 !important;
+
+      .x-item{
+        padding: 15px 0 !important;
+      }
+    }
+  }
+
+  .el-message-box {
+    width: 100vw !important;
+    position: absolute;
+    top: 20vh;
+    left: 0;
+  }
+
+  .el-form{
+    .el-form-item{
+      &>label{
+        width: 100% !important;
+        text-align: left !important;
+        line-height: 24px !important;
+      }
+      &>.el-form-item__content{
+        margin-left: 0 !important;
+      }
+
+      .el-tooltip{
+        display: none !important;
+      }
+    }
+  }
 
 }
-

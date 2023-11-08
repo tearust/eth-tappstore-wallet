@@ -64,5 +64,18 @@ TEA project team will answer them there.
     line-height: 22px;
     margin: 6px 0;
   }
+
+  @media only screen and (max-device-width: 650px) {
+    .el-tabs__header{
+      display: none !important;
+    }
+    //.el-tabs--border-card{
+    //  border: none !important;
+    //  box-shadow: none !important;
+    //}
+    //.el-tabs__content{
+    //  padding: 0 !important;
+    //}
+  }
 }
 </style>

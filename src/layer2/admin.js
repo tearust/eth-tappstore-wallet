@@ -248,6 +248,42 @@ const F = {
     });
 
   },
+
+  async admin_query_actor_version(self, param={}){
+    self.$root.loading(true);
+    
+    const opts = {
+      address: self.layer1_account.address,
+    };
+    try{
+      const rs = await txn.query_request('admin_query_actor_version', opts);
+      self.$root.loading(false);
+      
+      console.log('admin_query_actor_version =>', rs);
+      return rs;
+      
+    }catch(e){
+      self.$root.loading(false);
+    }
+  },
+
+  async admin_query_remote_actor_version(self, param={}){
+    self.$root.loading(true);
+    
+    const opts = {
+      address: self.layer1_account.address,
+    };
+    try{
+      const rs = await txn.query_request('admin_query_remote_actor_version', opts);
+      self.$root.loading(false);
+      
+      console.log('admin_query_remote_actor_version =>', rs);
+      return rs;
+      
+    }catch(e){
+      self.$root.loading(false);
+    }
+  },
 };
 
 export default F;

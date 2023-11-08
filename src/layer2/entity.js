@@ -575,7 +575,7 @@ const F = {
       opts.onlyTapp = false;
     }
     if(param.from){
-      opts.from = param.from;
+      // opts.from = param.from;
     }
 
     try{
@@ -615,7 +615,7 @@ const F = {
         // for temp chat app
         if(item.name === 'Payment channel'){
           item.tapp_url = utils.get_env('chat_url');
-          item.is_service = false;
+          item.is_service = true;
         }
 
         item.account_balance = {};
@@ -626,27 +626,26 @@ const F = {
       }));
       list = _.filter(list);
       // mem.set(mem_key, list);
-
       
-
-      const ids_list = _.map(list, (x)=>x.id);
-
-      const xopts = {
-        address: self.layer1_account.address,
-        tappIdB64Array: ids_list,
-      };
-      const xrs = await txn.query_request('query_multi_tapp_allowance_from_local_state', xopts, true);
-      if(xrs.balance){
-        _.each(list, (x, i)=>{
-          x.allowance = utils.layer1.balanceToAmount(xrs.balance[i]);
-          const v = mem.get('allowance_'+x.id);
-          if(v && xrs.balance[i] === '0'){
-            x.allowance = v;
-          }
-        });
+      if(self.layer1_account && self.layer1_account.address){
+        const ids_list = _.map(list, (x)=>x.id);
+        const xopts = {
+          address: self.layer1_account.address,
+          tappIdB64Array: ids_list,
+        };
+        
+        const xrs = await txn.query_request('query_multi_tapp_allowance_from_local_state', xopts, true);
+        if(xrs.balance){
+          _.each(list, (x, i)=>{
+            x.allowance = utils.layer1.balanceToAmount(xrs.balance[i]);
+            const v = mem.get('allowance_'+x.id);
+            if(v && xrs.balance[i] === '0'){
+              x.allowance = v;
+            }
+          });
+        }
       }
-      console.log(11, list);
-
+      
       await succ_cb(list);
       
     }catch(e){

@@ -166,7 +166,7 @@ export default {
     async refreshList(){
       const list = await layer2.log.queryActiveMiners(this);
 
-      if(this.$root.mobile().phone){
+      if(this.$root.mobile()){
         this.list = _.map(list, (item)=>{
           item.mobile_data = {
             "CML ID": item.cml_id,

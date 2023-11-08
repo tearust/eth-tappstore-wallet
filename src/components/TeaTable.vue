@@ -72,7 +72,7 @@ export default {
     }
   },
   mounted(){
-    this.is_mobile = this.$root.mobile().phone;
+    this.is_mobile = this.$root.mobile();
     const key = this.sort_key();
     const default_sort = utils.mem.get(key);
     const ref = this.$refs[this.name];

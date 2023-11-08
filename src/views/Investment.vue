@@ -1,6 +1,6 @@
 <template>
 <div class="tea-page">
-  <div>
+  <div style="height: 24px;">
     <el-switch
       v-if="user && user.isLogin"
       v-model="mine"
@@ -21,24 +21,28 @@
   <el-button size="small" class="tea-refresh-btn" type="primary" plain icon="el-icon-refresh" circle @click="refresh()"></el-button>
 
   <TeaTable
-    style="margin-top: 15px;"
+    style="margin-top: 25px;"
     :data="list || []"
     name="home_entity_list_table"
   >
-    <el-table-column
+    <TeaTableColumn
       prop="id"
       label="ID"
+      width="100"
+      xs
     >
       <template slot-scope="scope">
-        <el-button v-if="!$root.is_tappstore(scope.row.id)" :title="scope.row.id" size="small" type="text" @click="toEntityDetail(scope)">{{scope.row.id}}</el-button>
-        <span :title="scope.row.id" class="one-line" v-if="$root.is_tappstore(scope.row.id)">{{scope.row.id}}</span>
+        <div v-if="!$root.mobile()">
+        <el-button v-if="!$root.is_tappstore(scope.row.id)" :title="scope.row.id" size="small" type="text" @click="toEntityDetail(scope)">{{scope.row.id | short_address}}</el-button>
+        <span :title="scope.row.id" class="one-line" v-if="$root.is_tappstore(scope.row.id)">{{scope.row.id | short_address}}</span></div>
+        <div v-if="$root.mobile()"><span :title="scope.row.id" class="one-line">{{scope.row.id | short_address}}</span></div>
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
-    <el-table-column
+    <TeaTableColumn
       prop="name"
       label="Name"
-      width="100"
+      xs
     >
       <template slot-scope="scope">
         <span v-if="!scope.row.active_block">{{scope.row.name}}</span>
@@ -46,9 +50,9 @@
         <span v-if="scope.row.active_block">{{scope.row.name}}</span>
         
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
-    <el-table-column
+    <TeaTableColumn
       prop="token_symbol"
       label="Ticker"
       width="70"
@@ -56,27 +60,27 @@
       <template slot-scope="scope">
         {{$root.is_tappstore(scope.row.id) ? '' : scope.row.token_symbol}}
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
-    <el-table-column
+    <TeaTableColumn
       label="Owner"
     >
       <template slot-scope="scope">
         <!-- <el-button size="small" type="text" @click="$root.to_user_detail(scope.row.owner)">{{scope.row.owner}}</el-button> -->
         <span class="one-line">{{$root.is_tappstore(scope.row.id) ? '' : scope.row.owner}}</span>
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
-    <el-table-column
+    <TeaTableColumn
       label="Accrued balance"
     >
       <template slot-scope="scope">
         <span :inner-html.prop="scope.row.consume_account_balance | teaIcon"></span>
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
 
-    <el-table-column
+    <TeaTableColumn
       prop="total_supply"
       label="Total supply"
       width="110"
@@ -85,9 +89,9 @@
       <template slot-scope="scope">
         {{$root.is_tappstore(scope.row.id) ? '' : scope.row.total_supply}}
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
-    <el-table-column
+    <TeaTableColumn
       prop="buy_price"
       label="Buy price"
       width="100"
@@ -96,8 +100,8 @@
       <template slot-scope="scope">
         <span v-if="!$root.is_tappstore(scope.row.id)" :inner-html.prop="scope.row.buy_price | teaIcon"></span>
       </template>
-    </el-table-column>
-    <el-table-column
+    </TeaTableColumn>
+    <TeaTableColumn
       prop="sell_price"
       label="Sell price"
       width="100"
@@ -106,10 +110,10 @@
       <template slot-scope="scope">
         <span v-if="!$root.is_tappstore(scope.row.id)" :inner-html.prop="scope.row.sell_price | teaIcon"></span>
       </template>
-    </el-table-column>
+    </TeaTableColumn>
       
 
-    <el-table-column
+    <TeaTableColumn
       prop="market_cap"
       label="Market cap"
       width="100"
@@ -118,10 +122,10 @@
       <template slot-scope="scope">
         <span v-if="!$root.is_tappstore(scope.row.id)" :inner-html.prop="scope.row.market_cap | teaIcon"></span>
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
 
-   <el-table-column
+   <TeaTableColumn
       prop="token_balance"
       label="My holdings"
       width="110"
@@ -130,18 +134,19 @@
       <template slot-scope="scope">
         <span v-if="!$root.is_tappstore(scope.row.id)" :inner-html.prop="scope.row.token_balance"></span>
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
-    <el-table-column
+    <TeaTableColumn
       label="Actions"
       width="100"
       fixed="right"
+      xs
     >
       <template v-if="user && user.isLogin && !$root.is_tappstore(scope.row.id) && !is_system_actor(scope.row) " slot-scope="scope">
         <TeaIconButton tip="Buy" icon="buy" @click="buy_token(scope.row)" />
         <TeaIconButton tip="Sell" icon="sell" @click="sell_token(scope.row)" />
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
   </TeaTable>
 
@@ -153,6 +158,7 @@ import utils from '../tea/utils';
 import { mapGetters, mapState } from 'vuex';
 
 import TeaTable from '../components/TeaTable';
+import TeaTableColumn from '../components/TeaTableColumn';
 import TeaIconButton from '../components/TeaIconButton';
 
 import layer2 from '../layer2';
@@ -160,6 +166,7 @@ import helper from './helper';
 export default {
   components: {
     TeaTable,
+    TeaTableColumn,
     TeaIconButton,
   },
   data(){
@@ -216,13 +223,34 @@ export default {
         const all_list = _.concat(mine_list, not_min_list);
         const x_list = this.mine ? mine_list : all_list;
 
+        let tmp = null;
         if(this.user && this.user.isLogin && this.$root.is_sudo(this.user.address)){
-          this.list = x_list;
+          tmp = x_list;
         }
         else{
-          this.list = _.filter(x_list, (x)=>!this.is_system_actor(x));
+          tmp = _.filter(x_list, (x)=>!this.is_system_actor(x));
         }
         
+        if(this.$root.mobile()){
+          this.list = _.map(tmp, (item)=>{
+            item.mobile_data = {
+              'ID': item.id,
+              'Name': item.name,
+              'Ticker': item.ticker,
+              'Owner': item.owner,
+              'Accrued balance': item.consume_account_balance,
+              'Total supply': item.total_supply,
+              'Buy price': item.buy_price,
+              'Sell price': item.sell_price,
+              'Market cap': item.market_cap,
+              'My holdings': item.token_balance,
+            };
+            return item;
+          });
+        }
+        else{
+          this.list = tmp;
+        }
 
         this.$root.loading(false);
       }, param);

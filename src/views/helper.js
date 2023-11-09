@@ -108,7 +108,24 @@ const F = {
 
   
   openUrl(url){
-    window.open(url, '_blank');
+    if(utils.mobile()){
+      if(!_.startsWith(url, 'http')){
+        url = location.protocol+'//'+location.host+url;
+      }
+
+      if(utils.wallet_webview()){
+        const xl = encodeURIComponent(url);
+        location.href = 'https://teaproject.org/help/index.html?'+xl;
+      }
+      else{
+        location.href = url;  
+      }
+      
+    }
+    else{
+      window.open(url, '_blank');
+    }
+    
   },
 
   go_wallet(url){

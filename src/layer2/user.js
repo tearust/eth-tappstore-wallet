@@ -59,7 +59,7 @@ const F = {
 
     const chain = await self.wf.layer1.getChain();
     if(chain.name === 'Offline'){
-      throw('You did not install metamask wallet, please login with your email address.');
+      throw('You did not install metamask wallet, please install it first and continue.');
     }
     // if(chain.name !== 'Goerli'){
     //   throw('Current epoch only accept Goerli network. <br> please visit <a href="https://www.youtube.com/watch?v=nsAuqfAQCag" target="_blank">this link<a> to config.');

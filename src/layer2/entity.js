@@ -552,7 +552,6 @@ const F = {
   // query
   async queryAll(self, succ_cb, param={}){
     // const session_key = user.checkLogin(self);
-
     self.$root.loading(true);
 
     // const mem_key = 'entity_queryAll_'+utils.crypto.sha256(JSON.stringify(param));
@@ -615,7 +614,7 @@ const F = {
         // for temp chat app
         if(item.name === 'Payment channel'){
           item.tapp_url = utils.get_env('chat_url');
-          item.is_service = true;
+          item.is_service = false;
         }
 
         item.account_balance = {};
@@ -627,7 +626,7 @@ const F = {
       list = _.filter(list);
       // mem.set(mem_key, list);
       
-      if(self.layer1_account && self.layer1_account.address){
+      if(self.layer1_account.address !== 'no_wallet'){
         const ids_list = _.map(list, (x)=>x.id);
         const xopts = {
           address: self.layer1_account.address,
@@ -644,6 +643,11 @@ const F = {
             }
           });
         }
+      }
+      else{
+        _.each(list, (x, i)=>{
+          x.allowance = 0;
+        });
       }
       
       await succ_cb(list);

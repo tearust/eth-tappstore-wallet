@@ -8,7 +8,6 @@ import ElementUI from 'element-ui';
 // import 'element-ui/lib/theme-chalk/index.css';
 import { Loading } from 'element-ui';
 import locale from 'element-ui/lib/locale/lang/en';
-import isMobile from 'ismobilejs';
 
 import router from './router';
 import './style.scss';
@@ -26,8 +25,6 @@ import './filter';
 import layer2 from './layer2';
 import {VestingUsers, ContractMap} from './eth/consts';
 
-
-const is_mobile = isMobile(window.navigator);
 
 Vue.use(ElementUI, { locale });
 Vue.config.productionTip = false;
@@ -56,7 +53,7 @@ new Vue({
       return true;
     },
     mobile() {
-      return is_mobile.phone;
+      return utils.mobile();
     },
     loading(f, text = 'Loading...') {
       if (f) {

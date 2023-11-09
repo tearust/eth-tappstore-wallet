@@ -8,6 +8,7 @@ import {
   BN_MILLION, isBn, BN, u8aToHex,
 
 } from '@polkadot/util';
+import isMobile from 'ismobilejs';
 
 import './index';
 
@@ -19,6 +20,7 @@ const str = (key) => {
 
 const { _, uuid, forge } = tearust_utils;
 
+const is_mobile = isMobile(window.navigator);
 
 const consts = {
   CurveType: {Linear: 'Linear', SquareRoot: 'SquareRoot'},
@@ -470,6 +472,17 @@ const F = {
     return reg.test(email);
   },
 
+  mobile(){
+    return is_mobile.phone;
+  },
+  wallet_webview(){
+    const agent = _.toLower(navigator.userAgent);
+    if(_.includes(agent, 'metamask')){
+      return true;
+    }
+
+    return false;
+  }
 
 };
 

@@ -122,6 +122,7 @@ import TeaIconButton from '../components/TeaIconButton';
 import TeaTableColumn from '../components/TeaTableColumn';
 
 import layer2 from '../layer2';
+import helper from './helper';
 export default {
   components: {
     TeaTable,
@@ -322,7 +323,7 @@ export default {
           });
         }
         else{
-          window.open(this.tapp_url(row, 'seat_cid'), '_blank');
+          helper.openUrl(this.tapp_url(row, 'seat_cid'));
         }
         
       }
@@ -335,7 +336,7 @@ export default {
           });
         }
         else{
-          window.open(this.tapp_url(row, 'lb_cid'), '_blank');
+          helper.openUrl(this.tapp_url(row, 'lb_cid'));
         }
         
       }
@@ -352,7 +353,7 @@ export default {
           });
         }
         else{
-          window.open(this.tapp_url(row, 'cml_cid'), '_blank');
+         helper.openUrl(this.tapp_url(row, 'cml_cid'));
         }
         
       }
@@ -364,26 +365,17 @@ export default {
           });
         }
         else{
-          window.open(this.tapp_url(row, 'seed_cid'), '_blank');
+          helper.openUrl(this.tapp_url(row, 'seed_cid'));
         }
       }
       else if (row.id === '0x1000000000000000000000000000000000000004'){
-        // if(_.toNumber(row.account_balance.allowance) < 10){
-        //   await this.set_allowance(row, {
-        //     allowance: 20,
-        //     url: utils.get_env('fluencer_url'),
-        //   });
-        // }
-        // else{
-        //   window.open(utils.get_env('fluencer_url'), '_blank');
-        // }
-        window.open(this.tapp_url(row, 'fluencer_cid'), '_blank');
+        helper.openUrl(this.tapp_url(row, 'fluencer_cid'));
       }
       else if(row.ori.tapp_type === 'fluencer'){
-        window.open(this.tapp_url(row, 'fluencer_cid')+'?v='+row.id+'&t=fluencer', '_blank');
+        helper.openUrl(this.tapp_url(row, 'fluencer_cid')+'?v='+row.id+'&t=fluencer');
       }
       else if(row.id === '0x1000000000000000000000000000000000000005'){
-        window.open(this.tapp_url(row, 'email_cid'), '_blank');
+        helper.openUrl(this.tapp_url(row, 'email_cid'));
       }
       else if(row.id === '0x1000000000000000000000000000000000000006'){
         if(this.$root.mobile()){
@@ -397,14 +389,14 @@ export default {
           });
         }
         else{
-          window.open(this.tapp_url(row, 'devportal_cid'), '_blank');
+          helper.openUrl(this.tapp_url(row, 'devportal_cid'));
         }
       }
       else if(row.ori.tapp_type === 'User'){
-        window.open(this.tapp_url(row, 'seat_cid'), '_blank');
+        helper.openUrl(this.tapp_url(row, 'seat_cid'));
       }
       else if(row.tapp_url){
-        window.open(row.tapp_url, '_blank');
+        helper.openUrl(row.tapp_url);
       }
       else{
         this.$root.showError("Invalid tapp url");

@@ -8,6 +8,7 @@ import txn from './txn';
 import entity from './entity';
 import user from './user';
 import mem from './mem';
+import helper from '../views/helper';
 
 const F = {
   async createNew(self, succ_cb){
@@ -211,7 +212,7 @@ const F = {
         text: !extra ? `Set the TApp's spending limit` : `Set spending limit for this TApp.`,
         extra_button: extra? 'Visit TApp directly': false,
         extra_button_action: ()=>{
-          window.open(extra.url, '_blank');
+          helper.openUrl(extra.url);
         },
         props: {
           tapp_id: {

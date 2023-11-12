@@ -41,7 +41,6 @@
           <b>
             {{ is_mobile ? 'TEA balance (Chain)' : "Chain wallet TEA balance" }}
             <TeaIconButton
-              v-if="!is_mobile"
               style="position: relative"
               place="right"
               tip="
@@ -72,7 +71,6 @@
           <b>
             {{ is_mobile ? 'USDT balance (Chain)' : "Chain wallet USDT balance" }}
             <TeaIconButton
-              v-if="!is_mobile"
               style="position: relative"
               place="right"
               tip="

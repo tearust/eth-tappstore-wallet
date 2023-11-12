@@ -170,6 +170,7 @@ const F = {
 
     if(!opts.owner) delete opts.owner;
 
+
     const rs = await txn.query_request('queryCmlList', opts);
     if(!rs.list || rs.list.Err){
       self.$root.showError(JSON.stringify(rs.list.Err));

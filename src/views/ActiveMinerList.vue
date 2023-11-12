@@ -86,6 +86,7 @@
 
     <TeaTableColumn
       label="Status"
+      width="80"
       xs
     >
       <template slot-scope="scope">
@@ -99,6 +100,7 @@
 
     <TeaTableColumn
       label="IP"
+      xs
     >
       <template slot-scope="scope">
         <span>{{scope.row.ip}}</span>

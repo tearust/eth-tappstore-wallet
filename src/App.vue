@@ -23,6 +23,8 @@
 
     <TransferBalanceModal />
     <QueryTxnHashModal />
+
+    <NewUserTip v-if="show_tip" @close="close_tip()" />
   </div>
 </template>
 
@@ -43,6 +45,9 @@ import TransferBalanceModal from './views/modals/TransferBalanceModal';
 
 import QueryTxnHashModal from './views/modals/QueryTxnHashModal';
 
+import NewUserTip from './views/NewUserTip';
+import utils from './tea/utils';
+
 export default {
   components: {
     PageHeader,
@@ -61,6 +66,27 @@ export default {
     TransferBalanceModal,
     QueryTxnHashModal,
     
+
+    NewUserTip
+  },
+  data(){
+    return {
+      show_tip: false,
+    }
+  },
+  created(){
+    if(this.$root.mobile()){
+      const xt = utils.cache.get("new-user-tip");
+      if(!xt){
+        this.show_tip = true;
+      }
+    }
+  },
+  methods: {
+    close_tip(){
+      this.show_tip = false;
+      utils.cache.put("new-user-tip", 1);
+    }
   }
 }
 </script>

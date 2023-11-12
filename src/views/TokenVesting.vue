@@ -9,50 +9,56 @@
     name="token_vesting_list_table"
   >
 
-    <el-table-column
+    <TeaTableColumn
       label="Schedule id"
-      prop="schedule_id"
-    />
+    >
+      <template slot-scope="scope">
+        <span>{{scope.row.schedule_id}}</span>
+      </template>
+    </TeaTableColumn>
 
-    <el-table-column
+    <TeaTableColumn
       label="Total"
+      xs
     >
       <template slot-scope="scope">
         <span>{{scope.row.info.total}}</span>
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
-    <el-table-column
+    <TeaTableColumn
       label="Releasable"
     >
       <template slot-scope="scope">
         <span>{{scope.row.amount}}</span>
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
-    <el-table-column
+    <TeaTableColumn
       label="Released"
+      xs
     >
       <template slot-scope="scope">
         <span>{{scope.row.info.released}}</span>
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
-    <el-table-column
+    <TeaTableColumn
       label="Locked"
+      xs
     >
       <template slot-scope="scope">
         <span>{{scope.row.info.available}}</span>
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
-    <el-table-column
+    <TeaTableColumn
       label="Duration"
     >
       <template slot-scope="scope">
         <span>{{scope.row.info.duration}}</span>
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
     <TeaTableColumn
       label="Slice period"
@@ -72,24 +78,25 @@
       </template>
     </TeaTableColumn>
 
-    <el-table-column
+    <TeaTableColumn
       label="Start date"
     >
       <template slot-scope="scope">
         <span>{{scope.row.info.start}}</span>
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
-    <el-table-column
+    <TeaTableColumn
       label="Release"
-      width="100"
+      width="70"
       fixed="right"
+      xs
     >
       <template slot-scope="scope">
         <TeaIconButton tip="Click to release your tokens" icon="unlock" @click="releaseAction(scope.row)" icon_style="font-size:20px;" />
       
       </template>
-    </el-table-column>
+    </TeaTableColumn>
 
   </TeaTable>
 
@@ -133,7 +140,27 @@ export default {
     async refreshList(){
       this.$root.loading(true);
       const list = await this.wf.layer1.scheduleListForVesting();
-      this.list = list;
+
+      if(this.$root.mobile()){
+        this.list = _.map(list, (item)=>{
+          item.mobile_data = {
+            'Schedule id': item.schedule_id,
+            'Total': item.info.total,
+            'Releasable': item.amount,
+            'Released': item.info.released,
+            'Locked': item.info.available,
+            'Duration': item.info.duration,
+            'Slice period': item.info.period,
+            'Cliff': item.info.cliff,
+            'Start date': item.info.start,
+          };
+          return item;
+        });
+      }
+      else{
+        this.list = list;
+      }
+      
       this.$root.loading(false);
     },
 

@@ -102,7 +102,7 @@ const F = {
     }
 
     const time = moment(ts/1000000);
-    return time.format("YYYY-MM-DD hh:mm:ss");
+    return time.format("YYYY-MM-DD kk:mm:ss");
   },
 
   format_ts(ts){
@@ -112,7 +112,7 @@ const F = {
     }
 
     const time = moment(ts/1000000);
-    return [time.format("YYYY-MM-DD hh:mm:ss"), time];
+    return [time.format("YYYY-MM-DD kk:mm:ss"), time];
   }
 };
 

@@ -14,8 +14,12 @@
       <div style="position:absolute;right:0;bottom:0;">
         <!-- <div class="tlg" v-if="end_block && chain.current_block" :inner-html.prop="epochInfo()"></div> -->
         <b class="lg">
-          <span>Chain name :</span> 
+          <span>ETH Chain name :</span> 
           <b>{{chain_name}}</b>
+        </b>
+        <b class="lg">
+          <span>TEA Chain name :</span> 
+          <b>{{tea_chain_name}}</b>
         </b>
         <b class="lg">
           <span>Block Height :</span> 
@@ -75,6 +79,7 @@ export default {
       enclave_version: null,
 
       chain_name: '',
+      tea_chain_name: '',
     };
   },
   async mounted(){
@@ -90,6 +95,7 @@ export default {
     const r = await layer2.log.querySystemVersion(this);
     this.client_version = r.client_version;
     this.enclave_version = r.enclave_version;
+    this.tea_chain_name = _.capitalize(r.tea_network);
   },
   methods: {
     epochInfo(){

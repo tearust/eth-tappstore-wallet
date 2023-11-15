@@ -59,7 +59,7 @@ export default {
       // }
 
       return val;
-    }
+    },
   }
 }
 </script>

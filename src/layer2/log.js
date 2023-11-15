@@ -576,7 +576,10 @@ const F = {
         json,
       }
     });
+
+    
   },
+
 
   async import_txn_details_and_verify(self, param, succ_cb){
     self.$store.commit('modal/open', {

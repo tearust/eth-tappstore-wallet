@@ -42,6 +42,8 @@ import AdminOp from './views/AdminOp';
 import AdminOp1 from './views/AdminOp1';
 import PaymentChannelTest from './views/PaymentChannelTest';
 
+import MobileAbout from './views/MobileAbout';
+
 Vue.use(Router);
 
 
@@ -222,6 +224,12 @@ let routers = [
     meta: {
       needLogin: true,
     },
+  },
+
+  {
+    path: '/mobile_about',
+    name: 'mobile_about',
+    component: MobileAbout,
   }
   
   

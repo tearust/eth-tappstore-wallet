@@ -115,4 +115,15 @@
     }
   }
 
+  .jsoneditor{
+    border-color: #35a696 !important;
+    .jsoneditor-menu{
+      display: none !important;
+    }
+    .jsoneditor-text{
+      padding: 10px 5px !important;
+      min-height: 320px !important;
+    }
+  }
+
 }

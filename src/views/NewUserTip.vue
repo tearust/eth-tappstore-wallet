@@ -10,7 +10,7 @@
   </div>
   
 
-  <el-button @click="$emit('close')" type="primary" style="position:absolute;width:70%;top:60%;left:15%;">Got it</el-button>
+  <el-button @click="$emit('close')" type="primary" style="position:absolute;width:70%;top:30%;left:15%;font-size:18px;font-weight:bold;">Got it</el-button>
 </div>
 
 </template>

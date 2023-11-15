@@ -276,7 +276,7 @@
           </el-button></div> -->
 
           <el-tooltip
-            v-if="!is_mobile && layer1_account && !layer1_account.email"
+            v-if="layer1_account && !layer1_account.email"
             effect="light"
             placement="top"
             :content="`Query transaction with JSON`"
@@ -372,17 +372,17 @@
 
     <TeaTableColumn
       label="Error"
-      xs
     >
       <template slot-scope="scope">
         {{scope.row.error}}
       </template>
     </TeaTableColumn>
 
-    <TeaTableColumn label="Actions" width="140">
+    <TeaTableColumn label="Actions" width="100" fixed="right" xs>
       <template slot-scope="scope">
         <TeaIconButton
           tip="Details"
+          v-if="!is_mobile"
           icon="el-icon-notebook-2"
           @click="show_details(scope.row)"
           style="font-size:21px;"
@@ -706,7 +706,6 @@ export default {
     },
 
     async query_txn_with_hash(){
-      // if(!this.check_balance_for_new_user()) return;
       await layer2.log.import_txn_details_and_verify(this, {}, async(r)=>{
         if(!r.status && r.error === 'transaction dropped'){
           this.$root.showError("This transaction cannot be found.");

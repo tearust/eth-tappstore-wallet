@@ -1,12 +1,12 @@
 <template>
 <div class="tea-page">
-  <h4>Active miner list</h4>
+  <h4>Active hosts list</h4>
   
   <el-button size="small" style="top: 0px;" class="tea-refresh-btn" type="primary" plain icon="el-icon-refresh" circle @click="refreshList()"></el-button>
 
 
   <div style="margin-top: 20px;">
-  These are the currently available mining nodes hosting the TAppStore. The TAppStore can be launched by clicking the Visit link in the desired miner's row listing.
+  These are the currently available mining nodes hosting the TAppStore. The TAppStore can be launched by clicking the Visit link in the desired hosting's row listing.
   <br/>
   <!-- If your hosted node is not active on this list, use the <a href="https://github.com/tearust/teaproject/wiki/Mining:-Required-Open-Ports" target="_blank">following guide</a> to troubleshoot. -->
   </div>
@@ -122,8 +122,8 @@
 
   </TeaTable>
   <ul>
-    <li>If your hosted node is not active on this list, use the <a href="https://github.com/tearust/teaproject/wiki/Mining:-Required-Open-Ports" target="_blank">following guide</a> to troubleshoot. </li>
-    <li>For more information on how to run a mining node, please visit our <a href="https://www.youtube.com/playlist?list=PLOhw_qkI0ILWh5HDI8ZiFARjfkfvNPqev" target="_blank">YouTube playlist</a>.</li>
+    <li>If your hosting node is not active on this list, use the <a href="https://github.com/tearust/teaproject/wiki/Mining:-Required-Open-Ports" target="_blank">following guide</a> to troubleshoot. </li>
+    <li>For more information on how to run a hosting node, please visit our <a href="https://docs.teaproject.org/_mining" target="_blank">https://docs.teaproject.org/_mining</a></li>
   </ul>
 
 </div>

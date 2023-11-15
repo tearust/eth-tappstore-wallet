@@ -402,7 +402,7 @@ const F = {
         props: {
           target: {
             type: 'Input',
-            label: 'Target address or email',
+            label: 'Target address',
             required: true,
           },
           amount: {

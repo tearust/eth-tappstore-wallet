@@ -44,7 +44,7 @@
       
       <el-button v-if="step===1 && param.query" :disabled="!json || json_error" type="primary" size="small" @click="click_check_hash()">Next</el-button>
 
-      <el-button v-if="step===2 && param.query" type="primary" size="small" @click="click_confirm(1)">Search from memory</el-button>
+      <el-button v-if="step===2 && param.query" style="margin-bottom: 10px;" type="primary" size="small" @click="click_confirm(1)">Search from memory</el-button>
 
       <el-button v-if="step===2 && param.query" type="primary" size="small" @click="click_confirm(2)">Search from file</el-button>
       

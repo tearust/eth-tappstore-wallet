@@ -5,7 +5,9 @@
 
   <h4>Admin utility</h4>
   <div>
-    <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="query_special_balance_action()">Query account balance</el-button>
+    <el-button :disabled="not_admin" class="xbt" style="width:200px;" type="primary" @click="query_special_balance_action()">Query account balance</el-button>
+    <br/>
+    <el-button style="width:200px;" class="xbt" type="primary" @click="sign_text()">Sign text</el-button>
   </div>
 
   <el-divider />
@@ -128,6 +130,7 @@ import TeaIconButton from '../components/TeaIconButton';
 import TeaTableColumn from '../components/TeaTableColumn';
 
 import layer2 from '../layer2';
+import eth from '../eth';
 export default {
   components: {
     TeaTable,
@@ -381,6 +384,38 @@ export default {
       const r = await layer2.admin.admin_query_remote_actor_version(this, {});
       this.$root.alert_success(JSON.stringify(r));
     },
+    async sign_text(){
+      this.$store.commit('modal/open', {
+        key: 'common_form',
+        param: {
+          title: 'Sign text',
+          text: '',
+          props: {
+            text: {
+              type: 'Input',
+              label: 'text',
+              default: '',
+            },
+          },
+        },
+        cb: async (form, close)=>{
+          this.$root.loading(true);
+
+          try{
+            const e = await eth.get();
+            const r = await e.signMessage(form.text);
+            const rs = r[0];
+            this.$root.alert_success(rs);
+          }catch(e){
+
+          }
+
+          close();
+          this.$root.loading(false);
+          
+        }
+      });
+    }
   }
 }
 </script>

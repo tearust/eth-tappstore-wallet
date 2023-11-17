@@ -255,9 +255,18 @@ const F = {
             type: 'Input',
             required: true,
           },
+          with_actor: {
+            label: 'Update actors',
+            type: 'switch',
+            default: false,
+          },
           actor_name: {
             label: 'Actor name',
             type: 'Input',
+            condition: {
+              value: true,
+              target: 'with_actor',
+            },
             el_props: {
               type: 'textarea',
               rows: 5,
@@ -266,6 +275,10 @@ const F = {
           actor_url: {
             label: 'Actor url',
             type: 'Input',
+            condition: {
+              value: true,
+              target: 'with_actor',
+            },
             el_props: {
               type: 'textarea',
               rows: 5,
@@ -280,11 +293,13 @@ const F = {
           urlB64: utils.forge.util.encode64(form.url),
           type: form.type,
           version: form.version,
-          actorName: _.map((form.actor_name||'').split(','), (x)=>x),
-          actorUrl: _.map((form.actor_url||'').split(','), (x)=>utils.forge.util.encode64(x)),
           authB64: session_key,
           expireTime: 1800,
         };
+        if(form.with_actor){
+          opts.actorName = _.map((form.actor_name||'').split(','), (x)=>x);
+          opts.actorUrl = _.map((form.actor_url||'').split(','), (x)=>utils.forge.util.encode64(x));
+        }
         try{
           const rs = await txn.txn_request('upgrade_version', opts);
           console.log(11, rs);

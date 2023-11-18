@@ -171,7 +171,7 @@ export default {
         param: {
           title: 'Release Tea',
           confirm_text: 'Confirm',
-          text: `Input the tea amount you wanna released.`,
+          text: `Input the tea amount to be released.`,
           props: {
             amount: {
               label: 'Tea amount',

@@ -29,7 +29,6 @@
       prop="id"
       label="ID"
       width="100"
-      xs
     >
       <template slot-scope="scope">
         <div v-if="!$root.mobile()">
@@ -93,9 +92,9 @@
 
     <TeaTableColumn
       prop="buy_price"
-      label="Buy price"
-      width="100"
-      sortable
+      :label="$root.mobile()?'Buy':'Buy price'"
+      :width="$root.mobile()?65:100"
+      xs
     >
       <template slot-scope="scope">
         <span v-if="!$root.is_tappstore(scope.row.id)" :inner-html.prop="scope.row.buy_price | teaIcon"></span>
@@ -103,9 +102,9 @@
     </TeaTableColumn>
     <TeaTableColumn
       prop="sell_price"
-      label="Sell price"
-      width="100"
-      sortable
+      :label="$root.mobile()?'Sell':'Sell price'"
+      :width="$root.mobile()?65:100"
+      xs
     >
       <template slot-scope="scope">
         <span v-if="!$root.is_tappstore(scope.row.id)" :inner-html.prop="scope.row.sell_price | teaIcon"></span>
@@ -127,18 +126,18 @@
 
    <TeaTableColumn
       prop="token_balance"
-      label="My holdings"
-      width="110"
-      sortable
+      :label="$root.mobile()?'Holding':'My holdings'"
+      :width="$root.mobile()?70:110"
+      xs
     >
       <template slot-scope="scope">
-        <span v-if="!$root.is_tappstore(scope.row.id)" :inner-html.prop="scope.row.token_balance"></span>
+        <span v-if="!$root.is_tappstore(scope.row.id) && user && user.isLogin" :inner-html.prop="scope.row.token_balance"></span>
       </template>
     </TeaTableColumn>
 
     <TeaTableColumn
       label="Actions"
-      width="100"
+      width="70"
       fixed="right"
       xs
     >
@@ -243,7 +242,7 @@ export default {
               'Buy price': item.buy_price,
               'Sell price': item.sell_price,
               'Market cap': item.market_cap,
-              'My holdings': item.token_balance,
+              'My holdings': this.user && this.user.isLogin ? item.token_balance : '',
             };
             return item;
           });

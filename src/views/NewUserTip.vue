@@ -5,8 +5,9 @@
   <div style="width:40px;height:40px;position:absolute;top:15px;right:15px;background:#fff;">
     <i style="display:block;width:40px;height:40px;font-size:40px;color:#35a696;" class="el-icon-s-operation"></i>
   </div>
-  <div style="font-size:19px;color:#fff;font-weight:bold;position:absolute;right:15px;top:60px;border:1px solid #fff;border-radius:10px;padding:6px 2px 6px 10px;">
+  <div style="font-size:17px;color:#fff;font-weight:bold;position:absolute;right:15px;top:60px;border:1px solid #fff;border-radius:10px;padding:6px 38px 6px 8px;">
     Click here to login/logout and switch tabs.
+    <i class="el-icon-top" style="font-size:28px;position:absolute;right:8px;top:4px;"></i>
   </div>
   
 

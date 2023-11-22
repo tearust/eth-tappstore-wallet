@@ -45,7 +45,7 @@
               place="right"
               tip="
             The amount of TEA in your layer1 wallet (e.g. Metamask wallet) <br/>
-            Contract address: (0x2357eB15cc2e26847705b1e5ECB96B0aB9F9ab7F)
+            Contract address: (0x9Adc034a8c8447bba9B7f26902C900B858A187a6)
           "
               icon="questionmark"
             />

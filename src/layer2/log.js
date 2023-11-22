@@ -213,9 +213,6 @@ const F = {
         }
         item.cid = meta.cid;
 
-        if(item.ip === '43.201.33.230'){
-          item.ip = '3.38.139.106';
-        }
         return item;
       });
       

@@ -168,6 +168,19 @@ export default {
     async refreshList(){
       const list = await layer2.log.queryActiveMiners(this);
 
+      if(list.length < 1){
+        list.push({
+          cml_id: '0',
+          cid: null,
+          ip: '3.38.139.106',
+          tea_id: '',
+          owner: 'DAO',
+          token_id: '',
+          node_status: 'active',
+          
+        });
+      }
+
       if(this.$root.mobile()){
         this.list = _.map(list, (item)=>{
           item.mobile_data = {

@@ -8,6 +8,7 @@ import {
   BN_MILLION, isBn, BN, u8aToHex,
 
 } from '@polkadot/util';
+import { generateAvatarURL } from '@cfx-kit/wallet-avatar';
 import isMobile from 'ismobilejs';
 
 import './index';
@@ -219,6 +220,10 @@ const F = {
   consts,
   str,
   form,
+
+  getAddressAvatar(address){
+    return generateAvatarURL(address);
+  },
 
   getHttpBaseUrl() {
     if (!_http_base_url) {

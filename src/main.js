@@ -178,6 +178,9 @@ new Vue({
     inTokenVestingUserList(address){
       return _.includes(VestingUsers, _.toLower(address));
     },
+    get_address_avatar(address){
+      return utils.getAddressAvatar(address);
+    },
   },
   render: h => {
     if(utils.get_env('mode') === 'list'){

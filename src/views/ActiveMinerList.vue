@@ -168,7 +168,7 @@ export default {
     async refreshList(){
       const list = await layer2.log.queryActiveMiners(this);
 
-      if(list.length < 1){
+      if(true){
         list.push({
           cml_id: '0',
           cid: null,

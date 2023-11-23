@@ -62,6 +62,13 @@
   <span style="position:relative;left:-10px;top:-6px;">TApp Store</span>
   </div>
 
+  <div class="t-xtt" v-if="user && user.isLogin">
+    <img :src="$root.get_address_avatar(user.address)" />
+  </div>
+  <div class="t-xtt" v-if="!user || !user.isLogin" style="cursor:pointer;" @click="loginOrLogout()">
+    <img src="../assets/images/11.jpg" />
+  </div>
+
   <i style="display:block;width:60px;height:70px;font-size:40px;text-align:right;line-height:70px;color:#35a696;" class="el-icon-s-operation" @click="openDrawer()"></i>
 </div>
 
@@ -371,5 +378,19 @@ export default {
     background: #35a696;
   }
 
+}
+.t-xtt{
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  top: 20px;
+  right: 44px;
+  border-radius: 16px;
+  overflow: hidden;
+
+  &>img{
+    width:32px;
+    height:32px;
+  }
 }
 </style>

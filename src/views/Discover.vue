@@ -392,6 +392,13 @@ export default {
           helper.openUrl(this.tapp_url(row, 'devportal_cid'));
         }
       }
+      else if(row.id === '0xb8aaaaaaaa230340b78fa252ce4d47dd23e8a904'){
+        if(this.$root.mobile()){
+          this.$root.alert_success(mobile_text);
+          return false;
+        }
+        helper.openUrl(row.tapp_url);
+      }
       else if(row.ori.tapp_type === 'User'){
         helper.openUrl(this.tapp_url(row, 'seat_cid'));
       }

@@ -212,13 +212,19 @@ const F = {
           item.plantd_at -= 1000000000;
         }
         item.cid = meta.cid;
+        item.sell_price = utils.layer1.balanceToAmount(item.sell_price);
+        item.total_supply = utils.layer1.balanceToAmount(item.total_supply);
+        item.market_cap = item.sell_price*item.total_supply;
+        if(item.market_cap > 0){
+          item.market_cap = item.market_cap.toFixed(2);
+        }
 
         return item;
       });
       
 
       console.log('queryAllActiveMiners list =>', list);
-      return _.reverse(_.sortBy(list, (x)=>x.plantd_at));
+      return _.reverse(_.sortBy(list, (x)=>x.market_cap));
       
     }catch(e){
       self.$root.loading(false);

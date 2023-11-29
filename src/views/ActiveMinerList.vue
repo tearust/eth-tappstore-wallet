@@ -85,6 +85,14 @@
     </TeaTableColumn>
 
     <TeaTableColumn
+      label="Market cap"
+    >
+      <template slot-scope="scope">
+        <span>{{scope.row.market_cap}}</span>
+      </template>
+    </TeaTableColumn>
+
+    <TeaTableColumn
       label="Status"
       width="80"
       xs
@@ -156,6 +164,8 @@ export default {
     ]),
   },
   async mounted(){
+    document.title = "TEA Project Alpha Testnet";
+
     this.cid = utils.get_env('TAPPSTORE_CID');
     this.version = utils.get_env('VERSION');
     this.epoch = utils.get_env('EPOCH_VERSION');
@@ -168,18 +178,18 @@ export default {
     async refreshList(){
       const list = await layer2.log.queryActiveMiners(this);
 
-      if(true){
-        list.push({
-          cml_id: '0',
-          cid: null,
-          ip: '3.38.139.106',
-          tea_id: '',
-          owner: 'DAO',
-          token_id: '',
-          node_status: 'active',
+      // if(true){
+      //   list.push({
+      //     cml_id: '0',
+      //     cid: null,
+      //     ip: '3.38.139.106',
+      //     tea_id: '',
+      //     owner: 'DAO',
+      //     token_id: '',
+      //     node_status: 'active',
           
-        });
-      }
+      //   });
+      // }
 
       if(this.$root.mobile()){
         this.list = _.map(list, (item)=>{
@@ -192,6 +202,7 @@ export default {
             "Epoch": this.epoch,
             "Version": this.version,
             'Token id': item.token_id,
+            'Market cap': item.market_cap,
           };
           return item;
         });

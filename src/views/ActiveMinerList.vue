@@ -86,6 +86,7 @@
 
     <TeaTableColumn
       label="Market cap"
+      xs
     >
       <template slot-scope="scope">
         <span>{{scope.row.market_cap}}</span>
@@ -95,7 +96,6 @@
     <TeaTableColumn
       label="Status"
       width="80"
-      xs
     >
       <template slot-scope="scope">
         <span v-if="scope.row.node_status!=='pending'">{{scope.row.node_status}}</span>

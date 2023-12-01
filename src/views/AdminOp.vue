@@ -26,7 +26,7 @@
     v-if="credit_info_list"
   >
     <el-table-column
-      label="Total credit"
+      label="Init credit"
     >
       <template slot-scope="scope">
         <span :inner-html.prop="scope.row.total | teaIcon"></span>

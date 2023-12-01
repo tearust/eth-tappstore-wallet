@@ -393,8 +393,8 @@ export default {
         }
       }
       else if(row.id === '0xb8aaaaaaaa230340b78fa252ce4d47dd23e8a904'){
-        if(this.$root.mobile()){
-          this.$root.alert_success(mobile_text);
+        if(this.$root.mobile() && utils.wallet_webview()){
+          this.$root.alert_success("This app cannot run inside Metamask");
           return false;
         }
         helper.openUrl(row.tapp_url);

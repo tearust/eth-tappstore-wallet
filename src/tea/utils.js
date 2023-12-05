@@ -222,7 +222,8 @@ const F = {
   form,
 
   getAddressAvatar(address){
-    return generateAvatarURL(address);
+    // return generateAvatarURL(address);
+    return `https://effigy.im/a/${address}.png`;
   },
 
   getHttpBaseUrl() {

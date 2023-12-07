@@ -38,7 +38,7 @@
       xs
     >
       <template slot-scope="scope">
-        <span>{{scope.row.time}}</span>
+        <span>{{f_time(scope.row.time)}}</span>
       </template>
     </TeaTableColumn>
 
@@ -78,7 +78,7 @@
     </TeaTableColumn>
 
     <TeaTableColumn
-      label="Token quantity"
+      label="Token amount"
       width="120"
       xs
       tip="Units are either Tea token or corresponding entity token."
@@ -182,7 +182,7 @@ export default {
       if(this.$root.mobile()){
         this.list = _.map(list, (item)=>{
           item.mobile_data = {
-            'UTC': item.time,
+            'UTC': this.f_time(item.time),
             'Account': item.account,
             'Token ID': item.token_id,
             'Token type': item.state_type,
@@ -200,9 +200,13 @@ export default {
       this.$root.loading(false);
     },
 
+    f_time(utc_time){
+      return moment.utc(utc_time, 'DD/MM/YYYY kk:mm:ss').format('MM/DD/YYYY kk:mm:ss');
+    },
+
     showDate(c){
-      if(!c) return moment.utc().format('YYYY/MM/DD');
-      return moment.utc(c).format('YYYY/MM/DD');
+      if(!c) return moment.utc().format('MM/DD/YYYY');
+      return moment.utc(c).format('MM/DD/YYYY');
     },
 
     async query_op_logs(date=moment.utc()){

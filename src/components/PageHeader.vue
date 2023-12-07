@@ -66,7 +66,7 @@
     <img :src="$root.get_address_avatar(user.address)" />
   </div>
   <div class="t-xtt" v-if="!user || !user.isLogin" style="cursor:pointer;" @click="loginOrLogout()">
-    <img src="../assets/images/11.jpg" />
+    <img src="../assets/images/11.png" />
   </div>
 
   <i style="display:block;width:60px;height:70px;font-size:40px;text-align:right;line-height:70px;color:#35a696;" class="el-icon-s-operation" @click="openDrawer()"></i>

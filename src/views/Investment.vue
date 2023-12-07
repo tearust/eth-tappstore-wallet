@@ -41,7 +41,6 @@
     <TeaTableColumn
       prop="name"
       label="Name"
-      xs
     >
       <template slot-scope="scope">
         <span v-if="!scope.row.active_block">{{scope.row.name}}</span>
@@ -55,9 +54,11 @@
       prop="token_symbol"
       label="Ticker"
       width="70"
+      xs
     >
       <template slot-scope="scope">
-        {{$root.is_tappstore(scope.row.id) ? '' : scope.row.token_symbol}}
+        <!-- {{$root.is_tappstore(scope.row.id) ? 'TEA' : scope.row.token_symbol}} -->
+        {{scope.row.token_symbol}}
       </template>
     </TeaTableColumn>
 

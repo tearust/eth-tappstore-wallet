@@ -67,7 +67,7 @@ const F = {
   async favTapp(self, data, succ_cb){
     const session_key = user.checkLogin(self);
 
-    const html = `${utils.consts.gas_tip()}`;
+    const html = `Are you sure to fav this TApp?`;
     try{
       await self.$confirm(html, {
         dangerouslyUseHTMLString: true,
@@ -104,7 +104,7 @@ const F = {
   async unfavTapp(self, data, succ_cb){
     const session_key = user.checkLogin(self);
 
-    const html = `${utils.consts.gas_tip()}`;
+    const html = `Are you sure to unfav this TApp?`;
     try{
       await self.$confirm(html, {
         dangerouslyUseHTMLString: true,

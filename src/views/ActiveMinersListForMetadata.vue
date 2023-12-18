@@ -55,7 +55,7 @@
     </el-table-column>
 
     <el-table-column
-      label="TApp cid"
+      label="TApp CID"
     >
       <template slot-scope="scope">
         <span>{{scope.row.cid || cid}}</span>

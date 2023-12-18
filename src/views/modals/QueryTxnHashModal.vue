@@ -33,7 +33,9 @@
       
   <div v-if="step===2">
     <span style="font-size:15px;">The txn hash is <b style="color:#35a696;">{{json_hash}}</b></span><br/>
-    <span style="font-size:15px;">Please click the <b style="color:#35a696;">Confirm</b> buton to query the transaction execution time.</span>
+    <span style="font-size:15px;">
+      Please select <b style="color:#35a696;">Search from memory</b> (for transactions executed within 30 minutes) or <b style="color:#35a696;">Search from file</b> (for transactions executed more than 30 minutes ago).
+    </span>
   </div>
 
 

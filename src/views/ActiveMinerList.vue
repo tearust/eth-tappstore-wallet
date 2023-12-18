@@ -61,7 +61,7 @@
     </TeaTableColumn>
 
     <TeaTableColumn
-      label="Ipfs cid"
+      label="IPFS CID"
     >
       <template slot-scope="scope">
         <span>{{scope.row.cid || cid}}</span>

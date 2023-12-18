@@ -71,7 +71,7 @@
     
 
     <TeaTableColumn
-      label="Ipfs cid"
+      label="IPFS CID"
     >
       <template slot-scope="scope">
         <span class="one-line">{{scope.row.cid}}</span>
@@ -107,7 +107,7 @@
     text-align: right;
   ">
 
-    <el-button v-if="!$root.mobile() && user && user.isLogin" style="width:400px;" type="primary" @click="createNewTApp()">Create new TApp</el-button>
+    <el-button v-if="!$root.mobile() && user && user.isLogin && $root.is_sudo(user.address)" style="width:400px;" type="primary" @click="createNewTApp()">Create new TApp</el-button>
   </div>
 
 </div>

@@ -232,7 +232,7 @@ const F = {
       key: 'common_form',
       param: {
         title: 'Topup',
-        text: 'Move chain wallet (layer1) funds to layer2 TApp Store wallet account',
+        text: 'Move chain wallet (layer1) funds to layer2 TApp Store wallet account<br />It may takes up to 15 minutes.',
         props: {
           token: {
             type: 'select',
@@ -299,7 +299,7 @@ const F = {
 
     const text = (fee)=>{
       const tip = fee ? 'The Etherenum gas fee is '+fee+' TEA<br/>' : '';
-      return `Move funds back to chain wallet (layer1)<br/>${tip}please click 'Confirm' to process this withdrawal transaction.`;
+      return `Move funds back to chain wallet (layer1)<br/>${tip}It may takes up to 15 minutes.<br />please click 'Confirm' to process this withdrawal transaction.`;
     };
     self.$store.commit('modal/open', {
       key: 'common_form',

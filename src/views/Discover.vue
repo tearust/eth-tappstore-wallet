@@ -2,7 +2,7 @@
 <div class="tea-page">
   <div style="height: 24px;">
     <el-switch
-      v-if="user && user.isLogin"
+      v-if="false && user && user.isLogin"
       v-model="mine"
       active-color="#35a696"
       inactive-color="#409eff"

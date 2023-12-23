@@ -26,6 +26,32 @@ If you have any questions, please ask them in our TG community - <a href="https:
 
 TEA project team will answer them there.
 </p>
+
+
+<el-divider />
+
+<div v-if="ai_block.t">
+<div style="font-size: 16px;font-weight:bold;">{{ai_block.q}}</div>
+<p style="font-size: 20px;">
+{{ai_block.t}}
+</p>
+
+<div v-if="ai_block.related" style="margin-top: 20px;">
+<div style="font-size: 14px;font-weight:bold;color:#555;">Related questions:</div>
+<el-button style="display:block;margin-left:20px;padding:0;margin-top:5px;" type="text" v-for="(qq, i) of ai_block.related" :key="i" @click="ask_ai(qq)">{{qq}}</el-button>
+</div>
+
+<div style="margin-top: 20px;">
+Please visit <a href="https://docs.teaproject.org/" target="_blank">https://docs.teaproject.org/</a> for more docs.
+</div>
+
+<el-divider />
+</div>
+
+Please input your question here.
+<el-input placeholder="e.g. What is the easiest way to earn TEA token?" @keyup.enter.native="ask_ai()" v-model="ai_question">
+  <el-button slot="append" icon="el-icon-search" @click="ask_ai()"></el-button>
+</el-input>
     </el-tab-pane>
    
   </el-tabs>
@@ -39,7 +65,72 @@ TEA project team will answer them there.
 </div>
 </template>
 <script>
+import {mapGetters, mapState} from 'vuex';
+import Base from '../workflow/Base';
+import _ from 'lodash';
+import utils from '../tea/utils';
+import {axios} from 'tearust_utils';
 
+import layer2 from '../layer2';
+import helper from '../views/helper';
+
+import eth from '../eth';
+export default {
+  data() {
+    return {
+
+      ai_question: '',
+      ai_block: {
+        q: null,
+        t: null,
+        related: null,
+      },
+      
+    };
+  },
+  computed: {
+    ...mapGetters(['layer1_account']),
+  },
+  async mounted(){
+    
+  },
+
+  methods: {
+    async ask_ai(txt){
+      const query = txt || this.ai_question || 'What is the easiest way to earn TEA token?';
+      const url = 'https://api.gitbook.com/v1/orgs/6RfBNh1NuvfQc4xeHaLN/ask';
+      this.$root.loading(true);
+      const res = await axios.post(url, {
+        query,
+      }, {
+        headers: {
+          Authorization: 'Bearer gb_api_8np5Dmi8cmOtBitnk2KudbMg7MH4wphU2FqrsKcY',
+        }
+      });
+      if(res.data.answer){
+        const data = res.data.answer;
+        this.ai_block = {
+          q: _.clone(query),
+          t: data.text,
+          related: data.followupQuestions,
+        };
+      }
+      else{
+        this.ai_block = {
+          q: _.clone(query),
+          t: 'No answer.',
+          related: null,
+        };
+      }
+
+
+      this.$root.loading(false);
+      this.ai_question = '';
+      
+    }
+  }
+
+}
 
 </script>
 <style lang="scss">

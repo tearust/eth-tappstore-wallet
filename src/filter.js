@@ -66,7 +66,7 @@ Vue.filter('short_address', (address)=>{
 });
 
 Vue.filter('erc20', (hex)=>{
-  const USDT_ADDRESS = '0xdac17f958d2ee523a2206206994597c13d831ec7';
+  const USDT_ADDRESS = '0xfA88f8350A0d27B473450dFa54A80f5276658aD4';
   hex = USDT_ADDRESS;
   const html = '<a style="overflow:hidden;text-overflow: ellipsis;white-space:nowrap;color:#35A696;" href="https://etherscan.io/token/'+hex+'" target="_blank">'+hex+'</a>';
   return html;

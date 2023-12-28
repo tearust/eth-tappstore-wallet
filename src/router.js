@@ -57,7 +57,7 @@ let routers = [
     name: 'welcome',
     component: Welcome,
     meta: {
-      needLogin: true,
+      // needLogin: true,
     }
   },
   {

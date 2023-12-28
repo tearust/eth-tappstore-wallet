@@ -4,31 +4,6 @@
 
   <el-tabs type="border-card">
     <el-tab-pane label="TApp Store">
-    
-
-
-<strong style="display:block; font-size: 21px;">TApp Store Help</strong>
-<p>
-The TApp Store is the main access point to the various apps and investment opportunities in the TEA Project ecosystem. The Account tab allows users to move TEA tokens from Ethereum (the chain wallet) to the TApp Store wallet. Once funds are moved to the TApp Store wallet via the topup function, the TEA funds will be available to be used for TApps and investments.
-<br/><br/>
-
-The <b>TApps</b> tab lists all running TApps which can be launched by clicking on their name. Note that each TApp has a spending limit that must be set before using the TApp. This dictates how much TEA funds the TApp can withdraw from your TApp Store wallet. If you haven't set the limit, you'll be prompted to do so when you first launch the TApp.
-
-<br/><br/>
-
-The <b>Investments tab</b> allows you to purchase the tokenized assets of the various entities in the TEA ecosystem. These assets are issued on a bonding curve where price moves in step with supply.
-
-<br/><br/>
-
-The <b>TEA Vesting</b> tab shows the release schedule of any TEA that is due to the user from community rewards or investment.
-<br/><br/>
-If you have any questions, please ask them in our TG community - <a href="https://t.me/teaprojectorg" target="_blank">https://t.me/teaprojectorg</a> <br/>
-
-TEA project team will answer them there.
-</p>
-
-
-<el-divider />
 
 <div v-if="ai_block.t">
 <div style="font-size: 16px;font-weight:bold;">{{ai_block.q}}</div>
@@ -41,25 +16,25 @@ TEA project team will answer them there.
 <el-button style="display:block;margin-left:20px;padding:0;margin-top:5px;" type="text" v-for="(qq, i) of ai_block.related" :key="i" @click="ask_ai(qq)">{{qq}}</el-button>
 </div>
 
-<div style="margin-top: 20px;">
-Please visit <a href="https://docs.teaproject.org/" target="_blank">https://docs.teaproject.org/</a> for more docs.
-</div>
 
 <el-divider />
 </div>
+    
 
-Please input your question here.
-<el-input placeholder="e.g. What is the easiest way to earn TEA token?" @keyup.enter.native="ask_ai()" v-model="ai_question">
+
+
+Please ask your question here, our AI bot will try to find the answer from <a href="https://docs.teaproject.org" target="_blank">https://docs.teaproject.org.</a><br/>
+Looking for human? please join <a href="https://t.me/teaprojectorg" target="_blank">https://t.me/teaprojectorg</a>
+<el-input style="margin-top:5px;" placeholder="e.g. What is the easiest way to earn TEA token?" @keyup.enter.native="ask_ai()" v-model="ai_question">
   <el-button slot="append" icon="el-icon-search" @click="ask_ai()"></el-button>
 </el-input>
+
+
     </el-tab-pane>
    
   </el-tabs>
 
 
-
-<p style="margin-top: 24px;">We will have mining rewards during the contest but not for the public testing periods. Make sure to join our Telegram community for <a href="https://github.com/tearust/teaproject/wiki" target="_blank">updated rules</a> including starting time announcements: <a href="https://t.me/teaprojectorg" target="_blank">@teaprojectorg</a>.
-  </p>
   
 
 </div>

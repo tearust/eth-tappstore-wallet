@@ -61,9 +61,6 @@ const F = {
     if(chain.name === 'Offline'){
       throw('You did not install metamask wallet, please install it first and continue.');
     }
-    // if(chain.name !== 'Goerli'){
-    //   throw('Current epoch only accept Goerli network. <br> please visit <a href="https://www.youtube.com/watch?v=nsAuqfAQCag" target="_blank">this link<a> to config.');
-    // }
 
     // const epoch_closed = utils.mem.get('epoch_closed');
     // if (epoch_closed && !self.$root.is_sudo(address)) {

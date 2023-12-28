@@ -258,6 +258,23 @@ const F = {
             type: 'Input',
             required: true,
           },
+          pcr0: {
+            label: 'PCR0',
+            type: 'Input',
+          },
+          pcr1: {
+            label: 'PCR1',
+            type: 'Input',
+          },
+          pcr2: {
+            label: 'PCR2',
+            type: 'Input',
+          },
+          version: {
+            label: 'Version',
+            type: 'Input',
+            required: true,
+          },
           with_actor: {
             label: 'Update actors',
             type: 'switch',
@@ -299,6 +316,11 @@ const F = {
           authB64: session_key,
           expireTime: 1800,
         };
+        if(form.pcr0){
+          opts.pcr0 = form.pcr0;
+          opts.pcr1 = form.pcr1;
+          opts.pcr2 = form.pcr2;
+        }
         if(form.with_actor){
           opts.actorName = _.map((form.actor_name||'').split(','), (x)=>x);
           opts.actorUrl = _.map((form.actor_url||'').split(','), (x)=>utils.forge.util.encode64(x));

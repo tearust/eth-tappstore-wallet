@@ -45,7 +45,7 @@
               place="right"
               tip="
             The amount of TEA in your layer1 wallet (e.g. Metamask wallet) <br/>
-            Contract address: (0xfA88f8350A0d27B473450dFa54A80f5276658aD4)
+            Contract address: (0x1d4Ab5E692C5E45Afe7646185a2d58A0E21cD3e9)
           "
               icon="questionmark"
             />
@@ -75,7 +75,7 @@
               place="right"
               tip="
             The amount of USDT in your layer1 wallet (e.g. Metamask wallet) <br/>
-            Contract address: (0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0)
+            Contract address: (0xdAC17F958D2ee523a2206206994597C13D831ec7)
           "
               icon="questionmark"
             />

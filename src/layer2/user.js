@@ -59,13 +59,11 @@ const F = {
 
     const chain = await self.wf.layer1.getChain();
     if(chain.name === 'Offline'){
-      throw('You did not install metamask wallet, please install it first and continue.');
+      throw('You did not install metamask wallet.');
     }
-
-    // const epoch_closed = utils.mem.get('epoch_closed');
-    // if (epoch_closed && !self.$root.is_sudo(address)) {
-    //   throw 'Current epoch finished, can\'t login.';
-    // }
+    if(chain.name !== 'Mainnet'){
+      throw('TEA only accept ETH Mainnet network. <br> please visit <a href="https://www.youtube.com/watch?v=nsAuqfAQCag" target="_blank">this link<a> to config.');
+    }
 
     // thanks for https://github.com/polkadot-js/extension/issues/827
     const data = permission_str;

@@ -296,7 +296,7 @@ const F = {
 
     const text = (fee)=>{
       const tip = fee ? 'The Etherenum gas fee is '+fee+' TEA<br/>' : '';
-      return `Move funds back to chain wallet (layer1)<br/>${tip}It may takes up to 15 minutes.<br />please click 'Confirm' to process this withdrawal transaction.`;
+      return `Move funds back to chain wallet (layer1)<br/>${tip}It may take up to 15 minutes.<br />please click 'Confirm' to process this withdrawal transaction.`;
     };
     self.$store.commit('modal/open', {
       key: 'common_form',

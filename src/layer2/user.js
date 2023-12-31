@@ -248,14 +248,14 @@ const F = {
 
         const amt = _.toNumber(form.amount);
         const token = _.toLower(form.token);
-        if(token==='tea' && self.layer1_account.balance < amt){
-          self.$root.showError("Not enough TEA balance to topup.");
-          return false;
-        }
-        if(token==='usdt' && self.layer1_account.usd < amt){
-          self.$root.showError("Not enough USDT balance to topup.");
-          return false;
-        }
+        // if(token==='tea' && self.layer1_account.balance < amt){
+        //   self.$root.showError("Not enough TEA balance to topup.");
+        //   return false;
+        // }
+        // if(token==='usdt' && self.layer1_account.usd < amt){
+        //   self.$root.showError("Not enough USDT balance to topup.");
+        //   return false;
+        // }
 
         if(amt < 1) {
           self.$root.showError('Minimum topup amount is 1.');

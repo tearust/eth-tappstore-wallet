@@ -244,7 +244,8 @@ class Instance {
     // const s = '0x' + signature.substring(2).substring(64, 128);
     // const v = '0x' + signature.substring(2).substring(128, 130);
     const res = await lock.Topup(
-      erc20Token.address,
+      // erc20Token.address,
+      current_address,
       amount,
     );
     console.log('result:', res);

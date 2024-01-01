@@ -232,7 +232,10 @@ const F = {
           token: {
             type: 'select',
             default: 'TEA',
-            options: [{id: 'TEA'}, {id: 'USDT'}],
+            options: [
+              {id: 'TEA'}, 
+              {id: 'USDT'}
+            ],
           },
           amount: {
             type: "number",
@@ -243,9 +246,13 @@ const F = {
         },
       },
       cb: async (form, close) => {
-
         const amt = _.toNumber(form.amount);
         const token = _.toLower(form.token);
+        if(token === 'usdt'){
+          self.$root.alert_success("This feature is locked in this version.<br/>Stay updated with the latest unlock notifications by following us on <a href='https://x.com/teaprojectorg' target='_blank'>https://x.com/teaprojectorg</a>");
+          return;
+        }
+
         if(token==='tea' && self.layer1_account.balance < amt){
           self.$root.showError("Not enough TEA balance to topup.");
           return false;
@@ -306,7 +313,10 @@ const F = {
           token: {
             type: 'select',
             default: 'TEA',
-            options: [{id: 'TEA'}, {id: 'USDT'}],
+            options: [
+              {id: 'TEA'}, 
+              {id: 'USDT'}
+            ],
           },
           amount: {
             type: 'number',
@@ -316,12 +326,17 @@ const F = {
         },
       },
       cb: async (form, close) => {
+        const token = _.toLower(form.token);
+        if(token === 'usdt'){
+          self.$root.alert_success("This feature is locked in this version.<br/>Stay updated with the latest unlock notifications by following us on <a href='https://x.com/teaprojectorg' target='_blank'>https://x.com/teaprojectorg</a>");
+          return;
+        }
+
         self.$root.loading(true);
         const amount = utils.layer1.amountToBalance(form.amount);
 
         const tappId = base.getTappId();
         let target_tapp_id = tappId;
-        const token = _.toLower(form.token);
         if(token === 'usdt'){
           target_tapp_id = base.getUsdtId();
         }

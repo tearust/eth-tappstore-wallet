@@ -4,7 +4,7 @@
       <div class="p-header1">
         <a href="javascript:void(0)" onClick="location.reload()" style="float:left;">
           <el-image
-            src="https://wallet.teaproject.org/tea_logo/logo.png"
+            src="https://beta.teaproject.org/tea_logo/logo.png"
             fit="fit">
           </el-image>
         </a>

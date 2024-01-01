@@ -164,7 +164,7 @@ export default {
     ]),
   },
   async mounted(){
-    document.title = "TEA Project Alpha Testnet";
+    document.title = "TEA Project mainnet(beta)";
 
     this.cid = utils.get_env('TAPPSTORE_CID');
     this.version = utils.get_env('VERSION');

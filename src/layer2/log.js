@@ -183,7 +183,7 @@ const F = {
 
       if(data.has_cml && !data.has_app){
         alert('Click OK to redirect Tappstore for cml '+data.cml_id);
-        location.href = `http://${dd[1]}:8080/ipfs/${meta.cid}`;
+        location.href = `http://${dd[1]}:8080/ipfs/${meta.cid||self.cid}`;
       }
       
 

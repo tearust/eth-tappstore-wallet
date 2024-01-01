@@ -129,12 +129,16 @@ export default {
   },
   
   async mounted(){
+    document.title = "TEA Project mainnet(beta)";
+    
     const {cml_id, ticker} = this.$route.params;
     const xt = _.startsWith(this.$route.path, '/node') ? 'node' : 'app';
     console.log(11, cml_id, ticker, xt);
 
     this.xd = {
-      xt, cml_id, ticker: _.toUpper(ticker),
+      xt, 
+      cml_id, 
+      ticker: _.toUpper(ticker),
       has_cml: !!cml_id,
       has_app: !!ticker,
       cid: utils.get_env('TAPPSTORE_CID'),
@@ -147,7 +151,6 @@ export default {
     else{
       this.title = 'Redirect to Tappstore';
     }
-    
 
     this.cid = this.xd.cid;
     this.version = utils.get_env('VERSION');
@@ -164,8 +167,8 @@ export default {
       if (ticker === 'HARBERGER') x = 'SEAT';
       if (ticker === 'MINER') x = 'CML';
 
-      const r = utils.get_env(x+'_URL');
-      return r.replace('/ipfs/', '');
+      const r = utils.get_env(x+'_CID');
+      return r;
     },
     async refreshList(){
       const list = await layer2.log.queryActiveMetadata(this, this.xd);

@@ -210,8 +210,24 @@ class Instance {
     const signer = this.signer;
 
     const current_address = await signer.getAddress();
-    await erc20Token.approve(lock.address, help.usdt_unit(amt));
-       
+
+    const amount = help.usdt_unit(amt);
+    const allowance = await erc20Token.allowance(current_address, lock.address);
+    console.log(1111, allowance.toString());
+
+    if(allowance.lt(amount)){
+      await erc20Token.approve(lock.address, 0, {
+        gasLimit: 123456,
+      });
+      await erc20Token.approve(lock.address, amount, {
+        gasLimit: 123456,
+      });
+    } 
+    
+    
+    const allowance1 = await erc20Token.allowance(current_address, lock.address);
+    console.log(2222, allowance1.toString());
+    
     // lock
     // const types = {
     //   Permit: [
@@ -230,7 +246,7 @@ class Instance {
     //   verifyingContract: erc20Token.address,
     // };
     // const deadline = parseInt(new Date().getTime() / 1000) + 10000;
-    const amount = help.usdt_unit(amt);
+    // const amount = help.usdt_unit(amt);
     // const value = {
     //   owner: current_address,
     //   spender: lock.address,
@@ -243,10 +259,14 @@ class Instance {
     // const r = '0x' + signature.substring(2).substring(0, 64);
     // const s = '0x' + signature.substring(2).substring(64, 128);
     // const v = '0x' + signature.substring(2).substring(128, 130);
-    const res = await lock.Topup(
-      // erc20Token.address,
-      current_address,
+    // const amount = help.usdt_unit(amt);
+    let res = await lock.Topup(
+      erc20Token.address,
+      // current_address,
       amount,
+      {
+        gasLimit: 123456,
+      }
     );
     console.log('result:', res);
     

@@ -62,7 +62,7 @@ const F = {
       throw('You did not install metamask wallet.');
     }
     if(chain.name !== 'Mainnet'){
-      throw('TEA only accept ETH Mainnet network. <br> please visit <a href="https://www.youtube.com/watch?v=nsAuqfAQCag" target="_blank">this link<a> to config.');
+      throw('TEA only accept ETH Mainnet network. <br> please visit <a href="https://autofarm.gitbook.io/autofarm-network/how-tos/defi-beginners-guide/switching-networks-on-metamask" target="_blank">this link<a> to config.');
     }
 
     // thanks for https://github.com/polkadot-js/extension/issues/827

@@ -7,7 +7,7 @@
         <h4 class="t-h">Resources</h4>
         <a class="t-a" target="_blank" href="https://teaproject.org">Website</a>
         <a class="t-a" target="_blank" href="https://github.com/tearust/teaproject/discussions">Discussions</a>
-        <a class="t-a" target="_blank" href="https://github.com/tearust/teaproject/wiki">Wiki</a>
+        <a class="t-a" target="_blank" href="https://docs.teaproject.org">Documents</a>
         <a class="t-a" target="_blank" href="https://github.com/tearust">Github</a>
       </el-col>
 
@@ -35,10 +35,10 @@
           <b>{{enclave_version}}</b>
         </b>
 
-        <b class="lg">
+        <!-- <b class="lg">
           <span>Epoch version :</span> 
           <b>{{epoch_version}}</b>
-        </b>
+        </b> -->
         <b class="lg">
           <span>Wallet version : </span> 
           <b>{{version}}</b>
@@ -50,7 +50,7 @@
     
     
     <el-divider></el-divider>
-    <p style="margin:0 auto;text-align:center;font-size:16px;">Copyright © 2019-2023 <b>TeaProject.org</b> All Rights Reserved</p>
+    <p style="margin:0 auto;text-align:center;font-size:16px;">Copyright © 2019-2024 <b>TeaProject.org</b> All Rights Reserved</p>
   </div>
 </section>
 

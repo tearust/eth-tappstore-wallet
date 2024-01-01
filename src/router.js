@@ -191,7 +191,7 @@ let routers = [
     name: 'log',
     component: LogIndex,
     meta: {
-      needLogin: false,
+      needLogin: true,
     },
   },
   {

@@ -191,7 +191,7 @@ let routers = [
     name: 'log',
     component: LogIndex,
     meta: {
-      needLogin: true,
+      needLogin: utils.get_env('env') != 'dev',
     },
   },
   {

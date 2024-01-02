@@ -4,7 +4,7 @@
 <el-menu v-if="!is_mobile" active-text-color="#35a696" :default-active="activeIndex" class="p-header" @select="handleSelect" mode="horizontal">
   <a href="javascript:void(0)" onClick="location.reload()" style="float:left;">
     <el-image
-      src="https://alpha.teaproject.org/tea_logo/logo.png"
+      src="https://beta.teaproject.org/tea_logo/logo.png"
       fit="fit">
     </el-image>
     <span style="
@@ -58,7 +58,7 @@
     font-weight: bold;
     line-height:70px;
   ">
-  <img style="width:50px;height:50px;position:relative;top:8px;left:-8px;" src="https://alpha.teaproject.org/tea_logo/logo.png" />
+  <img style="width:50px;height:50px;position:relative;top:8px;left:-8px;" src="https://beta.teaproject.org/tea_logo/logo.png" />
   <span style="position:relative;left:-10px;top:-6px;">TApp Store</span>
   </div>
 

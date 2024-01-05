@@ -216,9 +216,12 @@ class Instance {
     console.log(1111, allowance.toString());
 
     if(allowance.lt(amount)){
-      await erc20Token.approve(lock.address, 0, {
-        gasLimit: 123456,
-      });
+      if(allowance > 0){
+        await erc20Token.approve(lock.address, 0, {
+          gasLimit: 123456,
+        });
+      }
+      
       await erc20Token.approve(lock.address, amount, {
         gasLimit: 123456,
       });

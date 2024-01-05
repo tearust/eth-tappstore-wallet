@@ -61,6 +61,9 @@
     <br/><br/>
     <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="query_actor_version()">Query actor version</el-button>
     <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="query_remote_actor_version()">Query remote actor version</el-button>
+    <br/><br/>
+    <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="query_pcr()">Query version PCR</el-button>
+    <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="add_version_pcr()">Add version PCR</el-button>
   </div>
 
 
@@ -415,7 +418,19 @@ export default {
           
         }
       });
-    }
+    },
+    async query_pcr(){
+      const r = await layer2.admin.admin_query_pcr(this, {});
+      // const html = r.PCR0+'<hr/>'+r.PCR1+'<hr/>'+r.PCR2;
+      this.$root.alert_success(JSON.stringify(r));
+    },
+    async add_version_pcr(){
+      await layer2.admin.add_version_pcr(this, {}, async ()=>{
+        this.$root.success();
+      });
+      
+
+    },
   }
 }
 </script>

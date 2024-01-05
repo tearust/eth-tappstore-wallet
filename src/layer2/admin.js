@@ -266,6 +266,31 @@ const F = {
       self.$root.loading(false);
     }
   },
+  async admin_query_pcr(self, param={}){
+    const session_key = user.checkLogin(self);
+    self.$root.loading(true);
+    
+    const opts = {
+      address: self.layer1_account.address,
+      tappIdB64: base.getTappId(),
+      authB64: session_key,
+    };
+    try{
+      const rs = await txn.query_request('admin_query_available_pcr', opts);
+      self.$root.loading(false);
+      
+      console.log('admin_query_available_pcr =>', rs);
+      return _.map(rs, (item)=>{
+        item.PCR0 = _layer1.u8aToHex(item.PCR0);
+        item.PCR1 = _layer1.u8aToHex(item.PCR1);
+        item.PCR2 = _layer1.u8aToHex(item.PCR2);
+        return item;
+      });
+      
+    }catch(e){
+      self.$root.loading(false);
+    }
+  },
 
   async admin_query_remote_actor_version(self, param={}){
     self.$root.loading(true);
@@ -283,6 +308,70 @@ const F = {
     }catch(e){
       self.$root.loading(false);
     }
+  },
+  async add_version_pcr(self, data, succ_cb){
+    const session_key = user.checkLogin(self);
+
+    self.$store.commit('modal/open', {
+      key: 'common_form', 
+      param: {
+        title: 'Upgrade PCR',
+        text: ``,
+        props: {
+          version: {
+            label: 'Version',
+            type: 'Input',
+            required: true,
+          },
+        
+          pcr0: {
+            label: 'PCR0',
+            type: 'Input',
+            required: true,
+          },
+          pcr1: {
+            label: 'PCR1',
+            type: 'Input',
+            required: true,
+          },
+          pcr2: {
+            label: 'PCR2',
+            type: 'Input',
+            required: true,
+          },
+          
+          
+        },
+      },
+      cb: async (form, close)=>{
+        self.$root.loading(true);
+
+        const opts = {
+          version: form.version,
+          address: self.layer1_account.address,
+          tappIdB64: base.getTappId(),
+          authB64: session_key,
+        };
+        if(true){
+          opts.pcr0 = form.pcr0;
+          opts.pcr1 = form.pcr1;
+          opts.pcr2 = form.pcr2;
+        }
+        
+        try{
+          const rs = await txn.txn_request('admin_add_version_pcr', opts);
+
+          self.$root.success();
+          close();
+          await succ_cb();
+        }catch(e){
+          self.$root.showError(e);
+        }
+
+        self.$root.loading(false);
+      },
+    });
+
   },
 };
 

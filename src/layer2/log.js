@@ -314,7 +314,7 @@ const F = {
           type: form.type,
           version: form.version,
           authB64: session_key,
-          expireTime: 1800,
+          expireTime: 3600*24*90,
         };
         if(form.pcr0){
           opts.pcr0 = form.pcr0;

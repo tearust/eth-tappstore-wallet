@@ -231,38 +231,7 @@ class Instance {
     const allowance1 = await erc20Token.allowance(current_address, lock.address);
     console.log(2222, allowance1.toString());
     
-    // lock
-    // const types = {
-    //   Permit: [
-    //     { name: "owner", type: "address" },
-    //     { name: "spender", type: "address" },
-    //     { name: "value", type: "uint256" },
-    //     { name: "nonce", type: "uint256" },
-    //     { name: "deadline", type: "uint256" },
-    //   ],
-    // };
-    // const chainId = (await this.getChain()).id;
-    // const domain = {
-    //   name: "USDT",
-    //   version: "1",
-    //   chainId: chainId,
-    //   verifyingContract: erc20Token.address,
-    // };
-    // const deadline = parseInt(new Date().getTime() / 1000) + 10000;
-    // const amount = help.usdt_unit(amt);
-    // const value = {
-    //   owner: current_address,
-    //   spender: lock.address,
-    //   value: amount,
-    //   nonce: await erc20Token.nonces(current_address),
-    //   deadline,
-    // };
-
-    // const signature = await signer._signTypedData(domain, types, value);
-    // const r = '0x' + signature.substring(2).substring(0, 64);
-    // const s = '0x' + signature.substring(2).substring(64, 128);
-    // const v = '0x' + signature.substring(2).substring(128, 130);
-    // const amount = help.usdt_unit(amt);
+    
     let res = await lock.Topup(
       erc20Token.address,
       // current_address,

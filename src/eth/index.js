@@ -127,7 +127,7 @@ class Instance {
     const erc20Token = this.usdt_contract;
     const me = await this.signer.getAddress();
     const n = await erc20Token.balanceOf(me);
-    const balance = U.formatUnits(n, 6);
+    const balance = U.formatUnits(n, 18);
     if(balance === '0.0') return 0;
     return balance
   }
@@ -222,7 +222,7 @@ class Instance {
     };
     const chainId = (await this.getChain()).id;
     const domain = {
-      name: "USDT",
+      name: "First Digital USD",
       version: "1",
       chainId: chainId,
       verifyingContract: erc20Token.address,

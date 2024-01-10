@@ -129,7 +129,7 @@ const F = {
   },
 
   go_wallet(url){
-    window.open(`https://wallet.teaproject.org/#`+url, '_blank');
+    window.open(`https://alpha.teaproject.org/#`+url, '_blank');
   },
 
 

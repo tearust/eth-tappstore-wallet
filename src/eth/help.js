@@ -7,7 +7,7 @@ window.U = U;
 window._layer1 = _layer1;
 
 const UNIT = BigNumber.from('1000000000000000000');
-const USDT_UNIT = BigNumber.from('1000000');
+const USDT_UNIT = BigNumber.from('1000000000000000000');
 const F = {
   toBN(n){
     return BigNumber.from(n);

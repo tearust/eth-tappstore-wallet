@@ -36,8 +36,7 @@ class Instance {
     );
     this.usdt_contract = new ethers.Contract(
       ContractMap.USDT,
-      // require('./abi/ERC20.sol/ERC20Token.json').abi,
-      require('./abi/Dai.sol/Dai.json').abi,
+      require('./abi/ERC20.sol/ERC20Token.json').abi,
       this.provider.getSigner(),
     );
     this.cml_contract = new ethers.Contract(
@@ -128,10 +127,9 @@ class Instance {
     const erc20Token = this.usdt_contract;
     const me = await this.signer.getAddress();
     const n = await erc20Token.balanceOf(me);
-    const balance = U.formatUnits(n, 6);
+    const balance = U.formatUnits(n, 18);
     if(balance === '0.0') return 0;
     return balance
-    // return 0
   }
   async getCoffeeBalance(){
     // const n = await this.coffee_contract.balanceOf(this.signer.getAddress());
@@ -210,35 +208,47 @@ class Instance {
     const signer = this.signer;
 
     const current_address = await signer.getAddress();
-
+    // await erc20Token.approve(lock.address, help.unit(100));
+       
+    // lock
+    const types = {
+      Permit: [
+        { name: "owner", type: "address" },
+        { name: "spender", type: "address" },
+        { name: "value", type: "uint256" },
+        { name: "nonce", type: "uint256" },
+        { name: "deadline", type: "uint256" },
+      ],
+    };
+    const chainId = (await this.getChain()).id;
+    const domain = {
+      name: "DAI",
+      version: "1",
+      chainId: chainId,
+      verifyingContract: erc20Token.address,
+    };
+    const deadline = parseInt(new Date().getTime() / 1000) + 10000;
     const amount = help.usdt_unit(amt);
-    const allowance = await erc20Token.allowance(current_address, lock.address);
-    console.log(1111, allowance.toString());
+    const value = {
+      owner: current_address,
+      spender: lock.address,
+      value: amount,
+      nonce: await erc20Token.nonces(current_address),
+      deadline,
+    };
 
-    if(allowance.lt(amount)){
-      if(allowance > 0){
-        await erc20Token.approve(lock.address, 0, {
-          gasLimit: 123456,
-        });
-      }
-      
-      await erc20Token.approve(lock.address, amount, {
-        gasLimit: 123456,
-      });
-    } 
-    
-    
-    const allowance1 = await erc20Token.allowance(current_address, lock.address);
-    console.log(2222, allowance1.toString());
-    
-    
-    let res = await lock.Topup(
+    const signature = await signer._signTypedData(domain, types, value);
+    const r = '0x' + signature.substring(2).substring(0, 64);
+    const s = '0x' + signature.substring(2).substring(64, 128);
+    const v = '0x' + signature.substring(2).substring(128, 130);
+    const res = await lock.TopupWithPermit(
       erc20Token.address,
-      // current_address,
       amount,
-      {
-        gasLimit: 123456,
-      }
+      deadline,
+      v,
+      r,
+      s,
+      false
     );
     console.log('result:', res);
     

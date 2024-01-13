@@ -69,13 +69,13 @@
 
         <div class="x-item" v-if="layer1_account && !layer1_account.email && layer1_account.usd">
           <b>
-            {{ is_mobile ? 'USDT balance (Chain)' : "Chain wallet USDT balance" }}
+            {{ is_mobile ? 'FDUSD balance (Chain)' : "Chain wallet FDUSD balance" }}
             <TeaIconButton
               style="position: relative"
               place="right"
               tip="
-            The amount of USDT in your layer1 wallet (e.g. Metamask wallet) <br/>
-            Contract address: (0xdAC17F958D2ee523a2206206994597C13D831ec7)
+            The amount of FDUSD in your layer1 wallet (e.g. Metamask wallet) <br/>
+            Contract address: (0xc5f0f7b66764F6ec8C8Dff7BA683102295E16409)
           "
               icon="questionmark"
             />
@@ -138,13 +138,13 @@
 
         <div class="x-item" v-if="usdt_balance">
           <b>
-            {{ is_mobile ? 'USDT balance' : "TApp Store wallet USDT balance" }}
+            {{ is_mobile ? 'FDUSD balance' : "TApp Store wallet FDUSD balance" }}
             <TeaIconButton
               v-if="!is_mobile"
               style="position: relative"
               place="right"
               tip="
-            The amount of USDT ready to be used in your layer2 wallet. These funds can be transferred gas-free to any TApp where you'd like to use the funds
+            The amount of FDUSD ready to be used in your layer2 wallet. These funds can be transferred gas-free to any TApp where you'd like to use the funds
           "
               icon="questionmark"
             />
@@ -237,7 +237,7 @@
 
         <div class="x-item" v-if="usdt_deposit">
           <b>
-            {{ is_mobile ? 'USDT deposit' : "TApp Store wallet USDT deposit" }}
+            {{ is_mobile ? 'FDUSD deposit' : "TApp Store wallet FDUSD deposit" }}
           </b>
           <span
             v-if="!is_mobile"

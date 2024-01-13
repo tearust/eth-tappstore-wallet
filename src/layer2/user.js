@@ -234,7 +234,7 @@ const F = {
             default: 'TEA',
             options: [
               {id: 'TEA'}, 
-              {id: 'USDT'}
+              {id: 'FDUSD'}
             ],
           },
           amount: {
@@ -254,10 +254,10 @@ const F = {
           self.$root.showError("Not enough TEA balance to topup.");
           return false;
         }
-        // if(token==='usdt' && self.layer1_account.usd < amt){
-        //   self.$root.showError("Not enough USDT balance to topup.");
-        //   return false;
-        // }
+        if(token==='fdusd' && self.layer1_account.usd < amt){
+          self.$root.showError("Not enough FDUSD balance to topup.");
+          return false;
+        }
 
         if(amt < 1) {
           self.$root.showError('Minimum topup amount is 1.');
@@ -312,7 +312,7 @@ const F = {
             default: 'TEA',
             options: [
               {id: 'TEA'}, 
-              {id: 'USDT'}
+              {id: 'FDUSD'}
             ],
           },
           amount: {
@@ -330,7 +330,7 @@ const F = {
 
         const tappId = base.getTappId();
         let target_tapp_id = tappId;
-        if(token === 'usdt'){
+        if(token === 'fdusd'){
           target_tapp_id = base.getUsdtId();
         }
         const param = {

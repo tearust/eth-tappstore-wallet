@@ -43,10 +43,10 @@
             <TeaIconButton
               style="position: relative"
               place="right"
-              tip="
+              :tip="`
             The amount of TEA in your layer1 wallet (e.g. Metamask wallet) <br/>
-            Contract address: (0x1d4Ab5E692C5E45Afe7646185a2d58A0E21cD3e9)
-          "
+            Contract address: (${$root.get_contract_address('ERC20')})
+          `"
               icon="questionmark"
             />
           </b>
@@ -73,10 +73,10 @@
             <TeaIconButton
               style="position: relative"
               place="right"
-              tip="
+              :tip="`
             The amount of FDUSD in your layer1 wallet (e.g. Metamask wallet) <br/>
-            Contract address: (0xc5f0f7b66764F6ec8C8Dff7BA683102295E16409)
-          "
+            Contract address: (${$root.get_contract_address('USDT')})
+          `"
               icon="questionmark"
             />
           </b>

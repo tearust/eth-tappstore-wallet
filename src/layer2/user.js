@@ -62,6 +62,10 @@ const F = {
       throw('You did not install metamask wallet, please install it first and continue.');
     }
 
+    if(chain.name !== 'Sepolia'){
+      throw('TEA only accept ETH Sepolia network. <br> please visit <a href="https://autofarm.gitbook.io/autofarm-network/how-tos/defi-beginners-guide/switching-networks-on-metamask" target="_blank">this link<a> to config.');
+    }
+
     // const epoch_closed = utils.mem.get('epoch_closed');
     // if (epoch_closed && !self.$root.is_sudo(address)) {
     //   throw 'Current epoch finished, can\'t login.';

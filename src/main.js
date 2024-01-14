@@ -181,6 +181,9 @@ new Vue({
     get_address_avatar(address){
       return utils.getAddressAvatar(address);
     },
+    get_contract_address(key){
+      return _.get(ContractMap, key, 'NA');
+    }
   },
   render: h => {
     if(utils.get_env('mode') === 'list'){

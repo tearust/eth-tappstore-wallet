@@ -54,8 +54,8 @@ _axios.interceptors.response.use((res)=>{
     }
   }
 }, (error)=>{
-  if(error.response && error.response.status === 503){
-    const err = error.response.data.error.replace('Invocation failure: Failed to invoke guest call: Guest call failure: Guest call failed: ', '');
+  if(error.response && (error.response.status === 503 || error.response.status===500)){
+    const err = error.response.data.replace('', '');
     return Promise.reject(err);
   }
   return Promise.reject(error);

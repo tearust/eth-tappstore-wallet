@@ -76,10 +76,35 @@ new Vue({
         C._loading = null;
       }
     },
+
+    error_msg(msg){
+      let prefix = '';
+      if(_.includes(msg, 'ExecTxnFailed')){
+        prefix = 'Execute txn failed: ';
+      }
+      else if(_.includes(msg, 'ClientUtilsError')){
+        prefix = 'Operate failed: ';
+      }
+
+      if(_.includes(msg, 'overdraft') || _.includes(msg, 'overdraw')){
+        return prefix+'Not enough balance';
+      }
+      else if(_.includes(msg, 'NotEnoughBalanceForTxn')){
+        return prefix+'Not enough balance to operate.';
+      }
+
+
+      return false;
+    },
+
     formatError(e){
       try{
+        const err = this.$root.error_msg(e.toString());
+        if(err){
+          return err;
+        }
         const json = JSON.parse(e.toString());
-        return json.summary || json.human;
+        return json.summary || json.human || json['Unnamed'];
       }catch(ee){}
       if(_.includes(e.toString(), 'not_login')){
         return 'not_login';

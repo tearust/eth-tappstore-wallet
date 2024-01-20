@@ -11,7 +11,7 @@ const MSG = [
   ['overdraw', 'Not enough balance.'],
   ['Not enough balance', 'Not enough balance.'],
   ['The retweet URL has already been used', 'The retweet URL has already been used.'],
-  ['Current address already faucet', 'Current address already faucet.']
+  ['Current address already faucet', 'Current address already faucet.'],
   ['SpendOverAllowance', 'Not enough spend limit.'],
   ['Invalid bid price, min bid price is 10000 cents', 'Invalid bid price, min bid price is 10000 cents.'],
   ['Account already exists', 'Account already exists.'],

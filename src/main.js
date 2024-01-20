@@ -25,6 +25,8 @@ import './filter';
 import layer2 from './layer2';
 import {VestingUsers, ContractMap} from './eth/consts';
 
+import error_message from './error';
+
 
 Vue.use(ElementUI, { locale });
 Vue.config.productionTip = false;
@@ -78,23 +80,7 @@ new Vue({
     },
 
     error_msg(msg){
-      let prefix = '';
-      if(_.includes(msg, 'ExecTxnFailed')){
-        prefix = 'Execute txn failed: ';
-      }
-      else if(_.includes(msg, 'ClientUtilsError')){
-        prefix = 'Operate failed: ';
-      }
-
-      if(_.includes(msg, 'overdraft') || _.includes(msg, 'overdraw')){
-        return prefix+'Not enough balance';
-      }
-      else if(_.includes(msg, 'NotEnoughBalanceForTxn')){
-        return prefix+'Not enough balance to operate.';
-      }
-
-
-      return false;
+      return error_message(msg);
     },
 
     formatError(e){

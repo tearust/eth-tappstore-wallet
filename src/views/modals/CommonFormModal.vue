@@ -53,7 +53,7 @@
           </el-option>
         </el-select>
 
-        <el-input-number v-if="types[item.name]==='number'" :disabled="props[item.name].disabled||false" v-model="form[item.name]" :min="props[item.name].min || 0" :max="props[item.name].max || 2000000" :step="props[item.name].step || 1" v-bind="{...props[item.name].el_props||{}}" style="width: 200px;"></el-input-number>
+        <el-input-number v-if="types[item.name]==='number'" :disabled="props[item.name].disabled||false" v-model="form[item.name]" :min="-9999999" :max="props[item.name].max || 2000000" :step="props[item.name].step || 1" v-bind="{...props[item.name].el_props||{}}" style="width: 200px;"></el-input-number>
 
         <el-checkbox v-if="types[item.name]==='checkbox'" v-model="form[item.name]" v-bind="{...props[item.name].el_props||{}}"></el-checkbox>
 
@@ -183,6 +183,22 @@ export default {
           if(item.rules){
             rules[n] = _.concat(item.rules, rules[n]);
           }
+        }
+
+        if(type === 'number'){
+          rules[n].push({
+            validator: (rule, v, cb)=>{
+              v = _.toNumber(v);
+              if(!v){
+                return cb('Invalid input.');
+              }
+              if(v < 0){
+                return cb('Input cannot be negative.')
+              }
+
+              cb();
+            }
+          })
         }
 
         

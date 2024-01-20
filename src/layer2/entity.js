@@ -18,6 +18,14 @@ const template = {
       url(id, tid){
 
       }
+    },
+    {
+      key: 'game',
+      label: 'Game',
+      link: ()=>{},
+      url(id, tid){
+
+      }
     }
   ],
   getLabel(value){
@@ -143,7 +151,7 @@ const F = {
             ],
             default: 'fluencer',
             
-            tip: 'Tea fluencer tapp for Epoch12',
+            // tip: 'TApp template, only support fluencer and game.',
             // tip_action: ()=>{
               
             // }

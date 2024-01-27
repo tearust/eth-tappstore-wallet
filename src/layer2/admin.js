@@ -373,6 +373,50 @@ const F = {
     });
 
   },
+
+  async remove_version_pcr(self, data, succ_cb){
+    const session_key = user.checkLogin(self);
+
+    self.$store.commit('modal/open', {
+      key: 'common_form', 
+      param: {
+        title: 'Remove PCR',
+        text: ``,
+        props: {
+          version: {
+            label: 'Version',
+            type: 'Input',
+            required: true,
+          },
+      
+          
+        },
+      },
+      cb: async (form, close)=>{
+        self.$root.loading(true);
+
+        const opts = {
+          version: form.version,
+          address: self.layer1_account.address,
+          tappIdB64: base.getTappId(),
+          authB64: session_key,
+        };
+        
+        try{
+          const rs = await txn.txn_request('admin_remove_version_pcr', opts);
+
+          self.$root.success();
+          close();
+          await succ_cb();
+        }catch(e){
+          self.$root.showError(e);
+        }
+
+        self.$root.loading(false);
+      },
+    });
+
+  },
 };
 
 export default F;

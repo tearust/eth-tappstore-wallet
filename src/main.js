@@ -25,6 +25,8 @@ import './filter';
 import layer2 from './layer2';
 import {VestingUsers, ContractMap} from './eth/consts';
 
+import error_message from './error';
+
 
 Vue.use(ElementUI, { locale });
 Vue.config.productionTip = false;
@@ -76,10 +78,19 @@ new Vue({
         C._loading = null;
       }
     },
+
+    error_msg(msg){
+      return error_message(msg);
+    },
+
     formatError(e){
       try{
+        const err = this.$root.error_msg(e.toString());
+        if(err){
+          return err;
+        }
         const json = JSON.parse(e.toString());
-        return json.summary || json.human;
+        return json.summary || json.human || json['Unnamed'];
       }catch(ee){}
       if(_.includes(e.toString(), 'not_login')){
         return 'not_login';

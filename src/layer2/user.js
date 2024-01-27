@@ -421,19 +421,21 @@ const F = {
         
         const amount = utils.layer1.amountToBalance(form.amount);
         let tar = form.target;
-        if(!utils.isEmail(tar) && !eth.help.getUtils().isAddress(tar)){
-          self.$root.showError('Invalid address or email');
+
+        if(!eth.help.getUtils().isAddress(tar)){
+          self.$root.showError('Invalid address');
           return false;
         }
+        
 
-        if(utils.isEmail(tar)){
-          tar = utils.emailToAddress(tar);
-          send_email = {
-            from_address: self.layer1_account.address,
-            email: form.target,
-            amount: form.amount
-          };
-        }
+        // if(utils.isEmail(tar)){
+        //   tar = utils.emailToAddress(tar);
+        //   send_email = {
+        //     from_address: self.layer1_account.address,
+        //     email: form.target,
+        //     amount: form.amount
+        //   };
+        // }
 
         const opts = {
           address: self.layer1_account.address,
@@ -443,6 +445,11 @@ const F = {
           to: tar,
           ...param,
         };
+
+        if(self.layer1_account.address === _.toLower(tar)){
+          self.$root.showError("You cannot transfer to yourself.");
+          return false;
+        }
 
         self.$root.loading(true);
 

@@ -64,6 +64,9 @@
     <br/><br/>
     <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="query_pcr()">Query version PCR</el-button>
     <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="add_version_pcr()">Add version PCR</el-button>
+    <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="remove_version_pcr()">Remove version PCR</el-button>
+    <br/>
+    <div v-if="pcr_html" :inner-html.prop="pcr_html" style="color:green;word-break:break-all;"></div>
   </div>
 
 
@@ -145,6 +148,7 @@ export default {
       not_admin: true,
       gas_fee_list: null,
       credit_info_list: null,
+      pcr_html: null,
     };
   },
   computed: {
@@ -422,7 +426,14 @@ export default {
     async query_pcr(){
       const r = await layer2.admin.admin_query_pcr(this, {});
       // const html = r.PCR0+'<hr/>'+r.PCR1+'<hr/>'+r.PCR2;
-      this.$root.alert_success(JSON.stringify(r));
+      // const html = '<div style="width="1000px;"">'+JSON.stringify(r)+'</div>'
+      // this.$root.alert_success(html);
+      let html = '';
+      _.each(r, (x)=>{
+        html += x.PCR0+'<br/>'+x.PCR1+'<br/>'+x.PCR2;
+        html +='<br><br/>';
+      });
+      this.pcr_html = html;
     },
     async add_version_pcr(){
       await layer2.admin.add_version_pcr(this, {}, async ()=>{
@@ -431,6 +442,11 @@ export default {
       
 
     },
+    async remove_version_pcr(){
+      await layer2.admin.remove_version_pcr(this, {}, async ()=>{
+        this.$root.success();
+      });
+    }
   }
 }
 </script>

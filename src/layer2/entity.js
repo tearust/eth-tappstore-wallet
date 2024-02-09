@@ -594,6 +594,9 @@ const F = {
         if(d.dev_status !== 'Active'){
           return null;
         }
+        if(d.tapp_type === 'game'){
+          return null;
+        }
         const item = {
           id: d.tapp_id,
           name: d.name,

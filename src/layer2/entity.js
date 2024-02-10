@@ -594,7 +594,7 @@ const F = {
         if(d.dev_status !== 'Active'){
           return null;
         }
-        if(d.tapp_type === 'game'){
+        if(opts.onlyTapp && d.tapp_type === 'game'){
           return null;
         }
         const item = {

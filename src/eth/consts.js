@@ -1,4 +1,5 @@
 import {_} from 'tearust_utils';
+import utils from '../tea/utils';
 
 export const ChainMap = {
   1: 'Mainnet',
@@ -10,14 +11,15 @@ export const ChainMap = {
 
 export const ContractMap = {
   'COFFEE': '0x41F2d9b281800b5C1219725C0CEF35912658beEa',
-  'ERC20': '0x1d4Ab5E692C5E45Afe7646185a2d58A0E21cD3e9',  // tea_erc20
-  'ERC721': '0xfB97Bf19c6D8DD9456BCD9B7fC509222c73e0986',
-  'STORAGE': '0x6000fC162cB6DC4366110696AD38e4F2963486F9',
-  'LOCK': '0xFb69e628691E92fDe1a33CbFAf331074Fb132710',
-  'MAINTAINER': '0x44a8f2ff2b0c1AFE7D63065cFac9B70B1B85BFaa',
-  'TOKENVESTING': '0xa0174bD55b9a665245bB0d539930EeD74FF13fCA',
-  'USDT': '0xc5f0f7b66764F6ec8C8Dff7BA683102295E16409',
+  'ERC20': _.toLower(utils.get_env('contract_erc20')),
+  'ERC721': _.toLower(utils.get_env('contract_erc721')),
+  'STORAGE': _.toLower(utils.get_env('contract_storage')),
+  'LOCK': _.toLower(utils.get_env('contract_lock')),
+  'MAINTAINER': _.toLower(utils.get_env('contract_maintainer')),
+  'TOKENVESTING': _.toLower(utils.get_env('contract_tokenvesting')),
+  'USDT': _.toLower(utils.get_env('contract_usdt')),
 };
+console.log("Contract map: ", ContractMap);
 
 export const VestingUsers = _.map([
   '0xdE71FdCAef4F00e86adB95e607bf3B494b04260B',

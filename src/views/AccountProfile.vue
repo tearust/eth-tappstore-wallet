@@ -74,7 +74,7 @@
               style="position: relative"
               place="right"
               :tip="`
-            The amount of FDUSD in your layer1 wallet (e.g. Metamask wallet) <br/>
+            The amount of ${$root.isMainnet()?'FDUSD':'USDT'} in your layer1 wallet (e.g. Metamask wallet) <br/>
             Contract address: (${$root.get_contract_address('USDT')})
           `"
               icon="questionmark"

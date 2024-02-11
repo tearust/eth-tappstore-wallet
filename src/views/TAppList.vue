@@ -37,14 +37,7 @@
       width="180"
     >
       <template slot-scope="scope">
-        <!-- <el-tooltip effect="light" :content="scope.row.owner" placement="right">
-        <el-button
-          @click="
-            $root.openUrl('https://wallet.teaproject.org#/user_details/'+scope.row.owner)"
-          type="text">
-          {{scope.row.owner}}
-        </el-button>
-        </el-tooltip> -->
+        
         <span>{{scope.row.owner}}</span>
       </template>
     </el-table-column>

@@ -402,6 +402,10 @@ export default {
       else if(row.ori.tapp_type === 'User'){
         helper.openUrl(this.tapp_url(row, 'seat_cid'));
       }
+      else if(row.ori.tapp_type === 'game'){
+        this.$root.alert_success("Coming soon.");
+        return false;
+      }
       else if(row.tapp_url){
         helper.openUrl(row.tapp_url);
       }

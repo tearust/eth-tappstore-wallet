@@ -61,7 +61,9 @@ const F = {
     if(chain.name === 'Offline'){
       throw('You did not install metamask wallet.');
     }
-    if(chain.name !== 'Mainnet'){
+
+    const network = utils.get_env('network');
+    if(chain.name !== network){
       throw('TEA only accept ETH Mainnet network. <br> please visit <a href="https://autofarm.gitbook.io/autofarm-network/how-tos/defi-beginners-guide/switching-networks-on-metamask" target="_blank">this link<a> to config.');
     }
 
@@ -249,7 +251,6 @@ const F = {
         const amt = _.toNumber(form.amount);
         const token = _.toLower(form.token);
 
-
         if(token==='tea' && self.layer1_account.balance < amt){
           self.$root.showError("Not enough TEA balance to topup.");
           return false;
@@ -421,7 +422,6 @@ const F = {
         
         const amount = utils.layer1.amountToBalance(form.amount);
         let tar = form.target;
-
         if(!eth.help.getUtils().isAddress(tar)){
           self.$root.showError('Invalid address');
           return false;

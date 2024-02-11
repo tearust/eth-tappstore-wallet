@@ -222,7 +222,7 @@ class Instance {
     };
     const chainId = (await this.getChain()).id;
     const domain = {
-      name: "First Digital USD",
+      name: utils.get_env('usdt_name'),
       version: "1",
       chainId: chainId,
       verifyingContract: erc20Token.address,

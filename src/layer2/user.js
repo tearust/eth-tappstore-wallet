@@ -64,7 +64,7 @@ const F = {
 
     const network = utils.get_env('network');
     if(chain.name !== network){
-      throw('TEA only accept ETH Mainnet network. <br> please visit <a href="https://autofarm.gitbook.io/autofarm-network/how-tos/defi-beginners-guide/switching-networks-on-metamask" target="_blank">this link<a> to config.');
+      throw('TEA only accept ETH '+network+' network. <br> please visit <a href="https://autofarm.gitbook.io/autofarm-network/how-tos/defi-beginners-guide/switching-networks-on-metamask" target="_blank">this link<a> to config.');
     }
 
     // thanks for https://github.com/polkadot-js/extension/issues/827
@@ -270,7 +270,7 @@ const F = {
           if(token === 'tea'){
             await layer1_instance.topup(amt);
           }
-          else if(token === 'usdt'){
+          else if(token === 'fdusd'){
             await layer1_instance.topup_usdt(amt);
           }
           

@@ -222,11 +222,12 @@ class Instance {
     };
     const chainId = (await this.getChain()).id;
     const domain = {
-      name: utils.get_env('usdt_name'),
+      name: utils.get_env('network')==='Mainnet'?'First Digital USD':'DAI',
       version: "1",
       chainId: chainId,
       verifyingContract: erc20Token.address,
     };
+    console.log(1111, domain);
     const deadline = parseInt(new Date().getTime() / 1000) + 10000;
     const amount = help.usdt_unit(amt);
     const value = {

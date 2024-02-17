@@ -45,11 +45,6 @@ class Instance {
       this.provider.getSigner(),
     );
 
-    this.coffee_contract = new ethers.Contract(
-      ContractMap.COFFEE,
-      require('./abi/Coffee.sol/COFFEE.json').abi,
-      this.provider.getSigner(),
-    );
 
     this.token_vesting_contract = new ethers.Contract(
       ContractMap.TOKENVESTING,
@@ -132,9 +127,6 @@ class Instance {
     return balance
   }
   async getCoffeeBalance(){
-    // const n = await this.coffee_contract.balanceOf(this.signer.getAddress());
-    // const balance = U.formatUnits(n, 'ether');
-    // return balance
     return 0;
   }
 
@@ -392,6 +384,7 @@ const F = {
       await instance.init();
       return instance;
     }catch(e){
+      console.log(222, e);
       instance = new Empty_Instance();
       return instance;
     }

@@ -54,6 +54,9 @@ new Vue({
     isDev() {
       return true;
     },
+    isMainnet() {
+      return utils.get_env('network') === 'Mainnet';
+    },
     mobile() {
       return utils.mobile();
     },

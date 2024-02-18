@@ -1,4 +1,5 @@
 import {_} from 'tearust_utils';
+import utils from '../tea/utils';
 
 export const ChainMap = {
   1: 'Mainnet',
@@ -8,16 +9,40 @@ export const ChainMap = {
   11155111: 'Sepolia',
 };
 
-export const ContractMap = {
-  'COFFEE': '0x41F2d9b281800b5C1219725C0CEF35912658beEa',
-  'ERC20': '0x1d4Ab5E692C5E45Afe7646185a2d58A0E21cD3e9',  // tea_erc20
-  'ERC721': '0xfB97Bf19c6D8DD9456BCD9B7fC509222c73e0986',
-  'STORAGE': '0x6000fC162cB6DC4366110696AD38e4F2963486F9',
-  'LOCK': '0xFb69e628691E92fDe1a33CbFAf331074Fb132710',
-  'MAINTAINER': '0x44a8f2ff2b0c1AFE7D63065cFac9B70B1B85BFaa',
-  'TOKENVESTING': '0xa0174bD55b9a665245bB0d539930EeD74FF13fCA',
-  'USDT': '0xc5f0f7b66764F6ec8C8Dff7BA683102295E16409',
-};
+const network = utils.get_env('network');
+let xm = null;
+if(network === ChainMap[1]) {
+  xm = {
+    'ERC20': '0x1d4Ab5E692C5E45Afe7646185a2d58A0E21cD3e9',
+    'ERC721': '0xfB97Bf19c6D8DD9456BCD9B7fC509222c73e0986',
+    'STORAGE': '0x6000fC162cB6DC4366110696AD38e4F2963486F9',
+    'LOCK': '0xFb69e628691E92fDe1a33CbFAf331074Fb132710',
+    'MAINTAINER': '0x44a8f2ff2b0c1AFE7D63065cFac9B70B1B85BFaa',
+    'TOKENVESTING': '0xa0174bD55b9a665245bB0d539930EeD74FF13fCA',
+    'USDT': '0xc5f0f7b66764F6ec8C8Dff7BA683102295E16409',
+  };
+}
+else if(network === ChainMap[11155111]) {
+  xm = {
+    'ERC20': '0x0FB8ae64DF4D374F91827Cacf64520E9674543c7',
+    'ERC721': '0x70fe3643Bf76D7ba74b1eB8e6969de3a49f7A314',
+    'STORAGE': '0xe81F29F9a52aCCf92c7B95FD71915bb69d0A004C',
+    'LOCK': '0x64505BfCD2c6A232a177351097236aF269350f5C',
+    'MAINTAINER': '0x63878Cb46847adE9F4a6CD69865b585869c04E41',
+    'TOKENVESTING': '0xCd0ebB9Db39990233c5C3d7E9f246dFe5e4ff849',
+    'USDT': '0xFF34B3d4Aee8ddCd6F9AFFFB6Fe49bD371b8a357',
+  };
+}
+if(!xm){
+  console.error('Not contract map, need to check the config.');
+}
+_.each(xm, (v, k)=>{
+  xm[k] = _.toLower(v);
+});
+export const ContractMap = xm;
+console.log("Contract map: ", ContractMap);
+
+
 
 export const VestingUsers = _.map([
   '0xdE71FdCAef4F00e86adB95e607bf3B494b04260B',

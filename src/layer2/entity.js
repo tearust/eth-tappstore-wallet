@@ -18,7 +18,6 @@ const template = {
       url(id, tid){
 
       }
-      
     },
     {
       key: 'game',
@@ -152,7 +151,7 @@ const F = {
             ],
             default: 'fluencer',
             
-            tip: 'TApp template, only support fluencer and game.',
+            // tip: 'TApp template, only support fluencer and game.',
             // tip_action: ()=>{
               
             // }
@@ -593,6 +592,9 @@ const F = {
           return null;
         }
         if(d.dev_status !== 'Active'){
+          return null;
+        }
+        if(opts.onlyTapp && d.tapp_type === 'game'){
           return null;
         }
         const item = {

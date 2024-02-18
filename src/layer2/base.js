@@ -20,7 +20,6 @@ const meta = {
 if(_.toLower(process.env.NODE_ENV) === 'production' && meta.mode !== 'list'){
   meta.server_url = location.protocol+'//'+location.hostname+':8000';
 }
-
 const _axios = axios.create({
   baseURL: meta.server_url,
 });
@@ -54,8 +53,8 @@ _axios.interceptors.response.use((res)=>{
     }
   }
 }, (error)=>{
-  if(error.response && error.response.status === 503){
-    const err = error.response.data.error.replace('Invocation failure: Failed to invoke guest call: Guest call failure: Guest call failed: ', '');
+  if(error.response && (error.response.status === 503 || error.response.status===500)){
+    const err = error.response.data.replace('', '');
     return Promise.reject(err);
   }
   return Promise.reject(error);

@@ -255,7 +255,6 @@ export default {
       address = 'no_wallet';
       email = utils.cache.get(layer2.user.getOfflineId());
     }
-    console.log(11, address, email);
     
     this.$store.commit('set_account', {
       ...this.layer1_account,

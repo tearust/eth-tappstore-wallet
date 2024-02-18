@@ -45,11 +45,6 @@ class Instance {
       this.provider.getSigner(),
     );
 
-    this.coffee_contract = new ethers.Contract(
-      ContractMap.COFFEE,
-      require('./abi/Coffee.sol/COFFEE.json').abi,
-      this.provider.getSigner(),
-    );
 
     this.token_vesting_contract = new ethers.Contract(
       ContractMap.TOKENVESTING,
@@ -132,9 +127,6 @@ class Instance {
     return balance
   }
   async getCoffeeBalance(){
-    // const n = await this.coffee_contract.balanceOf(this.signer.getAddress());
-    // const balance = U.formatUnits(n, 'ether');
-    // return balance
     return 0;
   }
 
@@ -222,11 +214,12 @@ class Instance {
     };
     const chainId = (await this.getChain()).id;
     const domain = {
-      name: "First Digital USD",
+      name: utils.get_env('network')==='Mainnet'?'First Digital USD':'DAI',
       version: "1",
       chainId: chainId,
       verifyingContract: erc20Token.address,
     };
+    console.log(1111, domain);
     const deadline = parseInt(new Date().getTime() / 1000) + 10000;
     const amount = help.usdt_unit(amt);
     const value = {
@@ -391,6 +384,7 @@ const F = {
       await instance.init();
       return instance;
     }catch(e){
+      console.log(222, e);
       instance = new Empty_Instance();
       return instance;
     }

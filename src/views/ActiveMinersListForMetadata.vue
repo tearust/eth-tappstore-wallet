@@ -129,11 +129,18 @@ export default {
   },
   
   async mounted(){
-    document.title = "TEA Project mainnet(beta)";
+    document.title = "TEA Project Testnet(alpha)";
+    if(utils.get_env('network')==='Mainnet'){
+      document.title = "TEA Project mainnet(beta)";
+    }
     
     const {cml_id, ticker} = this.$route.params;
     const xt = _.startsWith(this.$route.path, '/node') ? 'node' : 'app';
-    console.log(11, cml_id, ticker, xt);
+    let go = false;
+    if(_.endsWith(this.$route.path, '/go')){
+      go = true;
+    }
+    console.log(11, cml_id, ticker, xt, go);
 
     this.xd = {
       xt, 
@@ -142,11 +149,16 @@ export default {
       has_cml: !!cml_id,
       has_app: !!ticker,
       cid: utils.get_env('TAPPSTORE_CID'),
+      go,
     };
 
     if(this.xd.has_app){
       this.title = 'Tapp '+this.xd.ticker+' node list';
       this.xd.cid = this.get_cid(this.xd.ticker);
+
+      if(go){
+        this.title = 'Redirect to '+this.xd.ticker;
+      }
     }
     else{
       this.title = 'Redirect to Tappstore';

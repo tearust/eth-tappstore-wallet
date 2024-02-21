@@ -264,6 +264,11 @@ if(utils.get_env('mode') === 'list'){
       name: 'ActiveMinerListForMetadata_cml',
       component: ActiveMinerListForMetadata,
     },
+    {
+      path: '/node/:cml_id/:ticker/go',
+      name: 'ActiveMinerListForMetadata_cml_ticker_go',
+      component: ActiveMinerListForMetadata,
+    }
   ];
 };
 

@@ -185,6 +185,11 @@ const F = {
         alert('Click OK to redirect Tappstore for cml '+data.cml_id);
         location.href = `http://${dd[1]}:8080/ipfs/${meta.cid||self.cid}`;
       }
+      if(data.go){
+        _.delay(()=>{
+          location.href = `http://${dd[1]}:8080/ipfs/${meta.cid||self.cid}`;
+        }, 500);
+      }
       
 
       console.log('queryActiveMetadata list =>', list);

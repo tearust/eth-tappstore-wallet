@@ -262,7 +262,8 @@ export default {
       }
       
       vue.set(action, 'loading', false);
-    }
+    },
+
   }
 }
 </script>

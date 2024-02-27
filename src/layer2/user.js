@@ -319,8 +319,17 @@ const F = {
           amount: {
             type: 'number',
             default: amt,
-            label: 'Amount'
-          }
+            label: 'Amount',
+            // condition: {
+            //   target: 'all',
+            //   value: false,
+            // }
+          },
+          // all: {
+          //   type: 'switch',
+          //   default: false,
+          //   label: 'Transfer All',
+          // }
         },
       },
       cb: async (form, close) => {
@@ -340,7 +349,12 @@ const F = {
           authB64: session_key,
           amount: utils.toBN(amount).toString(),
           targetTappIdB64: target_tapp_id,
+          all: false,
         };
+        // if(form.all){
+        //   param.all = true;
+        //   param.amount = '0';
+        // }
 
         try {
           await txn.txn_request('withdraw', param);
@@ -414,12 +428,21 @@ const F = {
             default: 1,
             label: 'Amount',
             min: 1,
+            condition: {
+              value: false,
+              target: 'all',
+            },
+          },
+          all: {
+            type: 'switch',
+            default: false,
+            label: 'Transfer All',
           }
         },
       },
       cb: async (form, close) => {
         let send_email = false;
-        
+        console.log(111, form);
         const amount = utils.layer1.amountToBalance(form.amount);
         let tar = form.target;
         if(!eth.help.getUtils().isAddress(tar)){
@@ -443,8 +466,13 @@ const F = {
           authB64: session_key,
           amount: utils.toBN(amount).toString(),
           to: tar,
+          all: false,
           ...param,
         };
+        if(form.all){
+          opts.all = true;
+          opts.amount = '0';
+        }
 
         if(self.layer1_account.address === _.toLower(tar)){
           self.$root.showError("You cannot transfer to yourself.");

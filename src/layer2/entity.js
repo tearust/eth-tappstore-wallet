@@ -189,7 +189,7 @@ const F = {
 
 
           theta: {
-            label: 'Theta',
+            label: 'Theta(%)',
             type: 'select_number',
             el_props: {
               'allow-create': true,
@@ -382,6 +382,10 @@ const F = {
             max: 100000000,
             // remove_required_rule: true,
             default: 1,
+            condition: {
+              target: 'all',
+              value: false,
+            }
             // tip: 'Click "Next" button to see how much you can convert to, or input a number below to convert back.',
             // model_action: {
             //   button_text: 'Sell all',
@@ -415,15 +419,26 @@ const F = {
           //     }
           //   }
           // }
+          all: {
+            type: 'switch',
+            default: false,
+            label: 'Sell all',
+          }
         },
       },
       cb: async (form, close)=>{
-        if(!form.tapp_amount){
+        if(form.all){
+          await F.sellAllToken(self, data, succ_cb);
+          close();
+          return false;
+        }
+
+        if(!form.all && !form.tapp_amount){
           self.$root.showError('Amount token is required.');
           return;
         }
 
-        if(data.account_balance && _.toNumber(form.tapp_amount) > data.account_balance.token_balance){
+        if(!form.all && data.account_balance && _.toNumber(form.tapp_amount) > data.account_balance.token_balance){
           self.$root.showError('Insufficient token.');
           return;
         }
@@ -547,6 +562,92 @@ const F = {
           console.log('consumeToken result:', rs);
 
           close();
+          self.$root.success();
+          await succ_cb();
+        }catch(e){
+          self.$root.showError(e);
+        }
+        self.$root.loading(false);
+      },
+    });
+  },
+
+  async transferToken(self, data, succ_cb){
+    const session_key = user.checkLogin(self);
+    self.$store.commit('modal/open', {
+      key: 'common_form', 
+      param: {
+        title: 'Transfer token',
+        confirm_text: 'Confirm',
+        text: ``,
+        props: {
+          tapp_id: {
+            label: 'Token ID',
+            type: 'Input',
+            disabled: true,
+            default: data.id,
+          },
+          to: {
+            label: 'Target address',
+            type: 'Input',
+            required: true,
+            default: '',
+          },
+          tapp_amount: {
+            label: 'Quantity',
+            type: 'number',
+            max: 100000000,
+            // remove_required_rule: true,
+            default: 1,
+            condition: {
+              target: 'all',
+              value: false,
+            }
+          },
+          all: {
+            type: 'switch',
+            default: false,
+            label: 'Transfer all',
+          }
+        },
+      },
+      cb: async (form, close)=>{
+
+        if(!form.all && !form.tapp_amount){
+          self.$root.showError('Amount token is required.');
+          return;
+        }
+
+        if(!form.all && data.account_balance && _.toNumber(form.tapp_amount) > data.account_balance.token_balance){
+          self.$root.showError('Insufficient token.');
+          return;
+        }
+
+        const id = form.tapp_id;
+        const amount = utils.layer1.amountToBalance(form.tapp_amount);
+
+        self.$root.loading(true);
+        try{
+          const opts = {
+            tappIdB64: base.getTappId(),
+            address: self.layer1_account.address,
+            tokenId: id,
+            amount: utils.toBN(amount).toString(),
+            authB64: session_key,
+            to: form.to,
+            all: false,
+          };
+
+          if(form.all) {
+            opts.all = true;
+            opts.amount = '0';
+          }
+
+          const rs = await txn.txn_request('transfer_token', opts);
+          console.log('transfer_token result:', rs);
+
+          close();
+
           self.$root.success();
           await succ_cb();
         }catch(e){

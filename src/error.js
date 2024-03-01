@@ -16,6 +16,7 @@ const MSG = [
   ['Invalid bid price, min bid price is 10000 cents', 'Invalid bid price, min bid price is 10000 cents.'],
   ['Account already exists', 'Account already exists.'],
   ['Not enough USDT balance for Nitro deposit', 'Not enough balance for Nitro deposit.'],
+  ['not_enouth_balance_for_gas', 'Not enough balance for txn gas, please topup TEA or go to Tea Fluencer tapp to get credit.']
   
 ];
 

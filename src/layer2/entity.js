@@ -287,10 +287,10 @@ const F = {
           },
           tapp_amount: {
             label: 'Quantity',
-            type: 'number',
-            max: 100000000,
+            type: 'Input',
+            required: true,
             // remove_required_rule: true,
-            default: 1,
+            default: '',
             // tip: 'Click "Next" button to see how much you can convert to, or input a number below to convert back.'
           },
           // tea: {
@@ -320,28 +320,28 @@ const F = {
         }
 
         
-        const id = form.tapp_id;
-        const amount = utils.layer1.amountToBalance(form.tapp_amount);
-
-        const need_price = sq_root.calculate_buy_amount(amount, data.ori.total_supply, data.ori.buy_curve_k);
-        const estimate = utils.layer1.balanceToAmount(need_price);
-        
         try{
-          await self.$confirm(`You will pay <b>${estimate} TEA</b> <br/> Please click "OK" to confirm.`, {
-            dangerouslyUseHTMLString: true,
-          });
-        }catch(e){
-          return false;
-        }
+          const id = form.tapp_id;
+          const amount_bn = utils.layer1.amountToBalanceBn(form.tapp_amount);
+          const need_price = sq_root.calculate_buy_amount(amount_bn.toString(), data.ori.total_supply, data.ori.buy_curve_k);
+          const estimate = utils.layer1.balanceToAmount(need_price);
+          
+          try{
+            await self.$confirm(`You will pay <b>${estimate} TEA</b> <br/> Please click "OK" to confirm.`, {
+              dangerouslyUseHTMLString: true,
+            });
+          }catch(e){
+            return false;
+          }
         
-        self.$root.loading(true);
-        try{
+          self.$root.loading(true);
+        
           const opts = {
             tappIdB64: base.getTappId(),
             address: self.layer1_account.address,
 
             targetTappIdB64: id,
-            tokenAmount: utils.toBN(amount).toString(),
+            tokenAmount: amount_bn.toString(),
             authB64: session_key,
           };
 
@@ -378,10 +378,8 @@ const F = {
           },
           tapp_amount: {
             label: 'Quantity',
-            type: 'number',
-            max: 100000000,
-            // remove_required_rule: true,
-            default: 1,
+            type: 'Input',
+            default: '',
             condition: {
               target: 'all',
               value: false,
@@ -438,34 +436,38 @@ const F = {
           return;
         }
 
-        if(!form.all && data.account_balance && _.toNumber(form.tapp_amount) > data.account_balance.token_balance){
-          self.$root.showError('Insufficient token.');
-          return;
-        }
-
-        const id = form.tapp_id;
-        const amount = utils.layer1.amountToBalance(form.tapp_amount);
-
-        const need_price = sq_root.calculate_sell_amount(amount, data.ori.total_supply, data.ori.sell_curve_k);
-        const estimate = utils.layer1.balanceToAmount(need_price);
-        
-        
         try{
-          await self.$confirm(`You will receive <b>${estimate} TEA</b> <br/> Please click "OK" to confirm.`, {
-            dangerouslyUseHTMLString: true,
-          });
-        }catch(e){
-          return false;
-        }
 
-        self.$root.loading(true);
-        try{
+          const amount_bn = utils.layer1.amountToBalanceBn(form.tapp_amount);
+          console.log(111, amount_bn, amount_bn.toString())
+          if(!form.all && data.account_balance){
+            const ab_bn = utils.layer1.amountToBalanceBn(data.account_balance.token_balance.toString());
+            if(ab_bn.lt(amount_bn)){
+              self.$root.showError('Insufficient token.');
+              return false;
+            }
+          }
+
+          const id = form.tapp_id;
+          const need_price = sq_root.calculate_sell_amount(amount_bn.toString(), data.ori.total_supply, data.ori.sell_curve_k);
+          const estimate = utils.layer1.balanceToAmount(need_price);
+          
+          try{
+            await self.$confirm(`You will receive <b>${estimate} TEA</b> <br/> Please click "OK" to confirm.`, {
+              dangerouslyUseHTMLString: true,
+            });
+          }catch(e){
+            return false;
+          }
+
+          self.$root.loading(true);
+
           const opts = {
             tappIdB64: base.getTappId(),
             address: self.layer1_account.address,
 
             targetTappIdB64: id,
-            tokenAmount: utils.toBN(amount).toString(),
+            tokenAmount: amount_bn.toString(),
             authB64: session_key,
           };
 
@@ -475,8 +477,6 @@ const F = {
           close();
 
           self.$root.success();
-          // const html = `<div>Token: ${data.ticker}<br/>Price: ${data.sell_price} TEA<br/>Qantity: ${form.tapp_amount}<br/>Total: ${_.toNumber(data.sell_price)*_.toNumber(form.tapp_amount)}<br/></div>`;
-          // self.$root.alert_success(html, 'Sell success.');
           await succ_cb();
         }catch(e){
           self.$root.showError(e);
@@ -595,10 +595,9 @@ const F = {
           },
           tapp_amount: {
             label: 'Quantity',
-            type: 'number',
-            max: 100000000,
-            // remove_required_rule: true,
-            default: 1,
+            type: 'Input',
+            required: true,
+            default: '',
             condition: {
               target: 'all',
               value: false,
@@ -618,21 +617,23 @@ const F = {
           return;
         }
 
-        if(!form.all && data.account_balance && _.toNumber(form.tapp_amount) > data.account_balance.token_balance){
-          self.$root.showError('Insufficient token.');
-          return;
-        }
-
-        const id = form.tapp_id;
-        const amount = utils.layer1.amountToBalance(form.tapp_amount);
-
-        self.$root.loading(true);
         try{
+          const id = form.tapp_id;
+          const amount_bn = utils.layer1.amountToBalanceBn(form.tapp_amount);
+          if(!form.all && data.account_balance){
+            const ab_bn = utils.layer1.amountToBalanceBn(data.account_balance.token_balance.toString());
+            if(ab_bn.lt(amount_bn)){
+              throw 'Insufficient token.';
+            }
+          }
+          
+          self.$root.loading(true);
+        
           const opts = {
             tappIdB64: base.getTappId(),
             address: self.layer1_account.address,
             tokenId: id,
-            amount: utils.toBN(amount).toString(),
+            amount: amount_bn.toString(),
             authB64: session_key,
             to: form.to,
             all: false,

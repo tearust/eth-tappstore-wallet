@@ -138,13 +138,14 @@
 
     <TeaTableColumn
       label="Actions"
-      width="70"
+      width="100"
       fixed="right"
       xs
     >
       <template v-if="user && user.isLogin && !$root.is_tappstore(scope.row.id) && !is_system_actor(scope.row) " slot-scope="scope">
         <TeaIconButton tip="Buy" icon="buy" @click="buy_token(scope.row)" />
         <TeaIconButton tip="Sell" icon="sell" @click="sell_token(scope.row)" />
+        <TeaIconButton tip="Transfer" icon="fenxiangzidongzhuanchu" @click="transfer_token(scope.row)" />
       </template>
     </TeaTableColumn>
 
@@ -281,6 +282,12 @@ export default {
       }catch(e){
         this.$root.showError(e);
       }
+    },
+    async transfer_token(row){
+      await layer2.entity.transferToken(this, row, async ()=>{
+ 
+        await this.refresh();
+      });
     },
     is_system_actor(row){
       return helper.is_system_actor(row);

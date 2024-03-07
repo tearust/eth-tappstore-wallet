@@ -77,27 +77,54 @@ const layer1 = {
     }
 
     value = F.toBN(value);
-    value = F.bnToBalanceNumber(value);
-    value = layer1.roundAmount(value);
+    // value = F.bnToBalanceNumber(value);
+    const [f, v] = F.bnToRealBalance(value);
+    // value = layer1.roundAmount(value);
 
+    value = v;
     if(is_negative){
-      return value * -1;
+      if(f){
+        return value * -1;
+      }
+      else{
+        return '-'+value;
+      }
+      
     }
 
     if(!with_icon) return value;
     const symbol = '<span style="margin-right: 0;" class="iconfont icon-a-TeaProject-T"></span>'
     return symbol + value;
-
   },
   amountToBalance(value){
-    return _.toNumber(value) * (1000000*1000000*1000000);
+    if(!_.isNumber(value)){
+      throw 'Invalid value (must be number) for amountToBalane => '+value;
+    }
+    return value * (1000000*1000000*1000000);
+  },
+  amountToBalanceBn(value){
+    if(!_.isString(value)){
+      throw 'Invalid value (must be string) for amountToBalanceBn => '+value;
+    }
+    let str = null;
+    try{
+      str =  ethers.utils.parseEther(value).toString();
+    }catch(e){
+      console.error('[amountToBalanceBn error]', e);
+      throw 'Invalid Balance string.';
+    }
+    const value_bn = F.toBN(str);
+    if(value_bn.lte(F.toBN('0'))){
+      throw 'Value must bigger than 0';
+    } 
+    return value_bn;
   },
   balanceToAmount(value){
     return layer1.formatBalance(value);
   },
   roundAmount(value){
-    return value;
-    // return Math.floor(value*1000000) / 1000000;
+    // return value;
+    return Math.floor(value*1000000) / 1000000;
   },
   toRealBalance(value){
     value = F.toBN(value);
@@ -356,8 +383,16 @@ const F = {
 
   bnToBalanceNumber(bn){
     const value = ethers.utils.formatUnits(bn.toString(), 'ether');
-    // const value = Number(BigInt(bn.toString())/1000000000000000000n);
     return _.toNumber(value);
+  },
+  bnToRealBalance(bn){
+    const value = ethers.utils.formatUnits(bn.toString(), 'ether');
+    const nv = _.toNumber(value);
+    if(nv!==0 && nv.toString() !== value.toString()){
+      return [false, value.toString()]
+    }
+    // const value = Number(BigInt(bn.toString())/1000000000000000000n);
+    return [true, nv];
   },
 
 

@@ -317,32 +317,46 @@ const F = {
             ],
           },
           amount: {
-            type: 'number',
-            default: amt,
-            label: 'Amount'
-          }
+            type: 'Input',
+            default: amt.toString(),
+            label: 'Amount',
+            // condition: {
+            //   target: 'all',
+            //   value: false,
+            // }
+          },
+          // all: {
+          //   type: 'switch',
+          //   default: false,
+          //   label: 'Transfer All',
+          // }
         },
       },
       cb: async (form, close) => {
         const token = _.toLower(form.token);
 
-        self.$root.loading(true);
-        const amount = utils.layer1.amountToBalance(form.amount);
-
-        const tappId = base.getTappId();
-        let target_tapp_id = tappId;
-        if(token === 'fdusd'){
-          target_tapp_id = base.getUsdtId();
-        }
-        const param = {
-          address: self.layer1_account.address,
-          tappIdB64: tappId,
-          authB64: session_key,
-          amount: utils.toBN(amount).toString(),
-          targetTappIdB64: target_tapp_id,
-        };
-
         try {
+          self.$root.loading(true);
+          const amount_bn = utils.layer1.amountToBalanceBn(form.amount);
+
+          const tappId = base.getTappId();
+          let target_tapp_id = tappId;
+          if(token === 'fdusd'){
+            target_tapp_id = base.getUsdtId();
+          }
+          const param = {
+            address: self.layer1_account.address,
+            tappIdB64: tappId,
+            authB64: session_key,
+            amount: amount_bn.toString(),
+            targetTappIdB64: target_tapp_id,
+            all: false,
+          };
+          if(form.all){
+            param.all = true;
+            param.amount = '0';
+          }
+
           await txn.txn_request('withdraw', param);
           self.$root.success();
           succ_cb();
@@ -410,51 +424,55 @@ const F = {
             required: true,
           },
           amount: {
-            type: 'number',
-            default: 1,
+            type: 'Input',
+            default: '1',
             label: 'Amount',
-            min: 1,
+            condition: {
+              value: false,
+              target: 'all',
+            },
+          },
+          all: {
+            type: 'switch',
+            default: false,
+            label: 'Transfer All',
           }
         },
       },
       cb: async (form, close) => {
         let send_email = false;
-        
-        const amount = utils.layer1.amountToBalance(form.amount);
-        let tar = form.target;
-        if(!eth.help.getUtils().isAddress(tar)){
-          self.$root.showError('Invalid address');
-          return false;
-        }
-        
-
-        // if(utils.isEmail(tar)){
-        //   tar = utils.emailToAddress(tar);
-        //   send_email = {
-        //     from_address: self.layer1_account.address,
-        //     email: form.target,
-        //     amount: form.amount
-        //   };
-        // }
-
-        const opts = {
-          address: self.layer1_account.address,
-          tappIdB64: tappId,
-          authB64: session_key,
-          amount: utils.toBN(amount).toString(),
-          to: tar,
-          ...param,
-        };
-
-        if(self.layer1_account.address === _.toLower(tar)){
-          self.$root.showError("You cannot transfer to yourself.");
-          return false;
-        }
-
-        self.$root.loading(true);
 
         let is_success = false;
         try {
+          const amount_bn = utils.layer1.amountToBalanceBn(form.amount);
+          let tar = form.target;
+
+          if(!eth.help.getUtils().isAddress(tar)){
+            self.$root.showError('Invalid address');
+            return false;
+          }
+          
+          const opts = {
+            address: self.layer1_account.address,
+            tappIdB64: tappId,
+            authB64: session_key,
+            amount: amount_bn.toString(),
+            to: tar,
+            all: false,
+            ...param,
+          };
+          if(form.all){
+            opts.all = true;
+            opts.amount = '0';
+          }
+
+          if(self.layer1_account.address === _.toLower(tar)){
+            self.$root.showError("You cannot transfer to yourself.");
+            return false;
+          }
+
+          self.$root.loading(true);
+
           await txn.txn_request('transferTea', opts);
 
           if(send_email){

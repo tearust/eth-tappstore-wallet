@@ -1,0 +1,4 @@
+.env.dell merge=ours
+.env.prod merge=ours
+.env.prod_wallet merge=ours
+.env.test merge=ours

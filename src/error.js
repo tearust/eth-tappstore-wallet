@@ -16,12 +16,12 @@ const MSG = [
   ['Invalid bid price, min bid price is 10000 cents', 'Invalid bid price, min bid price is 10000 cents.'],
   ['Account already exists', 'Account already exists.'],
   ['Not enough USDT balance for Nitro deposit', 'Not enough balance for Nitro deposit.'],
-  ['not_enouth_balance_for_gas', 'Not enough balance for txn gas, please topup TEA or go to Tea Fluencer tapp to get credit.']
+  ['not_enouth_balance_for_gas', "There isn't enough balance in your wallet to cover the gas fee (transaction fee) for this transaction.<br/>New users can claim airdrop credits from TEAFluencer app.", 'Insufficient Funds'],
   
 ];
 
-const error_message = (msg)=>{
-  msg = _.toLower(msg);
+const error_message = (ori_msg)=>{
+  const msg = _.toLower(ori_msg);
   let prefix = '';
   _.each(PREFIX_MSG, ([k, v])=>{
     k = _.toLower(k);
@@ -32,19 +32,26 @@ const error_message = (msg)=>{
   });
 
   let body = null;
-  _.each(MSG, ([k, v])=>{
+  let title = null;
+  _.each(MSG, ([k, v, _tt])=>{
     k = _.toLower(k);
     if(_.includes(msg, k)){
       body = v;
+      if(_tt){
+        title = _tt;
+      }
       return false;
     }
   });
 
   if(body){
+    if(title){
+      return [prefix+body, title];
+    }
     return prefix+body;
   }
 
-  return false;
+  return ori_msg;
 };
 
 export default error_message;

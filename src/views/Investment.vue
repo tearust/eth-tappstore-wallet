@@ -145,7 +145,7 @@
       <template v-if="user && user.isLogin && !$root.is_tappstore(scope.row.id) && !is_system_actor(scope.row) " slot-scope="scope">
         <TeaIconButton tip="Buy" icon="buy" @click="buy_token(scope.row)" />
         <TeaIconButton tip="Sell" icon="sell" @click="sell_token(scope.row)" />
-        <TeaIconButton tip="Transfer" icon="bank" @click="transfer_token(scope.row)" />
+        <TeaIconButton tip="Transfer" icon="fenxiangzidongzhuanchu" @click="transfer_token(scope.row)" />
       </template>
     </TeaTableColumn>
 

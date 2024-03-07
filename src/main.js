@@ -133,7 +133,12 @@ new Vue({
           layer2.user.logout();
         }, 2000);
       }
-      this.$alert(err, title, {
+      let err_str = err;
+      if(_.isArray(err)){
+        title = err[1];
+        err_str = err[0];
+      }
+      this.$alert(err_str, title, {
         type: 'error',
         dangerouslyUseHTMLString: true,
       });

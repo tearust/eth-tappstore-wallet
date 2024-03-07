@@ -383,11 +383,6 @@ const F = {
 
   bnToBalanceNumber(bn){
     const value = ethers.utils.formatUnits(bn.toString(), 'ether');
-    const nv = _.toNumber(value);
-    if(nv!==0 && nv.toString() !== value.toString()){
-      console.log(4444, nv, value);
-    }
-    // const value = Number(BigInt(bn.toString())/1000000000000000000n);
     return _.toNumber(value);
   },
   bnToRealBalance(bn){

@@ -393,11 +393,13 @@ export default {
         }
       }
       else if(row.id === '0xb8aaaaaaaa230340b78fa252ce4d47dd23e8a904'){
-        if(this.$root.mobile() && utils.wallet_webview()){
-          this.$root.alert_success("This app cannot run inside Metamask");
-          return false;
-        }
-        helper.openUrl(row.tapp_url);
+        this.$root.alert_success("Coming soon.");
+        return false;
+        // if(this.$root.mobile() && utils.wallet_webview()){
+        //   this.$root.alert_success("This app cannot run inside Metamask");
+        //   return false;
+        // }
+        // helper.openUrl(row.tapp_url);
       }
       else if(row.ori.tapp_type === 'User'){
         helper.openUrl(this.tapp_url(row, 'seat_cid'));

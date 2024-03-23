@@ -281,9 +281,9 @@ const F = {
       
       console.log('admin_query_available_pcr =>', rs);
       return _.map(rs, (item)=>{
-        item.PCR0 = _layer1.u8aToHex(item.PCR0);
-        item.PCR1 = _layer1.u8aToHex(item.PCR1);
-        item.PCR2 = _layer1.u8aToHex(item.PCR2);
+        item.PCR0 = item.pcrs.PCR0;
+        item.PCR1 = item.pcrs.PCR1;
+        item.PCR2 = item.pcrs.PCR2;
         return item;
       });
       

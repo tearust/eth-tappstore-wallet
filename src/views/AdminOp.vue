@@ -425,11 +425,13 @@ export default {
     },
     async query_pcr(){
       const r = await layer2.admin.admin_query_pcr(this, {});
+      console.log(111, r);
       // const html = r.PCR0+'<hr/>'+r.PCR1+'<hr/>'+r.PCR2;
       // const html = '<div style="width="1000px;"">'+JSON.stringify(r)+'</div>'
       // this.$root.alert_success(html);
       let html = '';
       _.each(r, (x)=>{
+        html += x.version+'<br/>';
         html += x.PCR0+'<br/>'+x.PCR1+'<br/>'+x.PCR2;
         html +='<br><br/>';
       });

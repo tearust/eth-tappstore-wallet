@@ -3,16 +3,16 @@
   <h4>Only available for admin user</h4>
   <el-divider />
 
-  <h4>Admin utility</h4>
-  <div>
+  <h4 v-if="!$root.mobile()">Admin utility</h4>
+  <div v-if="!$root.mobile()">
     <el-button :disabled="not_admin" class="xbt" style="width:200px;" type="primary" @click="query_special_balance_action()">Query account balance</el-button>
     <br/>
     <el-button style="width:200px;" class="xbt" type="primary" @click="sign_text()">Sign text</el-button>
   </div>
+  <el-divider v-if="!$root.mobile()" />
 
-  <el-divider />
-  <h4>Credit system</h4>
-  <div>
+  <h4 v-if="!$root.mobile()">Credit system</h4>
+  <div v-if="!$root.mobile()">
     <el-button :disabled="not_admin" class="xbt" style="width:200px;" type="primary" @click="start_credit_system()">Start credit system</el-button>
 
     <el-button :disabled="not_admin" class="xbt" style="width:200px;" type="primary" @click="add_global_credit()">Topup global credit</el-button>
@@ -54,17 +54,17 @@
 
   <el-divider v-if="!$root.mobile()" />
 
-  <div v-if="!$root.mobile()">
-    <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="freeze_state()">Freeze state</el-button>
-    <el-button :disabled="not_admin" style="width:300px;" type="primary" @click="upgradeVersion()">Upgrade version</el-button>
-    <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="cancel_freeze_state()">Cancel freeze state</el-button>
+  <div>
+    <el-button :disabled="not_admin" style="width:200px;" class="xbt" type="primary" @click="freeze_state()">Freeze state</el-button>
+    <el-button v-if="!$root.mobile()" :disabled="not_admin" class="xbt" style="width:300px;" type="primary" @click="upgradeVersion()">Upgrade version</el-button>
+    <el-button :disabled="not_admin" style="width:200px;" class="xbt" type="primary" @click="cancel_freeze_state()">Cancel freeze state</el-button>
     <br/><br/>
-    <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="query_actor_version()">Query actor version</el-button>
-    <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="query_remote_actor_version()">Query remote actor version</el-button>
+    <el-button v-if="!$root.mobile()" :disabled="not_admin" style="width:200px;" type="primary" @click="query_actor_version()">Query actor version</el-button>
+    <el-button v-if="!$root.mobile()" :disabled="not_admin" style="width:200px;" type="primary" @click="query_remote_actor_version()">Query remote actor version</el-button>
     <br/><br/>
-    <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="query_pcr()">Query version PCR</el-button>
-    <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="add_version_pcr()">Add version PCR</el-button>
-    <el-button :disabled="not_admin" style="width:200px;" type="primary" @click="remove_version_pcr()">Remove version PCR</el-button>
+    <el-button :disabled="not_admin" style="width:200px;" class="xbt" type="primary" @click="query_pcr()">Query version PCR</el-button>
+    <el-button :disabled="not_admin" style="width:200px;" class="xbt" type="primary" @click="add_version_pcr()">Add version PCR</el-button>
+    <el-button :disabled="not_admin" style="width:200px;" class="xbt" type="primary" @click="remove_version_pcr()">Remove version PCR</el-button>
     <br/>
     <div v-if="pcr_html" :inner-html.prop="pcr_html" style="color:green;word-break:break-all;"></div>
   </div>
@@ -105,9 +105,9 @@
 
   </TeaTable>
 
-  <el-divider />
-  <h4>Reference reward</h4>
-  <div style="display:block;">
+  <el-divider v-if="!$root.mobile()" />
+  <h4 v-if="!$root.mobile()">Reference reward</h4>
+  <div style="display:block;" v-if="!$root.mobile()">
     <el-button :disabled="not_admin" class="xbt" style="width:200px;" type="primary" @click="query_reward_account()">Query reward account</el-button>
 
     <el-button :disabled="not_admin" class="xbt" style="width:200px;" type="primary" @click="add_reward_account()">Insert reward account</el-button>
@@ -116,7 +116,7 @@
     <el-button :disabled="not_admin" class="xbt" style="width:320px;margin-top:20px;" type="primary" @click="topup_to_global_reward_account()">Topup global reference reward account balance</el-button>
   </div>
 
-  <el-divider />
+  <el-divider v-if="!$root.mobile()" />
   <h4 v-if="!$root.mobile()">Seat</h4>
   <el-button v-if="!$root.mobile()" :disabled="not_admin" style="width:200px;" type="primary" @click="admin_add_seat()">Admin add seat</el-button>
   <el-button v-if="!$root.mobile()" :disabled="not_admin" style="width:200px;" type="primary" @click="admin_delete_seat()">Admin delete seat</el-button>
